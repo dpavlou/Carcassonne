@@ -18,6 +18,7 @@ namespace Tile_Engine
         public static Viewport viewport;
         private static float zoom = 1;
         private static float rotation = 0;
+        private static int skata;
 
         #endregion
 
