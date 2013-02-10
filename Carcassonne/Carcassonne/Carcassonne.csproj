@@ -117,7 +117,7 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Tile Engine\TileEngine.csproj">
+    <ProjectReference Include="..\..\TileEngine\TileEngine.csproj">
       <Project>{40987225-83BE-4FB3-A4D7-9D72CA4533E3}</Project>
       <Name>TileEngine</Name>
     </ProjectReference>

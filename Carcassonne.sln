@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carcassonne", "Carcassonne\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarcassonneContent", "Carcassonne\CarcassonneContent\CarcassonneContent.contentproj", "{2FE5AD35-4737-46C8-8CA6-AF5BA9682F58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileEngine", "Tile Engine\TileEngine.csproj", "{40987225-83BE-4FB3-A4D7-9D72CA4533E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileEngine", "TileEngine\TileEngine.csproj", "{40987225-83BE-4FB3-A4D7-9D72CA4533E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
