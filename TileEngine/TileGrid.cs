@@ -25,12 +25,17 @@ namespace TileEngine
         public const int MapWidth = 150;
         public const int MapHeight = 150;
         public const int MapLayers = 3;
-        private const int skyTile = 2;
+        private const int skyTile = 0;
         static public Vector2 MapLocation = new Vector2(10, 10);
 
         public static bool ShowMap = true;
         static private Tile[,] mapCells =
             new Tile[MapWidth, MapHeight];
+
+        public static bool showRandomTile = false;
+        public static List<Tile> BoxTiles = new List<Tile>();
+        public static Tile TileSpawner;
+        public static bool mouseOverSpawner = false;
 
         public static bool EditorMode = false;
 
@@ -41,8 +46,12 @@ namespace TileEngine
         #region Initialization
         static public void Initialize(Texture2D tileTexture)
         {
+
             Random rand = new Random();
             tileSheet = tileTexture;
+
+ 
+            TileSpawner = new Tile(0,3,0,"",new Vector2(1400,30));
 
             for (int x = 0; x < MapWidth; x++)
             {
@@ -51,9 +60,9 @@ namespace TileEngine
                     for (int z = 0; z < MapLayers; z++)
                     {
                         if (rand.Next(0,30) ==0)
-                            mapCells[x, y] = new Tile(skyTile, 0, 1, "");
+                            mapCells[x, y] = new Tile(1, 0, 0, "",Vector2.Zero);
                         else
-                            mapCells[x, y] = new Tile(skyTile, 0, 0, "");
+                            mapCells[x, y] = new Tile(2, 0, 0, "",Vector2.Zero);
                     }
                 }
             }
@@ -180,10 +189,7 @@ namespace TileEngine
             return CellCodeValue((int)cell.X, (int)cell.Y);
         }
 
-        static public bool kouroupettos()
-        {
-            return true;
-        }
+
         #endregion
 
         #region Information about MapSquare objects
@@ -241,6 +247,104 @@ namespace TileEngine
 
         #endregion
 
+        #region Information About Tile Box
+
+        static public bool ShowRandomTile
+        {
+            get { return showRandomTile; }
+            set { showRandomTile = value; }
+        }
+
+        static public Rectangle ExactScreenRectangle(Vector2 boxPos)
+        {
+            return new Rectangle(
+            (int)boxPos.X,
+            (int)boxPos.Y,
+            TileWidth,
+            TileHeight);
+        }
+
+        static public void AddBoxTile(int ID,string code,Vector2 mousePosition)
+        {
+            BoxTiles.Add(new Tile(0, 0, ID, code, mousePosition));
+        }
+
+        static public bool NewTileAvailable()
+        {
+            return showRandomTile;
+        }
+
+        static public bool CanGenerateTile(Vector2 mousePos)
+        {
+            return (ExactScreenRectangle(mousePos).Intersects
+                 (ExactScreenRectangle(TileSpawner.position))
+                 && !showRandomTile);
+                
+        }
+
+        static public Vector2 MouseCenter(Vector2 mousePos)
+        {
+            
+             return new Vector2(
+                  (int)mousePos.X - (int)(TileWidth / 2),
+                  (int)mousePos.Y - (int)(TileHeight / 2));
+            
+        }
+
+        static public void updateTilePosition(Vector2 mousePos, string ID)
+        {
+            foreach(Tile tile in BoxTiles)
+                if (tile.checkID(ID))
+                {
+                    tile.position = MouseCenter(mousePos);
+                }
+        }
+
+
+        static public void MouseOverTileGenerator(Vector2 mousePos)
+        {
+            if (ExactScreenRectangle(mousePos).Intersects
+                  (ExactScreenRectangle(TileSpawner.position))
+                  && !showRandomTile)
+                mouseOverSpawner = true;
+            else
+                mouseOverSpawner = false;
+        }
+
+
+        static public void PlaceTile(Vector2 mousePos, string ID)
+        {
+            mousePos += Camera.Position;
+            for (int x = BoxTiles.Count - 1; x >= 0; x--)
+
+                if (BoxTiles[x].checkID(ID))
+                {
+                    // tile.position = GetCellLocation(mousePos);
+                    mapCells[GetCellByPixelX((int)mousePos.X), GetCellByPixelY((int)mousePos.Y)].LayerTiles[1] = BoxTiles[x].LayerTiles[2];
+                    BoxTiles.RemoveAt(x);
+                }
+            ShowRandomTile = false;
+
+        }
+     
+        static public Vector2 GetCellLocation(Vector2 pixelLocation)
+        {
+            Vector2 location = GetCellByPixel(pixelLocation);
+
+            return new Vector2(location.X * TileWidth, location.Y * TileHeight);
+        }
+        static public float SpawnerTransparency()
+        {
+            if (showRandomTile)
+                return 0.1f;
+            else if (!mouseOverSpawner)
+                return 0.7f;
+            else
+                return 1f;
+        }
+
+        #endregion
+
         #region Loading and Saving Maps
         public static void SaveMap(FileStream fileStream)
         {
@@ -269,7 +373,7 @@ namespace TileEngine
                 for (int y = 0; y < MapHeight; y++)
                     for (int z = 0; z < MapLayers; z++)
                     {
-                        mapCells[x, y] = new Tile(skyTile, 0, 0, "");
+                        mapCells[x, y] = new Tile(skyTile, 0, 0, "",Vector2.Zero);
                     }
         }
         #endregion
@@ -284,6 +388,8 @@ namespace TileEngine
             int startY = GetCellByPixelY((int)Camera.Position.Y);
             int endY = GetCellByPixelY((int)Camera.Position.Y +
                       Camera.ViewPortHeight);
+
+            DrawRandomTile(spriteBatch);
 
             for (int x = startX; x <= endX; x++)
                 for (int y = startY; y <= endY; y++)
@@ -305,6 +411,8 @@ namespace TileEngine
                         }
                     }
 
+                 
+
                     if (EditorMode)
                     {
                         DrawEditModeItems(spriteBatch, x, y);
@@ -316,6 +424,41 @@ namespace TileEngine
                     }
 
                 }
+        }
+
+        public static void DrawRandomTile(SpriteBatch spriteBatch)
+        {
+            if (ShowRandomTile)
+            {
+                foreach (Tile tile in BoxTiles)
+                {
+                    for (int i = 0; i < MapLayers; i++)
+                    {
+                    spriteBatch.Draw(
+                      tileSheet,
+                      ExactScreenRectangle(tile.position),
+                      TileSourceRectangle(tile.LayerTiles[i]),
+                      Color.White,
+                      0.0f,
+                      Vector2.Zero,
+                      SpriteEffects.None,
+                      1f - ((float)i * 0.1f));
+                    }
+                }
+
+
+            }
+
+            spriteBatch.Draw(
+                tileSheet,
+                ExactScreenRectangle(TileSpawner.position),
+                TileSourceRectangle(TileSpawner.LayerTiles[1]),
+                Color.White*SpawnerTransparency(),
+                0.0f,
+                Vector2.Zero,
+                SpriteEffects.None,
+                1f - ((float)SpawnerTransparency() * 0.1f));
+
         }
 
         public static void DrawMapOnScreen(SpriteBatch spriteBatch, Vector2 MapLocation)

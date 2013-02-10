@@ -83,8 +83,7 @@ namespace Carcassonne
                 isScrolling = false;
 
             }
-
-
+            
             if (mouseState.LeftButton == ButtonState.Pressed
                 && !isScrolling)
             {
@@ -113,6 +112,8 @@ namespace Carcassonne
             //worldLocation += moveAmount;
    
             repositionCamera();
+
+            TileManager.Update(gameTime,ID);
         }
          #endregion
 

@@ -15,7 +15,7 @@ namespace TileEngine
         public int[] LayerTiles = new int[3];
         public string CodeValue = "";
         public bool Passable = true;
-
+        public Vector2 currPos = Vector2.Zero;
         #endregion
 
         #region Constructor
@@ -23,20 +23,31 @@ namespace TileEngine
             int background,
             int interactive,
             int foreground,
-            string code
+            string code,
+            Vector2 Position
             )
         {
             LayerTiles[0] = background;
             LayerTiles[1] = interactive;
             LayerTiles[2] = foreground;
             CodeValue = code;
+            currPos = Position;
            
         }
         #endregion
 
         #region Public Methods
- 
-        
+        public Vector2 position
+        {
+            get { return currPos; }
+            set { currPos = value; }
+        }
+
+        public bool checkID(string ID)
+        {
+            return (ID == CodeValue);                
+        }
+
         #endregion
 
     }

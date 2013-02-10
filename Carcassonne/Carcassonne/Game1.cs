@@ -68,7 +68,7 @@ namespace Carcassonne
             Camera.ViewPortWidth = 1600;
             Camera.ViewPortHeight = 900;
 
-            player = new Player(Content,"skata");
+            player = new Player(Content,"Kokos");
 
             // TODO: use this.Content to load your game content here
         }
@@ -124,7 +124,7 @@ namespace Carcassonne
             spriteBatch.DrawString(
             pericles10,
             "Scale:" +
-            player.scale,
+            TileGrid.SpawnerTransparency(),
             new Vector2(10, 40),
             Color.Red);
             spriteBatch.End();
