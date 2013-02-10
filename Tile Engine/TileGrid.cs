@@ -179,6 +179,11 @@ namespace Tile_Engine
         {
             return CellCodeValue((int)cell.X, (int)cell.Y);
         }
+
+        static public bool kouroupettos()
+        {
+            return true;
+        }
         #endregion
 
         #region Information about MapSquare objects
