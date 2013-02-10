@@ -60,9 +60,9 @@ namespace TileEngine
                     for (int z = 0; z < MapLayers; z++)
                     {
                         if (rand.Next(0,30) ==0)
-                            mapCells[x, y] = new Tile(1, 0, 0, "",Vector2.Zero);
+                            mapCells[x, y] = new Tile(2, 0, 0, "",Vector2.Zero);
                         else
-                            mapCells[x, y] = new Tile(0, 0, 0, "",Vector2.Zero);
+                            mapCells[x, y] = new Tile(1, 0, 0, "",Vector2.Zero);
                     }
                 }
             }
@@ -303,7 +303,7 @@ namespace TileEngine
 
         static public void MouseOverTileGenerator(Vector2 mousePos)
         {
-            if (ExactScreenRectangle(mousePos).Intersects
+            if (new Rectangle((int)mousePos.X,(int)mousePos.Y,1,1).Intersects
                   (ExactScreenRectangle(TileSpawner.position))
                   && !showRandomTile)
                 mouseOverSpawner = true;

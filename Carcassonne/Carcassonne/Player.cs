@@ -98,6 +98,7 @@ namespace Carcassonne
                 newMousePosition = new Vector2(mouseState.X-5, mouseState.Y-5);    
                 velocity = newMousePosition - mousePosition;
                 velocity.Normalize();
+                velocity = Vector2.Negate(velocity);
                 velocity = velocity * Vector2.Distance(newMousePosition, mousePosition);
               
             }

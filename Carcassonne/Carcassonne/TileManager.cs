@@ -18,7 +18,7 @@ namespace Carcassonne
         {
             if (TileGrid.CanGenerateTile(mousePos))
             {
-                TileGrid.AddBoxTile(rand.Next(1, TileGrid.TilesPerRow), ID, mousePos);
+                TileGrid.AddBoxTile(rand.Next(2, TileGrid.TilesPerRow), ID, mousePos);
                 TileGrid.ShowRandomTile = true;
             }
         }
