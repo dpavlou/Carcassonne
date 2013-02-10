@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carcassonne", "Carcassonne\Carcassonne\Carcassonne.csproj", "{D951C76F-28EE-4591-9ECF-5A0F0EBFB124}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "CarcassonneContent", "Carcassonne\CarcassonneContent\CarcassonneContent.contentproj", "{2FE5AD35-4737-46C8-8CA6-AF5BA9682F58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tile Engine", "Tile Engine\Tile Engine.csproj", "{40987225-83BE-4FB3-A4D7-9D72CA4533E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D951C76F-28EE-4591-9ECF-5A0F0EBFB124}.Debug|x86.ActiveCfg = Debug|x86
+		{D951C76F-28EE-4591-9ECF-5A0F0EBFB124}.Debug|x86.Build.0 = Debug|x86
+		{D951C76F-28EE-4591-9ECF-5A0F0EBFB124}.Release|x86.ActiveCfg = Release|x86
+		{D951C76F-28EE-4591-9ECF-5A0F0EBFB124}.Release|x86.Build.0 = Release|x86
+		{2FE5AD35-4737-46C8-8CA6-AF5BA9682F58}.Debug|x86.ActiveCfg = Debug|x86
+		{2FE5AD35-4737-46C8-8CA6-AF5BA9682F58}.Release|x86.ActiveCfg = Release|x86
+		{40987225-83BE-4FB3-A4D7-9D72CA4533E3}.Debug|x86.ActiveCfg = Debug|x86
+		{40987225-83BE-4FB3-A4D7-9D72CA4533E3}.Debug|x86.Build.0 = Debug|x86
+		{40987225-83BE-4FB3-A4D7-9D72CA4533E3}.Release|x86.ActiveCfg = Release|x86
+		{40987225-83BE-4FB3-A4D7-9D72CA4533E3}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
