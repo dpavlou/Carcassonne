@@ -53,7 +53,7 @@ namespace Tile_Engine
                         if (rand.Next(0,30) ==0)
                             mapCells[x, y] = new Tile(skyTile, 0, 1, "");
                         else
-                             mapCells[x, y] = new Tile(skyTile, 0, 0, "");
+                            mapCells[x, y] = new Tile(skyTile, 0, 0, "");
                     }
                 }
             }
