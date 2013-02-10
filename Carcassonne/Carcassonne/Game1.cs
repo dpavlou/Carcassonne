@@ -68,7 +68,7 @@ namespace Carcassonne
             Camera.ViewPortWidth = 1600;
             Camera.ViewPortHeight = 900;
 
-            player = new Player(Content,"Kokos1");
+            player = new Player(Content,"skata");
 
             // TODO: use this.Content to load your game content here
         }
