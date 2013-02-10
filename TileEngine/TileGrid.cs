@@ -51,7 +51,7 @@ namespace TileEngine
             tileSheet = tileTexture;
 
  
-            TileSpawner = new Tile(0,3,0,"",new Vector2(1400,30));
+            TileSpawner = new Tile(0,0,3,"",new Vector2(1400,30));
 
             for (int x = 0; x < MapWidth; x++)
             {
@@ -62,7 +62,7 @@ namespace TileEngine
                         if (rand.Next(0,30) ==0)
                             mapCells[x, y] = new Tile(1, 0, 0, "",Vector2.Zero);
                         else
-                            mapCells[x, y] = new Tile(2, 0, 0, "",Vector2.Zero);
+                            mapCells[x, y] = new Tile(0, 0, 0, "",Vector2.Zero);
                     }
                 }
             }
@@ -452,13 +452,12 @@ namespace TileEngine
             spriteBatch.Draw(
                 tileSheet,
                 ExactScreenRectangle(TileSpawner.position),
-                TileSourceRectangle(TileSpawner.LayerTiles[1]),
-                Color.White*SpawnerTransparency(),
+                TileSourceRectangle(TileSpawner.LayerTiles[2]),
+                Color.White * SpawnerTransparency(),
                 0.0f,
                 Vector2.Zero,
                 SpriteEffects.None,
-                1f - ((float)SpawnerTransparency() * 0.1f));
-
+                1f - ((float)2 * 0.1f));
         }
 
         public static void DrawMapOnScreen(SpriteBatch spriteBatch, Vector2 MapLocation)
