@@ -117,13 +117,14 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Tile Engine\Tile Engine.csproj">
+    <ProjectReference Include="..\..\Tile Engine\TileEngine.csproj">
       <Project>{40987225-83BE-4FB3-A4D7-9D72CA4533E3}</Project>
-      <Name>Tile Engine</Name>
+      <Name>TileEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\CarcassonneContent\CarcassonneContent.contentproj">
-      <Name>CarcassonneContent</Name>
+      <Name>CarcassonneContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{2FE5AD35-4737-46C8-8CA6-AF5BA9682F58}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
