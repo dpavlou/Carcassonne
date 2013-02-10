@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carcassonne", "Carcassonne\Carcassonne\Carcassonne.csproj", "{D951C76F-28EE-4591-9ECF-5A0F0EBFB124}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "CarcassonneContent", "Carcassonne\CarcassonneContent\CarcassonneContent.contentproj", "{2FE5AD35-4737-46C8-8CA6-AF5BA9682F58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarcassonneContent", "Carcassonne\CarcassonneContent\CarcassonneContent.contentproj", "{2FE5AD35-4737-46C8-8CA6-AF5BA9682F58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tile Engine", "Tile Engine\Tile Engine.csproj", "{40987225-83BE-4FB3-A4D7-9D72CA4533E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileEngine", "TileEngine\TileEngine.csproj", "{40987225-83BE-4FB3-A4D7-9D72CA4533E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

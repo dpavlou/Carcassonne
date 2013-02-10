@@ -13,7 +13,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Tile_Engine
+namespace TileEngine
 {
     public static class TileGrid
     {
