@@ -61,7 +61,7 @@ namespace Carcassonne
             pericles10 = Content.Load<SpriteFont>(@"Fonts\Pericles10");
 
             TileGrid.Initialize(
-              Content.Load<Texture2D>(@"Textures\MapSquare"));
+              Content.Load<Texture2D>(@"Textures\MapSquare"),pericles10);
             //Camera.newViewPort = GraphicsDevice.Viewport;
 
             Camera.WorldRectangle = new Rectangle(0, 0, TileGrid.MapWidth * TileGrid.TileWidth, TileGrid.MapHeight * TileGrid.TileHeight);
@@ -126,9 +126,22 @@ namespace Carcassonne
             spriteBatch.DrawString(
             pericles10,
             "Scale:" +
-            TileGrid.SpawnerTransparency(),
+            TileGrid.ReadyToCommit,
             new Vector2(10, 40),
             Color.Red);
+ 
+            spriteBatch.DrawString(
+            pericles10,
+            "Tiles",
+            new Vector2(1460, 50),
+            Color.Red);
+
+            spriteBatch.DrawString(
+            pericles10,
+            "Commit",
+            new Vector2(1460, 110),
+            Color.Red);
+
             spriteBatch.End();
 
             base.Draw(gameTime);

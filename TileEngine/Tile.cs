@@ -16,6 +16,7 @@ namespace TileEngine
         public string CodeValue = "";
         public bool Passable = true;
         public Vector2 currPos = Vector2.Zero;
+        public float rotation = 0.0f;
         #endregion
 
         #region Constructor
@@ -43,10 +44,18 @@ namespace TileEngine
             set { currPos = value; }
         }
 
+        public float Rotation
+        {
+            get { return rotation; }
+            set { rotation = value; }
+        }
+
         public bool checkID(string ID)
         {
             return (ID == CodeValue);                
         }
+
+
 
         #endregion
 

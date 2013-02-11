@@ -76,20 +76,22 @@ namespace Carcassonne
              * */
 
             ScrollScalling(mouseState);
-   
 
-            if (mouseState.LeftButton != ButtonState.Pressed)
+    
+            
+
+            if (mouseState.RightButton != ButtonState.Pressed)
             {
                 isScrolling = false;
 
             }
             
-            if (mouseState.LeftButton == ButtonState.Pressed
+            if (mouseState.RightButton == ButtonState.Pressed
                 && !isScrolling)
             {
                var mousePos = new Vector2(mouseState.X, mouseState.Y);
                mousePosition = new Vector2(mousePos.X,mousePos.Y);
-               newMousePosition = new Vector2(mouseState.X-5, mouseState.Y-5);    
+               newMousePosition = new Vector2(mouseState.X-5, mouseState.Y-5); 
                 isScrolling=true;
             }
 
@@ -99,6 +101,8 @@ namespace Carcassonne
                 velocity = newMousePosition - mousePosition;
                 velocity.Normalize();
                 velocity = Vector2.Negate(velocity);
+
+               if (Vector2.Distance(newMousePosition, mousePosition)!=0.0f)
                 velocity = velocity * Vector2.Distance(newMousePosition, mousePosition);
               
             }
@@ -114,7 +118,7 @@ namespace Carcassonne
    
             repositionCamera();
 
-            TileManager.Update(gameTime,ID);
+            TileManager.Update(gameTime, WorldPosition, ID);
         }
          #endregion
 
@@ -140,6 +144,7 @@ namespace Carcassonne
                 TileGrid.TileWidth = (int)newScale;
                 TileGrid.TileHeight = (int)newScale;
                 scale = newScale;
+                TileGrid.AdjustTileLocation(ID); 
             }
 
             prevWheelValue = currWheelValue;
