@@ -72,7 +72,7 @@ namespace Carcassonne
             Camera.ViewPortWidth = 1600;
             Camera.ViewPortHeight = 900;
 
-            player = new Player(Content,"Kokos");
+            player = new Player(Content,"Kokos",new Vector2(TileGrid.MapWidth/2*TileGrid.TileWidth,TileGrid.MapHeight/2*TileGrid.TileHeight));
 
             // TODO: use this.Content to load your game content here
         }

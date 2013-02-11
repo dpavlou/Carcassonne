@@ -40,14 +40,14 @@ namespace Carcassonne
 
         #region Constructor
 
-        public Player(ContentManager content,string playerName)
+        public Player(ContentManager content,string playerName, Vector2 position)
         {
             ID = playerName;
             mousePosition = Vector2.Zero;
             velocity = Vector2.Zero;
             GameWidth = 1600;
             GameHeight = 900;
-            worldLocation = new Vector2(GameWidth/2, GameHeight/2);
+            worldLocation = position;
             prevWheelValue = currWheelValue = 0;
             scale = TileGrid.OriginalTileHeight;
 
