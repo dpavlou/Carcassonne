@@ -47,7 +47,7 @@ namespace Carcassonne
 
         static public void GenerateNewTile(Vector2 mousePos,Vector2 worldLocation, string ID)
         {
-            if (TileSpawner.MouseOver(mousePos))
+            if (TileSpawner.MouseOverReal(mousePos))
            {
                 AddBoxTile(rand.Next(2, 3), ID, mousePos + worldLocation); //TileGrid.TilesPerRow
                 timeSinceLastGeneration = 0.0f;
@@ -259,7 +259,7 @@ namespace Carcassonne
                 if(timeSinceLastGeneration>minTimeToGeneration && !dragging)
                 GenerateNewTile(mousePos-worldLocation,worldLocation, ID);
 
-                if (commitTile.MouseOver(mousePos - worldLocation) && !dragging)
+                if (commitTile.MouseOverReal(mousePos - worldLocation) && !dragging)
                 {
                     foreach (Actor actor in BoxTiles)
                         if (actor.checkID(ID))
@@ -268,7 +268,7 @@ namespace Carcassonne
                         }
                 }
 
-                if (freezeTile.MouseOver(mousePos - worldLocation) && !dragging
+                if (freezeTile.MouseOverReal(mousePos - worldLocation) && !dragging
                     && timeSinceLastFreeze>minTimeToFreeze)
                 {
                     timeSinceLastFreeze = 0.0f;
@@ -406,7 +406,7 @@ namespace Carcassonne
 
             spriteBatch.Draw(
                 TileGrid.tileSheet,
-                TileGrid.ExactScreenRectangle(TileSpawner.position),
+                TileGrid.ExactScreenOriginalRectangle(TileSpawner.position),
                 TileGrid.TileSourceRectangle(TileSpawner.LayerTiles[2]),
                 Color.White * TileSpawner.Transparency,
                 0.0f,
@@ -417,7 +417,7 @@ namespace Carcassonne
 
             spriteBatch.Draw(
                  TileGrid.tileSheet,
-                 TileGrid.ExactScreenRectangle(commitTile.position),
+                 TileGrid.ExactScreenOriginalRectangle(commitTile.position),
                  TileGrid.TileSourceRectangle(commitTile.LayerTiles[2]),
                  Color.White * commitTile.Transparency,
                  0.0f,
@@ -427,7 +427,7 @@ namespace Carcassonne
 
             spriteBatch.Draw(
              TileGrid.tileSheet,
-             TileGrid.ExactScreenRectangle(freezeTile.position),
+             TileGrid.ExactScreenOriginalRectangle(freezeTile.position),
              TileGrid.TileSourceRectangle(freezeTile.LayerTiles[2]),
              Color.White * freezeTile.Transparency,
              0.0f,

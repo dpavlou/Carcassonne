@@ -22,8 +22,8 @@ namespace TileEngine
         static public int TileHeight = 90;
         public const int OriginalTileWidth = 90;
         public const int OriginalTileHeight = 90;
-        public const int MapWidth = 150;
-        public const int MapHeight = 150;
+        public const int MapWidth = 100;
+        public const int MapHeight = 100;
         public const int MapLayers = 3;
         private const int skyTile = 0;
         static public Vector2 MapLocation = new Vector2(10, 10);
@@ -124,6 +124,15 @@ namespace TileEngine
                 TileHeight);
         }
 
+        static public Rectangle CellWorldOriginalRectangle(int cellX, int cellY)
+        {
+            return new Rectangle(
+                cellX * OriginalTileWidth,
+                cellY * OriginalTileHeight,
+                OriginalTileWidth,
+                OriginalTileHeight);
+        }
+
         static public Rectangle MapToScreenRectangle(int cellX, int cellY)
         {
             return new Rectangle(
@@ -144,6 +153,12 @@ namespace TileEngine
         {
             return Camera.WorldToScreen(CellWorldRectangle(cellX, cellY));
         }
+
+        static public Rectangle CellScreenOriginalRectangle(int cellX, int cellY)
+        {
+            return Camera.WorldToScreen(CellWorldOriginalRectangle(cellX, cellY));
+        }
+
 
         static public Rectangle CellSreenRectangle(Vector2 cell)
         {
@@ -279,7 +294,14 @@ namespace TileEngine
             TileHeight);
         }
 
-   
+        static public Rectangle ExactScreenOriginalRectangle(Vector2 boxPos)
+        {
+            return new Rectangle(
+            (int)boxPos.X,
+            (int)boxPos.Y,
+            OriginalTileWidth,
+            OriginalTileHeight);
+        }
         #endregion
 
         #region Loading and Saving Maps

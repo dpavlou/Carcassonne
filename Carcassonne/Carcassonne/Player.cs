@@ -137,7 +137,7 @@ namespace Carcassonne
         private void ScrollScalling(MouseState mouseState)
         {
 
-            float newScale = MathHelper.Clamp(scale+(currWheelValue/120 - prevWheelValue/120), 20f, TileGrid.OriginalTileWidth);
+            float newScale = MathHelper.Clamp(scale+(currWheelValue/120 - prevWheelValue/120), 40f, TileGrid.OriginalTileWidth);
 
             if (newScale != scale)
             {

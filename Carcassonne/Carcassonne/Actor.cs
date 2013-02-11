@@ -88,13 +88,28 @@ namespace Carcassonne
             }
         }
 
+        public bool MouseOverReal(Vector2 mousePos)
+        {
+            if (new Rectangle((int)mousePos.X, (int)mousePos.Y, 1, 1).Intersects
+                  (TileGrid.ExactScreenOriginalRectangle(position)))
+            {
+                mouseOver = true;
+                return true;
+            }
+            else
+            {
+                mouseOver = false;
+                return false;
+            }
+        }
+
         #endregion
 
         #region Helper Methods
 
         public void TransparencyHandler(Vector2 mousePos)
         {
-            if (MouseOver(mousePos))
+            if (MouseOverReal(mousePos))
                 transparency = 1.0f;
             else
                 transparency = 0.8f;
