@@ -141,10 +141,11 @@ namespace Carcassonne
 
             if (newScale != scale)
             {
+                TileManager.AdjustTileLocation(ID, newScale); 
                 TileGrid.TileWidth = (int)newScale;
                 TileGrid.TileHeight = (int)newScale;
                 scale = newScale;
-                TileGrid.AdjustTileLocation(ID); 
+              
             }
 
             prevWheelValue = currWheelValue;

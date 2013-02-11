@@ -14,7 +14,7 @@ namespace TileEngine
         #region Declarations
         public int[] LayerTiles = new int[3];
         public string CodeValue = "";
-        public bool Passable = true;
+        public bool passable = true;
         public Vector2 currPos = Vector2.Zero;
         public float rotation = 0.0f;
         #endregion
@@ -55,6 +55,11 @@ namespace TileEngine
             return (ID == CodeValue);                
         }
 
+        public bool Passable
+        {
+            get { return passable; }
+            set { passable = value; }
+        }
 
 
         #endregion

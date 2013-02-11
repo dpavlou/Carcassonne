@@ -29,38 +29,27 @@ namespace TileEngine
         static public Vector2 MapLocation = new Vector2(10, 10);
 
         public static bool ShowMap = true;
-        static private Tile[,] mapCells =
+        static public Tile[,] mapCells =
             new Tile[MapWidth, MapHeight];
 
-        public static bool showRandomTile = false;
-        public static List<Tile> BoxTiles = new List<Tile>();
-        public static Tile TileSpawner;
-        public static Tile commitTile;
-        public static int[] CommitPos=new int[2];
-
-        public static bool mouseOverSpawner = false;
-        public static RotatingTile rotation;
-        public static bool rotating = false;
-        public static bool readyToCommit = false;
-        public static bool readyToDrag = false;
+    
 
         public static bool EditorMode = false;
 
         public static SpriteFont spriteFont;
-        static private Texture2D tileSheet;
-        static private SpriteFont pericles10;
+        static public Texture2D tileSheet;
+
         #endregion
 
         #region Initialization
-        static public void Initialize(Texture2D tileTexture, SpriteFont pericles)
+        static public void Initialize(Texture2D tileTexture)
         {
 
             Random rand = new Random();
             tileSheet = tileTexture;
-            pericles10 = pericles;
+
  
-            TileSpawner = new Tile(0,0,3,"",new Vector2(1400,30));
-            commitTile = new Tile(0, 0, 2, "", new Vector2(1400, 90));
+
 
             for (int x = 0; x < MapWidth; x++)
             {
@@ -198,6 +187,12 @@ namespace TileEngine
             return CellCodeValue((int)cell.X, (int)cell.Y);
         }
 
+        static public Vector2 GetCellLocation(Vector2 pixelLocation)
+        {
+            Vector2 location = GetCellByPixel(pixelLocation);
+
+            return new Vector2(location.X * TileWidth, location.Y * TileHeight);
+        }
 
         #endregion
 
@@ -254,15 +249,26 @@ namespace TileEngine
                 (int)pixelLocation.Y);
         }
 
+        static public bool AvailableForPlacement(int posX,int posY)
+        {
+            return ((mapCells[posX, posY].LayerTiles[1] == 0)
+                       && mapCells[posX, posY].Passable);
+        }
+
+        static public Vector2 MouseCenter(Vector2 mousePos)
+        {
+
+            return new Vector2(
+                 (int)mousePos.X - (int)(TileWidth / 2),
+                 (int)mousePos.Y - (int)(TileHeight / 2));
+
+        }
+
         #endregion
 
         #region Information About Tile Box
 
-        static public bool ShowRandomTile
-        {
-            get { return showRandomTile; }
-            set { showRandomTile = value; }
-        }
+
 
         static public Rectangle ExactScreenRectangle(Vector2 boxPos)
         {
@@ -273,176 +279,7 @@ namespace TileEngine
             TileHeight);
         }
 
-        static public void AddBoxTile(int ID,string code,Vector2 mousePosition)
-        {
-            BoxTiles.Add(new Tile(0, 0, ID, code, mousePosition));
-        }
-
-        static public bool NewTileAvailable()
-        {
-            return showRandomTile;
-        }
-
-        static public bool CanGenerateTile(Vector2 mousePos)
-        {
-            return (ExactScreenRectangle(mousePos).Intersects
-                 (ExactScreenRectangle(TileSpawner.position))
-                 && !showRandomTile);
-                
-        }
-        static public void rotatePiece(string ID)
-        {
-            if (!rotating)
-            {
-                foreach (Tile tile in BoxTiles)
-                    if (tile.checkID(ID))
-                    {
-                        rotation = new RotatingTile(true, tile.rotation);
-                        rotating = true;
-                    }
-            }
-        }
-
-        static public Vector2 MouseCenter(Vector2 mousePos)
-        {
-            
-             return new Vector2(
-                  (int)mousePos.X - (int)(TileWidth / 2),
-                  (int)mousePos.Y - (int)(TileHeight / 2));
-            
-        }
-
-        static public void updateTilePosition(Vector2 mousePos, string ID)
-        {
-            foreach(Tile tile in BoxTiles)
-                if (tile.checkID(ID))
-                {
-                    tile.position = MouseCenter(mousePos);
-
-                }
-        }
-
-        static public bool ReadyToCommit
-        {
-            get { return readyToCommit; }
-            set { readyToCommit = value; }
-        }
-
-        static public bool ReadyToDrag
-        {
-            get { return readyToDrag; }
-            set { readyToDrag = value; }
-        }
-
-        static public void MouseOverTileGenerator(Vector2 mousePos)
-        {
-            if (new Rectangle((int)mousePos.X,(int)mousePos.Y,1,1).Intersects
-                  (ExactScreenRectangle(TileSpawner.position))
-                  && !showRandomTile)
-                mouseOverSpawner = true;
-            else
-                mouseOverSpawner = false;
-        }
-
-        static public void AdjustTileLocation(string ID)
-        {
-            foreach (Tile tile in BoxTiles)
-                if (tile.checkID(ID))
-                    tile.position = new Vector2(CommitPos[0] * TileWidth, CommitPos[1] * TileWidth);
-        }
-        static public void PlaceTile(Vector2 mousePos, string ID)
-        {
-            mousePos += Camera.Position;
-            for (int x = BoxTiles.Count - 1; x >= 0; x--)
-
-                if (BoxTiles[x].checkID(ID))
-                {
-                   
-                
-                     if ((mapCells[GetCellByPixelX((int)mousePos.X), GetCellByPixelY((int)mousePos.Y)].LayerTiles[1]) == 0)
-                     {
-                         BoxTiles[x].position = GetCellLocation(mousePos);
-                         CommitPos[0] =GetCellByPixelX((int)mousePos.X);
-                         CommitPos[1]=GetCellByPixelY((int)mousePos.Y);
-                        // mapCells[CommitPos[0], CommitPos[1]].LayerTiles[1] = BoxTiles[x].LayerTiles[2];
-                       //  mapCells[CommitPos[0], CommitPos[1]].rotation = BoxTiles[x].rotation;
-                         ReadyToCommit = true;
-                         
-                     }
-                     ReadyToDrag = true;
-                  
-                }
-          //  ShowRandomTile = false;
-
-        }
-
-        static public void CommitTile(Vector2 mousePos,string ID)
-        {
-            for (int x = BoxTiles.Count - 1; x >= 0; x--)
-
-                if (BoxTiles[x].checkID(ID))
-                {
-                    if (ReadyToCommit)
-                    {
-                       if (new Rectangle((int)mousePos.X,(int)mousePos.Y,1,1).Intersects
-                         (ExactScreenRectangle(commitTile.position)))
-                       {
-                           mapCells[CommitPos[0], CommitPos[1]].LayerTiles[1] = BoxTiles[x].LayerTiles[2];
-                           mapCells[CommitPos[0], CommitPos[1]].rotation = BoxTiles[x].rotation;
-                         //mapCells[CommitPos[0], CommitPos[1]].CodeValue = ID;
-                           mapCells[CommitPos[0], CommitPos[1]].Passable = false;
-                        BoxTiles.RemoveAt(x);
-                        ShowRandomTile = false;
-                        ReadyToCommit = false;
-                        ReadyToDrag = false;
-                  
-                       }
-                    }
-                }
-
-        }
-
-
-        static public bool CheckTileMouseIntersection(Vector2 mousePos, string ID)
-        {
-            for (int x = BoxTiles.Count - 1; x >= 0; x--)
-
-                if (BoxTiles[x].checkID(ID))
-                {
-                    if (new Rectangle((int)mousePos.X, (int)mousePos.Y, 1, 1).Intersects
-                        (ExactScreenRectangle(BoxTiles[x].position)))
-                        return true;
-                }
-            return false;
-
-        }
-
-
-        static public Vector2 GetCellLocation(Vector2 pixelLocation)
-        {
-            Vector2 location = GetCellByPixel(pixelLocation);
-
-            return new Vector2(location.X * TileWidth, location.Y * TileHeight);
-        }
-
-        static public float SpawnerTransparency()
-        {
-            if (showRandomTile)
-                return 0.1f;
-            else if (!mouseOverSpawner)
-                return 0.7f;
-            else
-                return 1f;
-        }
-
-        static public float CommitTransparency()
-        {
-            if (ReadyToCommit)
-                return 1f;
-            else
-                return 0.1f;
-        }
-
+   
         #endregion
 
         #region Loading and Saving Maps
@@ -489,7 +326,6 @@ namespace TileEngine
             int endY = GetCellByPixelY((int)Camera.Position.Y +
                       Camera.ViewPortHeight);
 
-            DrawRandomTile(spriteBatch);
 
             for (int x = startX; x <= endX; x++)
                 for (int y = startY; y <= endY; y++)
@@ -526,56 +362,7 @@ namespace TileEngine
                 }
         }
 
-        public static void DrawRandomTile(SpriteBatch spriteBatch)
-        {
-            if (ShowRandomTile)
-            {
-                foreach (Tile tile in BoxTiles)
-                {
-                    for (int i = 0; i < MapLayers; i++)
-                    {
-                  
-                    spriteBatch.Draw(
-                      tileSheet,
-                      ExactScreenRectangle(Camera.WorldToScreen(tile.position)),
-                      TileSourceRectangle(tile.LayerTiles[i]),
-                      Color.White,
-                      tile.Rotation,
-                      Vector2.Zero,
-                      SpriteEffects.None,
-                      1f - ((float)i * 0.1f));
-                    }
-                    spriteBatch.DrawString(
-                    pericles10,
-                    tile.CodeValue,
-                    Camera.WorldToScreen(tile.position),
-                    Color.White);
-                }
 
-
-            }
-
-            spriteBatch.Draw(
-                tileSheet,
-                ExactScreenRectangle(TileSpawner.position),
-                TileSourceRectangle(TileSpawner.LayerTiles[2]),
-                Color.White * SpawnerTransparency(),
-                0.0f,
-                Vector2.Zero,
-                SpriteEffects.None,
-                1f - ((float)2 * 0.1f));
-
-            spriteBatch.Draw(
-            tileSheet,
-            ExactScreenRectangle(commitTile.position),
-            TileSourceRectangle(commitTile.LayerTiles[2]),
-            Color.White * CommitTransparency(),
-             0.0f,
-             Vector2.Zero,
-            SpriteEffects.None,
-            1f - ((float)2 * 0.1f));
-
-        }
 
         public static void DrawMapOnScreen(SpriteBatch spriteBatch, Vector2 MapLocation)
         {
