@@ -49,7 +49,7 @@ namespace Carcassonne
         {
             if (TileSpawner.MouseOver(mousePos))
            {
-                AddBoxTile(1, ID, mousePos+worldLocation);
+                AddBoxTile(rand.Next(2, 3), ID, mousePos + worldLocation); //TileGrid.TilesPerRow
                 timeSinceLastGeneration = 0.0f;
             }
         }
@@ -396,7 +396,7 @@ namespace Carcassonne
                 pericles10,
                 BoxTiles[x].CodeValue,
                 Camera.WorldToScreen(BoxTiles[x].position),
-                Color.White);
+                Color.Red);
             }
 
             

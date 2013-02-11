@@ -49,7 +49,7 @@ namespace Carcassonne
             GameHeight = 900;
             worldLocation = new Vector2(GameWidth/2, GameHeight/2);
             prevWheelValue = currWheelValue = 0;
-            scale = 51.0f;
+            scale = TileGrid.OriginalTileHeight;
 
 
         }
