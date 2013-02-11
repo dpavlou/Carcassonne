@@ -88,7 +88,7 @@ namespace Carcassonne
             if (MouseOver(mousePos))
                 transparency = 1.0f;
             else
-                transparency = 0.4f;
+                transparency = 0.8f;
         }
             
         public void updateTilePosition(Vector2 mousePos)

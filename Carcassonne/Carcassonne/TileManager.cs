@@ -45,7 +45,7 @@ namespace Carcassonne
         {
             if (TileSpawner.MouseOver(mousePos))
            {
-                AddBoxTile(rand.Next(2, TileGrid.TilesPerRow), ID, mousePos+worldLocation);
+                AddBoxTile(1, ID, mousePos+worldLocation);
                 timeSinceLastGeneration = 0.0f;
             }
         }

@@ -18,10 +18,10 @@ namespace TileEngine
     public static class TileGrid
     {
         #region Declarations
-        static public int TileWidth = 51;
-        static public int TileHeight = 51;
-        public const int OriginalTileWidth = 51;
-        public const int OriginalTileHeight = 51;
+        static public int TileWidth = 90;
+        static public int TileHeight = 90;
+        public const int OriginalTileWidth = 90;
+        public const int OriginalTileHeight = 90;
         public const int MapWidth = 150;
         public const int MapHeight = 150;
         public const int MapLayers = 3;

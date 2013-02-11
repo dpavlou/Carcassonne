@@ -62,7 +62,7 @@ namespace Carcassonne
 
             TileGrid.Initialize(
               Content.Load<Texture2D>(@"Textures\MapSquare"));
-            TileManager.Initialize(new Vector2(1400, 30), new Vector2(1400, 90), pericles10);
+            TileManager.Initialize(new Vector2(1400, 30), new Vector2(1400, 150), pericles10);
 
             //Camera.newViewPort = GraphicsDevice.Viewport;
 
@@ -129,13 +129,13 @@ namespace Carcassonne
             spriteBatch.DrawString(
             pericles10,
             "Tiles",
-            new Vector2(1460, 50),
+            new Vector2(1500, 60),
             Color.Red);
 
             spriteBatch.DrawString(
             pericles10,
             "Commit",
-            new Vector2(1460, 110),
+            new Vector2(1500, 155),
             Color.Red);
 
             spriteBatch.End();
