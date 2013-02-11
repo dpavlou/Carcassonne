@@ -61,8 +61,8 @@ namespace Carcassonne
             pericles10 = Content.Load<SpriteFont>(@"Fonts\Pericles10");
 
             TileGrid.Initialize(
-              Content.Load<Texture2D>(@"Textures\MapSquare"));
-            TileManager.Initialize(new Vector2(1400, 30), new Vector2(1400, 150), pericles10);
+                Content.Load<Texture2D>(@"Textures\MapSquare"));
+            TileManager.Initialize(new Vector2(1400, 30), new Vector2(1400, 90),new Vector2(1400,150), pericles10);
 
             //Camera.newViewPort = GraphicsDevice.Viewport;
 
@@ -138,6 +138,12 @@ namespace Carcassonne
             new Vector2(1500, 155),
             Color.Red);
 
+            spriteBatch.DrawString(
+            pericles10,
+            "Lock",
+            new Vector2(1460, 170),
+            Color.Red);
+            
             spriteBatch.End();
 
             base.Draw(gameTime);

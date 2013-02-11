@@ -19,18 +19,22 @@ namespace Carcassonne
         public static List<Actor> BoxTiles = new List<Actor>();
         public static Actor TileSpawner;
         public static Actor commitTile;
+        public static Actor freezeTile;
         public static bool[,] AvailabilityMap =
            new bool[TileGrid.MapWidth, TileGrid.MapHeight];
         private static float timeSinceLastGeneration = 2.0f;
         private static float minTimeToGeneration = 0.7f;
+        private static float timeSinceLastFreeze = 2.0f;
+        private static float minTimeToFreeze = 0.2f;
         public static bool dragging = false;
         private static int dragID = 99999;
    //     public static RotatingTile rotation;
 
-        static public void Initialize(Vector2 TileSpawnerLocation, Vector2 CommitLocation, SpriteFont pericles)
+        static public void Initialize(Vector2 TileSpawnerLocation, Vector2 CommitLocation, Vector2 FreezeLocation,SpriteFont pericles)
         {
-            TileSpawner = new Actor(0, 0, 3, "", TileSpawnerLocation, true);
+            TileSpawner = new Actor(0, 0, 2, "", TileSpawnerLocation, true);
             commitTile = new Actor(0, 0, 2, "", CommitLocation, true);
+            freezeTile = new Actor(0, 0, 2, "", FreezeLocation, true);
             pericles10 = pericles;
 
             ResetAvailabilityMap();
@@ -248,6 +252,7 @@ namespace Carcassonne
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             timeSinceLastGeneration = MathHelper.Min(timeSinceLastGeneration+elapsed,6.0f);
+            timeSinceLastFreeze = MathHelper.Min(timeSinceLastFreeze+elapsed,6.0f);
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
@@ -262,6 +267,43 @@ namespace Carcassonne
                             actor.commitTile();
                         }
                 }
+
+                if (freezeTile.MouseOver(mousePos - worldLocation) && !dragging
+                    && timeSinceLastFreeze>minTimeToFreeze)
+                {
+                    timeSinceLastFreeze = 0.0f;
+                    bool temp = false;
+                    foreach (Actor actor in BoxTiles)
+                        if (actor.checkID(ID))
+                        {
+                            if (!actor.Freeze)
+                            {
+                                temp = true;
+                                break;
+                            }
+                        }
+
+                    if (temp)
+                    {
+                        foreach (Actor actor in BoxTiles)
+                            if (actor.checkID(ID))
+                            {
+                                if (!actor.Freeze)
+                                {
+                                    actor.ToggleFreeze();
+                                }
+                            }
+                    }
+                    else
+                    {
+                        foreach (Actor actor in BoxTiles)
+                            if (actor.checkID(ID))
+                            {
+                                actor.ToggleFreeze();
+                            }
+                    }
+                }
+
 
                for (int x = BoxTiles.Count - 1; x >= 0; x--)
                     if (BoxTiles[x].checkID(ID))
@@ -310,7 +352,7 @@ namespace Carcassonne
 
             TileSpawner.TransparencyHandler(mousePos - worldLocation);
             commitTile.TransparencyHandler(mousePos-worldLocation);
-
+            freezeTile.TransparencyHandler(mousePos - worldLocation);
             
         }
         #endregion
@@ -349,6 +391,7 @@ namespace Carcassonne
                               1f - ((float)i * 0.1f ));
 
                 }
+              if(!BoxTiles[x].Freeze)
                 spriteBatch.DrawString(
                 pericles10,
                 BoxTiles[x].CodeValue,
@@ -381,6 +424,16 @@ namespace Carcassonne
                  Vector2.Zero,
                  SpriteEffects.None,
                  1f - ((float)2 * 0.1f));
+
+            spriteBatch.Draw(
+             TileGrid.tileSheet,
+             TileGrid.ExactScreenRectangle(freezeTile.position),
+             TileGrid.TileSourceRectangle(freezeTile.LayerTiles[2]),
+             Color.White * freezeTile.Transparency,
+             0.0f,
+             Vector2.Zero,
+             SpriteEffects.None,
+             1f - ((float)2 * 0.1f));
 
         }
         #endregion

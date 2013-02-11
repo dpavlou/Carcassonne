@@ -16,6 +16,7 @@ namespace Carcassonne
         public bool available;
         private bool inactive;
         private bool dragging;
+        private bool freeze;
         #region Constructor
         public Actor(int background,
                             int interactive,
@@ -30,6 +31,7 @@ namespace Carcassonne
             mouseOver = false;
             this.available = true;
             dragging = false;
+            freeze = false;
         }
 
         #endregion
@@ -59,6 +61,13 @@ namespace Carcassonne
             get { return transparency;  } 
             set { transparency = value; }
         }
+
+        public bool Freeze
+        {
+            get { return freeze; }
+            set { freeze = value; }
+        }
+
 
         #endregion
 
@@ -93,8 +102,16 @@ namespace Carcassonne
             
         public void updateTilePosition(Vector2 mousePos)
         {
-            locked = false;
-            position = TileGrid.MouseCenter(mousePos);
+            if (!Freeze)
+            {
+                locked = false;
+                position = TileGrid.MouseCenter(mousePos);
+            }
+        }
+
+        public void ToggleFreeze()
+        {
+            freeze = !freeze;
         }
 
 
