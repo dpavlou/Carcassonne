@@ -17,6 +17,7 @@ namespace TileEngine
         public bool passable = true;
         public Vector2 currPos = Vector2.Zero;
         public float rotation = 0.0f;
+        private int rotationState = 0;
         #endregion
 
         #region Constructor
@@ -33,15 +34,49 @@ namespace TileEngine
             LayerTiles[2] = foreground;
             CodeValue = code;
             currPos = Position;
-           
         }
         #endregion
 
         #region Public Methods
+        public Vector2 OffSetPosition
+        {
+            get
+            {
+                Vector2 offSet = Vector2.Zero;
+                if (RotationState==1)
+                    offSet.X += (float)TileGrid.TileWidth;
+                else if (RotationState == 2)
+                {
+                    offSet.X += (float)TileGrid.TileWidth;
+                    offSet.Y += (float)TileGrid.TileHeight;
+                }
+                else if (RotationState == 3)
+                    offSet.Y += (float)TileGrid.TileHeight;
+
+                return currPos + offSet;
+            }
+
+            set { currPos = value; }
+        }
+
         public Vector2 position
         {
-            get { return currPos; }
-            set { currPos = value; }
+            get
+            {
+                return currPos;
+            }
+
+            set
+            {
+                currPos = value;
+            }
+
+        }
+
+        public int RotationState
+        {
+            get { return rotationState; }
+            set { rotationState = value; }
         }
 
         public float Rotation

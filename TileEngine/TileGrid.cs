@@ -38,16 +38,17 @@ namespace TileEngine
 
         public static SpriteFont spriteFont;
         static public Texture2D tileSheet;
+        static public Texture2D tempTile;
 
         #endregion
 
         #region Initialization
-        static public void Initialize(Texture2D tileTexture)
+        static public void Initialize(Texture2D tileTexture,Texture2D temptile)
         {
 
             Random rand = new Random();
             tileSheet = tileTexture;
-
+            tempTile = temptile;
  
 
 
@@ -81,6 +82,14 @@ namespace TileEngine
                 OriginalTileWidth,
                 OriginalTileHeight);
         }
+
+        public static Vector2 TileSourceCenter(int tileIndex)
+        {
+            return new Vector2(
+                (tileIndex % TilesPerRow) * OriginalTileWidth + OriginalTileWidth / 2,
+                (tileIndex / TilesPerRow) * OriginalTileHeight + OriginalTileHeight / 2);   
+        }
+
         #endregion
 
         #region Information about Map Cells

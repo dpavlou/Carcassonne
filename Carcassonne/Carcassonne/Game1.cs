@@ -61,16 +61,17 @@ namespace Carcassonne
             pericles10 = Content.Load<SpriteFont>(@"Fonts\Pericles10");
 
             TileGrid.Initialize(
-              Content.Load<Texture2D>(@"Textures\MapSquare"));
+              Content.Load<Texture2D>(@"Textures\MapSquare"), Content.Load<Texture2D>(@"Textures\BaseGame\city1"));
 
-            TileManager.Initialize(new Vector2(1400, 30), new Vector2(1400, 130),new Vector2(1400,230), pericles10);
+            TileManager.Initialize(new Vector2(this.GraphicsDevice.Viewport.Width - 200, 40),
+                                   new Vector2(this.GraphicsDevice.Viewport.Width - 200, 140), pericles10);
 
             //Camera.newViewPort = GraphicsDevice.Viewport;
 
             Camera.WorldRectangle = new Rectangle(0, 0, TileGrid.MapWidth * TileGrid.TileWidth, TileGrid.MapHeight * TileGrid.TileHeight);
             Camera.Position = Vector2.Zero;
-            Camera.ViewPortWidth = 1600;
-            Camera.ViewPortHeight = 900;
+            Camera.ViewPortWidth = this.GraphicsDevice.Viewport.Width;
+            Camera.ViewPortHeight = this.GraphicsDevice.Viewport.Height;
 
             player = new Player(Content,"Kokos",new Vector2(TileGrid.MapWidth/2*TileGrid.TileWidth,TileGrid.MapHeight/2*TileGrid.TileHeight));
 
@@ -131,26 +132,21 @@ namespace Carcassonne
             spriteBatch.DrawString(
             pericles10,
             "Scale:" +
-           player.calculateStep(),
+           ((float)TileGrid.TileWidth / (float)TileGrid.OriginalTileWidth),
             new Vector2(10, 40),
             Color.Red);
 
             spriteBatch.DrawString(
             pericles10,
             "Tiles",
-            new Vector2(1500, 60),
+            new Vector2(this.GraphicsDevice.Viewport.Width-100, 70),
             Color.Red);
 
-            spriteBatch.DrawString(
-            pericles10,
-            "Commit",
-            new Vector2(1500, 160),
-            Color.Red);
 
             spriteBatch.DrawString(
             pericles10,
             "Lock",
-            new Vector2(1500, 260),
+            new Vector2(this.GraphicsDevice.Viewport.Width - 100, 170),
             Color.Red);
             
             spriteBatch.End();

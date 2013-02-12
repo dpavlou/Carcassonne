@@ -50,8 +50,8 @@ namespace Carcassonne
             ID = playerName;
             mousePosition = Vector2.Zero;
             velocity = Vector2.Zero;
-            GameWidth = 1600;
-            GameHeight = 900;
+            GameWidth = Camera.ViewPortWidth;
+            GameHeight = Camera.ViewPortHeight;
             worldLocation = position;
             prevWheelValue = currWheelValue = 0;
             scale = TileGrid.OriginalTileHeight;
@@ -71,10 +71,17 @@ namespace Carcassonne
         
             var mouseState = Mouse.GetState();
 
-
             ScrollScalling(mouseState);
 
- 
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                TileManager.AddRotatingTile(ID, false);
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                TileManager.AddRotatingTile(ID, true);
+            }
+             
             if (mouseState.RightButton != ButtonState.Pressed)
             {
                 isScrolling = false;
@@ -122,7 +129,7 @@ namespace Carcassonne
            moveAmount = velocity * elapsed;
 
 
-           if (ReachedDesiredLocation())
+           if (ReachedDesiredLocation()) 
                calculateVelocity();
    
             moveAmount *= 2;
@@ -211,6 +218,7 @@ namespace Carcassonne
         {
             if (newScale != scale)
             {
+                autoPilot = false;
                 Vector2 screenCenter = TileGrid.GetCellByPixel(new Vector2(worldLocation.X,
                                                                             worldLocation.Y));
                 TileManager.AdjustTileLocation(ID, newScale);

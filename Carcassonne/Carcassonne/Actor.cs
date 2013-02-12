@@ -15,7 +15,7 @@ namespace Carcassonne
         public bool mouseOver;
         public bool available;
         private bool inactive;
-        private bool dragging;
+        private bool visible;
         private bool freeze;
         #region Constructor
         public Actor(int background,
@@ -30,7 +30,7 @@ namespace Carcassonne
             transparency = 1.0f;
             mouseOver = false;
             this.available = true;
-            dragging = false;
+            visible = true;
             freeze = false;
         }
 
@@ -42,6 +42,12 @@ namespace Carcassonne
         {
             get { return available; }
             set { available = value; }
+        }
+
+        public bool Visible //drawn if true
+        {
+            get { return visible; }
+            set { visible = value; }
         }
 
         public bool Inactive  //if true remove from list
@@ -113,8 +119,19 @@ namespace Carcassonne
                 transparency = 1.0f;
             else
                 transparency = 0.8f;
+
         }
-            
+
+
+        public void CheckVisibility()
+        {
+            if (Visible)
+                transparency = 1.0f;
+            else
+                transparency = 0.0f;
+
+        }
+
         public void updateTilePosition(Vector2 mousePos)
         {
             if (!Freeze)
