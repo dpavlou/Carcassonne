@@ -46,7 +46,7 @@ namespace TileEngine
         static public void Initialize(Texture2D tileTexture,Texture2D temptile)
         {
 
-            Random rand = new Random();
+          //  Random rand = new Random();
             tileSheet = tileTexture;
             tempTile = temptile;
  

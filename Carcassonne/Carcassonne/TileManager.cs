@@ -164,7 +164,7 @@ namespace Carcassonne
                for (int x = BoxTiles.Count - 1; x >= 0; x--)
                     if (BoxTiles[x].checkID(ID))
                     {
-                        if (BoxTiles[x].MouseOver(mousePos) || dragging)
+                        if ((BoxTiles[x].MouseOver(mousePos) || dragging) && !BoxTiles[x].Available) //get the available tile first
                             if (!dragging || dragID==x)
                             {
                                 BoxTiles[x].updateTilePosition(mousePos);
@@ -173,6 +173,20 @@ namespace Carcassonne
                                 break;
                             }
                     }
+
+               for (int x = BoxTiles.Count - 1; x >= 0; x--)
+                   if (BoxTiles[x].checkID(ID))
+                   {
+                       if (BoxTiles[x].MouseOver(mousePos) || dragging) //get any other tile if available tile wasnt found
+                           if (!dragging || dragID == x)
+                           {
+                               BoxTiles[x].updateTilePosition(mousePos);
+                               dragging = true;
+                               dragID = x;
+                               break;
+                           }
+                   }
+
                                 
             }
             if(!activeRotation)
@@ -190,8 +204,8 @@ namespace Carcassonne
                         for (int j = BoxTiles.Count - 1; j >= 0; j--)
                         {
                             if (x!=j)
-                            AvailabilityMap[TileGrid.GetCellByPixelX((int)BoxTiles[j].position.X),
-                                      TileGrid.GetCellByPixelY((int)BoxTiles[j].position.Y)] = false;
+                            AvailabilityMap[TileGrid.GetCellByPixelX((int)BoxTiles[j].position.X+TileGrid.TileWidth/2),
+                                      TileGrid.GetCellByPixelY((int)BoxTiles[j].position.Y + TileGrid.TileHeight / 2)] = false;
                         }
 
                         BoxTiles[x].tilePlacemenet(mousePos);
@@ -226,7 +240,9 @@ namespace Carcassonne
             for (int x = BoxTiles.Count - 1; x >= 0; x--)
                 if (BoxTiles[x].checkID(ID))
                 {
-                    BoxTiles[x].CheckVisibility();
+
+                   BoxTiles[x].CheckVisibility();
+
                     if (BoxTiles[x].Inactive)
                     {
                         BoxTiles.RemoveAt(x);
@@ -254,8 +270,17 @@ namespace Carcassonne
           {
               for (int i = 0; i < TileGrid.MapLayers; i++)
               {
+                  float layer = 0.4f;
                   if (x == dragID && !BoxTiles[x].Freeze)
                   {
+
+                      if (BoxTiles[x].Locked)
+                          layer = 0.3f;
+                      else
+                          layer = 0.1f;
+
+
+
                       spriteBatch.Draw(
                        TileGrid.tempTile,
                        Camera.WorldToScreen(BoxTiles[x].position + new Vector2(TileGrid.TileWidth / 2, TileGrid.TileHeight / 2)),
@@ -265,7 +290,7 @@ namespace Carcassonne
                        TileGrid.TileSourceCenter(0),
                        ((float)TileGrid.TileWidth / (float)TileGrid.OriginalTileWidth),
                        SpriteEffects.None,
-                         0.1f);
+                       layer);
                       /*    spriteBatch.Draw(
                                     TileGrid.tileSheet,
                                     TileGrid.ExactScreenRectangle(Camera.WorldToScreen(BoxTiles[x].position)),
@@ -278,25 +303,32 @@ namespace Carcassonne
                        * */
                   }
                   else
-                      spriteBatch.Draw(
-                        TileGrid.tempTile,
-                        Camera.WorldToScreen(BoxTiles[x].position + new Vector2(TileGrid.TileWidth / 2, TileGrid.TileHeight / 2)),
-                        null,
-                        Color.White * BoxTiles[x].Transparency,
-                        BoxTiles[x].Rotation,
-                        TileGrid.TileSourceCenter(0),
-                        ((float)TileGrid.TileWidth / (float)TileGrid.OriginalTileWidth),
-                        SpriteEffects.None,
-                        1f - ((float)i * 0.1f));
-                  /*      spriteBatch.Draw(
-                                  TileGrid.tileSheet,
-                                  TileGrid.ExactScreenRectangle(Camera.WorldToScreen(BoxTiles[x].position)),
-                                  TileGrid.TileSourceRectangle(BoxTiles[x].LayerTiles[i]),
-                                  Color.White * BoxTiles[x].Transparency,
-                                  BoxTiles[x].Rotation,
-                                  Vector2.Zero,
-                                  SpriteEffects.None,
-                                  1f - ((float)i * 0.1f ));*/
+                  {
+
+                      if (!BoxTiles[x].Available)
+                          layer = 0.2f;
+            
+
+                          spriteBatch.Draw(
+                            TileGrid.tempTile,
+                            Camera.WorldToScreen(BoxTiles[x].position + new Vector2(TileGrid.TileWidth / 2, TileGrid.TileHeight / 2)),
+                            null,
+                            Color.White * BoxTiles[x].Transparency,
+                            BoxTiles[x].Rotation,
+                            TileGrid.TileSourceCenter(0),
+                            ((float)TileGrid.TileWidth / (float)TileGrid.OriginalTileWidth),
+                            SpriteEffects.None,
+                            layer);
+                      /*      spriteBatch.Draw(
+                                      TileGrid.tileSheet,
+                                      TileGrid.ExactScreenRectangle(Camera.WorldToScreen(BoxTiles[x].position)),
+                                      TileGrid.TileSourceRectangle(BoxTiles[x].LayerTiles[i]),
+                                      Color.White * BoxTiles[x].Transparency,
+                                      BoxTiles[x].Rotation,
+                                      Vector2.Zero,
+                                      SpriteEffects.None,
+                                      1f - ((float)i * 0.1f ));*/
+                  }
 
               }
               if (!BoxTiles[x].Freeze)
