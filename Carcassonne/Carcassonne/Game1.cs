@@ -97,7 +97,7 @@ namespace Carcassonne
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
                 || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
-
+            
             player.Update(gameTime);
            // Camera.Update();
             base.Update(gameTime);
@@ -119,6 +119,8 @@ namespace Carcassonne
 
             TileGrid.Draw(spriteBatch);
             TileManager.Draw(spriteBatch);
+
+
             spriteBatch.DrawString(
             pericles10,
             "WorldLocation:"+
@@ -126,6 +128,12 @@ namespace Carcassonne
              new Vector2(10, 10),
              Color.Red);
 
+            spriteBatch.DrawString(
+            pericles10,
+            "Scale:" +
+            player.scale,
+            new Vector2(10, 40),
+            Color.Red);
 
             spriteBatch.DrawString(
             pericles10,

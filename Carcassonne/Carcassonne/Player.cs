@@ -16,7 +16,7 @@ namespace Carcassonne
         private String ID;
         private bool isScrolling = false;
         private Vector2 mousePosition;
-        private Vector2 velocity;
+        public Vector2 velocity;
         private Vector2 moveAmount;
         private Vector2 newMousePosition;
         private int GameWidth;
@@ -91,14 +91,19 @@ namespace Carcassonne
             {
                var mousePos = new Vector2(mouseState.X, mouseState.Y);
                mousePosition = new Vector2(mousePos.X,mousePos.Y);
-               newMousePosition = new Vector2(mouseState.X-5, mouseState.Y-5); 
+               newMousePosition = new Vector2(mouseState.X, mouseState.Y); 
                 isScrolling=true;
             }
 
             if (isScrolling)
             {
-                newMousePosition = new Vector2(mouseState.X-5, mouseState.Y-5);    
-                velocity = newMousePosition - mousePosition;
+                newMousePosition = new Vector2(mouseState.X, mouseState.Y);    
+
+                if(newMousePosition != mousePosition) //NaN error handler
+                    velocity = newMousePosition - mousePosition;
+                else
+                    velocity = (newMousePosition-new Vector2(1,0)) - mousePosition;
+
                 velocity.Normalize();
                 velocity = Vector2.Negate(velocity);
 
