@@ -120,7 +120,8 @@ namespace Carcassonne
             if (!Freeze)
             {
                 locked = false;
-                position = TileGrid.MouseCenter(mousePos);
+                position=TileGrid.PositionInWorldBounds(TileGrid.MouseCenter(mousePos));
+             //   position = TileGrid.MouseCenter(mousePos);
             }
         }
 
@@ -132,7 +133,9 @@ namespace Carcassonne
 
         public void tilePlacemenet(Vector2 mousePos)
         {
+            mousePos = TileGrid.PositionInWorldBounds(TileGrid.MouseCenter(mousePos));
             if (!Locked)
+             
                 if ((TileGrid.mapCells[TileGrid.GetCellByPixelX((int)mousePos.X),
                     TileGrid.GetCellByPixelY((int)mousePos.Y)].LayerTiles[1]) == 0
                     && TileManager.AvailabilityMap[TileGrid.GetCellByPixelX((int)mousePos.X),

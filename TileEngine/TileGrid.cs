@@ -57,8 +57,8 @@ namespace TileEngine
                 {
                     for (int z = 0; z < MapLayers; z++)
                     {
-                        if (rand.Next(0,30) ==0)
-                            mapCells[x, y] = new Tile(1, 0, 0, "",Vector2.Zero);
+                        if(x==0 || y==0 || x==MapWidth-1 || y==MapWidth-1)
+                            mapCells[x, y] = new Tile(2, 0, 0, "", Vector2.Zero);
                         else
                             mapCells[x, y] = new Tile(1, 0, 0, "",Vector2.Zero);
                     }
@@ -279,12 +279,29 @@ namespace TileEngine
 
         }
 
+        static public Vector2 PositionInWorldBounds(Vector2 mousePos)
+        {
+
+            if (mousePos.Y < (float)TileHeight)
+                mousePos.Y = (float)TileHeight;
+            else if (mousePos.Y > ((float)TileHeight * (MapHeight - 2)))
+                mousePos.Y = (float)TileHeight * (MapHeight - 2);
+
+            if (mousePos.X < (float)TileWidth)
+                mousePos.X = (float)TileWidth;
+            else if (mousePos.X > ((float)TileWidth * (MapWidth - 2)))
+                mousePos.X = (float)TileWidth * (MapWidth - 2);
+
+            return mousePos;
+                
+        }
+
         #endregion
 
         #region Information About Tile Box
 
 
-
+        
         static public Rectangle ExactScreenRectangle(Vector2 boxPos)
         {
             return new Rectangle(
