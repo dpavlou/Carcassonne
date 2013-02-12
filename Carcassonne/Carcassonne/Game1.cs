@@ -124,14 +124,14 @@ namespace Carcassonne
             spriteBatch.DrawString(
             pericles10,
             "WorldLocation:"+
-            player.WorldPosition,
+           player.worldLocation,
              new Vector2(10, 10),
              Color.Red);
 
             spriteBatch.DrawString(
             pericles10,
             "Scale:" +
-            player.scale,
+           player.calculateStep(),
             new Vector2(10, 40),
             Color.Red);
 

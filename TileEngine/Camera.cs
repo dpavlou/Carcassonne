@@ -113,6 +113,17 @@ namespace TileEngine
             Position += offset;
         }
 
+      
+        public static Vector2 WorldScreenCenter(Vector2 worldLocation)
+        {
+
+            return (new Vector2(worldLocation.X + (ViewPortWidth / 2),
+                       worldLocation.Y + (ViewPortHeight / 2)));
+        }
+
+
+
+
         public static bool ObjectIsVisible(Rectangle bounds)
         {
             return (ViewPort.Intersects(bounds));

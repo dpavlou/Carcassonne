@@ -12,18 +12,23 @@ namespace Carcassonne
 {
     public class Player
     {
-        private Vector2 worldLocation;
+        public Vector2 worldLocation;
         private String ID;
         private bool isScrolling = false;
         private Vector2 mousePosition;
         public Vector2 velocity;
         private Vector2 moveAmount;
         private Vector2 newMousePosition;
+        public Vector2 desiredCenter;
+        public bool autoPilot;
+
         private int GameWidth;
         private int GameHeight;
-
+        private bool active = false; //double click simulation
         private float prevWheelValue;
         private float currWheelValue;
+        private float timeSinceAutoPilot = 5.0f;
+        private float timeSinceLastClick = 2.0f;
         public float scale;
 
 
@@ -50,7 +55,7 @@ namespace Carcassonne
             worldLocation = position;
             prevWheelValue = currWheelValue = 0;
             scale = TileGrid.OriginalTileHeight;
-
+            autoPilot = false;
 
         }
 
@@ -61,25 +66,15 @@ namespace Carcassonne
         {
            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+           timeSinceAutoPilot = MathHelper.Min(timeSinceAutoPilot + elapsed, 5.0f);
+           timeSinceLastClick= MathHelper.Min(timeSinceLastClick + elapsed, 5.0f);  
+        
             var mouseState = Mouse.GetState();
 
-            /*
-             * var mousePosition = new Point(mouseState.X, mouseState.Y
-             * if (area.Contains(mousePosition))
-            {
-                backgroundTexture = hoverTexture;
-            }
-                else
-            {
-                  backgroundTexture = defaultTexture;
-            }
-             * */
 
             ScrollScalling(mouseState);
 
-    
-            
-
+ 
             if (mouseState.RightButton != ButtonState.Pressed)
             {
                 isScrolling = false;
@@ -89,6 +84,7 @@ namespace Carcassonne
             if (mouseState.RightButton == ButtonState.Pressed
                 && !isScrolling)
             {
+                autoPilot = false;
                var mousePos = new Vector2(mouseState.X, mouseState.Y);
                mousePosition = new Vector2(mousePos.X,mousePos.Y);
                newMousePosition = new Vector2(mouseState.X, mouseState.Y); 
@@ -112,11 +108,25 @@ namespace Carcassonne
               
             }
 
+            if (simulateDoubleClick(mouseState))
+            {
+                desiredCenter = (new Vector2(mouseState.X, mouseState.Y)+ worldLocation);
+                calculateVelocity();
+                autoPilot=true;
+                timeSinceAutoPilot = 0.0f;
+            }
 
             reduceVelocity();
 
-            moveAmount =  velocity * elapsed;
+             
+           moveAmount = velocity * elapsed;
+
+
+           if (ReachedDesiredLocation())
+               calculateVelocity();
+   
             moveAmount *= 2;
+              
 
             adjustLocation();
             //worldLocation += moveAmount;
@@ -129,6 +139,65 @@ namespace Carcassonne
 
         #region Helper Methods
 
+        private void calculateVelocity()
+        {
+            velocity = desiredCenter - Camera.WorldScreenCenter(worldLocation);
+        }
+
+        public float calculateStep()
+        {
+      
+            return (Vector2.Distance(Camera.WorldScreenCenter(worldLocation), desiredCenter));
+      
+        }
+
+        public bool simulateDoubleClick(MouseState mouseState)
+        {
+
+           
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                timeSinceLastClick = 0.0f;
+
+            if (mouseState.LeftButton == ButtonState.Pressed && active)
+            {
+                active = false;
+                return true;
+            }
+            if(mouseState.LeftButton != ButtonState.Pressed 
+                && timeSinceLastClick <0.1f )
+                active=true;
+            else
+                active=false;
+
+             return false;
+
+        }
+
+        private bool ReachedDesiredLocation()
+        {
+            if (autoPilot)
+            {
+                if (TileGrid.CellWorldRectangle(desiredCenter).Intersects
+                   (TileGrid.CellWorldRectangle(Camera.WorldScreenCenter(worldLocation)))
+                    || timeSinceAutoPilot > 2.5f)
+                {
+                    autoPilot = false;
+                    return false;
+                }
+                else
+                {
+                   // if (timeSinceAutoPilot % 0.2f < 0.01)
+                       // ScaleScreen(MathHelper.Min(scale + 1, TileGrid.OriginalTileHeight));
+
+                    return true;
+                }
+            }
+
+            autoPilot = false;
+            return false;
+
+        }
+
         private void adjustLocation()
         {
             worldLocation.X = MathHelper.Clamp(worldLocation.X += moveAmount.X, GameWidth/2, 
@@ -138,34 +207,40 @@ namespace Carcassonne
                                         TileGrid.MapHeight * TileGrid.TileHeight-GameHeight/2);
         }
 
-
-        private void ScrollScalling(MouseState mouseState)
+        private void ScaleScreen(float newScale)
         {
-
-            float newScale = MathHelper.Clamp(scale+(currWheelValue/120 - prevWheelValue/120), 40f, TileGrid.OriginalTileWidth);
-
             if (newScale != scale)
             {
                 Vector2 screenCenter = TileGrid.GetCellByPixel(new Vector2(worldLocation.X,
                                                                             worldLocation.Y));
-                TileManager.AdjustTileLocation(ID, newScale); 
+                TileManager.AdjustTileLocation(ID, newScale);
                 TileGrid.TileWidth = (int)newScale;
                 TileGrid.TileHeight = (int)newScale;
                 float scaleDifference = newScale - scale;
                 scale = newScale;
-                             
-                worldLocation=new Vector2(screenCenter.X*(float)TileGrid.TileWidth,
-                                        (float)screenCenter.Y*TileGrid.TileHeight);
+
+                worldLocation = new Vector2(screenCenter.X * (float)TileGrid.TileWidth,
+                                        (float)screenCenter.Y * TileGrid.TileHeight);
                 adjustLocation();
-                
+
             }
+
+
+        }
+
+        private void ScrollScalling(MouseState mouseState)
+        {
+    
+            float newScale = MathHelper.Clamp(scale+(currWheelValue/120 - prevWheelValue/120), 40f, TileGrid.OriginalTileWidth);
+
+            ScaleScreen(newScale);
 
             prevWheelValue = currWheelValue;
             currWheelValue = mouseState.ScrollWheelValue;
 
-            
-
         }
+
+
         private void reduceVelocity()
         {
             float reduceAmount = 10.0f;
