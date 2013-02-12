@@ -279,8 +279,6 @@ namespace Carcassonne
                       else
                           layer = 0.1f;
 
-
-
                       spriteBatch.Draw(
                        TileGrid.tempTile,
                        Camera.WorldToScreen(BoxTiles[x].position + new Vector2(TileGrid.TileWidth / 2, TileGrid.TileHeight / 2)),
@@ -352,7 +350,7 @@ namespace Carcassonne
                 0.0f,
                 Vector2.Zero,
                 SpriteEffects.None,
-                1f - (2 * 0.1f));
+                0.02f);
 
 
         /*    spriteBatch.Draw(
@@ -373,7 +371,7 @@ namespace Carcassonne
              0.0f,
              Vector2.Zero,
              SpriteEffects.None,
-             1f - (2 * 0.1f));
+              0.02f);
 
         }
         #endregion
