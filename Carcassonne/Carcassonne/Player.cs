@@ -146,11 +146,18 @@ namespace Carcassonne
 
             if (newScale != scale)
             {
+                Vector2 screenCenter = TileGrid.GetCellByPixel(new Vector2(worldLocation.X,
+                                                                            worldLocation.Y));
                 TileManager.AdjustTileLocation(ID, newScale); 
                 TileGrid.TileWidth = (int)newScale;
                 TileGrid.TileHeight = (int)newScale;
+                float scaleDifference = newScale - scale;
                 scale = newScale;
-              
+                             
+                worldLocation=new Vector2(screenCenter.X*(float)TileGrid.TileWidth,
+                                        (float)screenCenter.Y*TileGrid.TileHeight);
+                adjustLocation();
+                
             }
 
             prevWheelValue = currWheelValue;

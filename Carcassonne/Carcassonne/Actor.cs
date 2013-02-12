@@ -133,7 +133,7 @@ namespace Carcassonne
 
         public void tilePlacemenet(Vector2 mousePos)
         {
-            mousePos = TileGrid.PositionInWorldBounds(TileGrid.MouseCenter(mousePos));
+            mousePos = TileGrid.PositionInWorldBounds(mousePos);
             if (!Locked)
              
                 if ((TileGrid.mapCells[TileGrid.GetCellByPixelX((int)mousePos.X),

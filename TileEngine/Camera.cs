@@ -95,6 +95,7 @@ namespace TileEngine
             set { viewPortSize.Y = value; }
         }
 
+
         public static Rectangle ViewPort
         {
             get
@@ -116,6 +117,8 @@ namespace TileEngine
         {
             return (ViewPort.Intersects(bounds));
         }
+
+
 
         public static Vector2 WorldToScreen(Vector2 worldLocation)
         {
