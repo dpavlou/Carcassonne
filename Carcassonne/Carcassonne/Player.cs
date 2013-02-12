@@ -73,11 +73,11 @@ namespace Carcassonne
 
             ScrollScalling(mouseState);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            if (Keyboard.GetState().IsKeyDown(Keys.A) || mouseState.XButton1 == ButtonState.Pressed)
             {
                 TileManager.AddRotatingTile(ID, false);
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.S))
+            else if (Keyboard.GetState().IsKeyDown(Keys.S) || mouseState.XButton2 == ButtonState.Pressed)
             {
                 TileManager.AddRotatingTile(ID, true);
             }
