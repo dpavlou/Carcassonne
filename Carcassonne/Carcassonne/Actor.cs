@@ -116,9 +116,9 @@ namespace Carcassonne
         public void TransparencyHandler(Vector2 mousePos)
         {
             if (MouseOverReal(mousePos))
-                transparency = 1.0f;
-            else
                 transparency = 0.8f;
+            else
+                transparency = 0.4f;
 
         }
 

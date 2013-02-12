@@ -21,6 +21,7 @@ namespace Carcassonne
         SpriteBatch spriteBatch;
         SpriteFont pericles10;
         Player player;
+        FpsMonitor fps;
 
         public Game1()
         {
@@ -37,7 +38,8 @@ namespace Carcassonne
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            fps = new FpsMonitor();
+
             this.IsMouseVisible = true;
 
             this.Window.Title = "Carcassonne ALPHA";
@@ -98,10 +100,14 @@ namespace Carcassonne
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
                 || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
-            
+
+            fps.Update();
+
             player.Update(gameTime);
            // Camera.Update();
+
             base.Update(gameTime);
+
         }
 
         /// <summary>
@@ -121,34 +127,15 @@ namespace Carcassonne
             TileGrid.Draw(spriteBatch);
             TileManager.Draw(spriteBatch);
 
-
             spriteBatch.DrawString(
             pericles10,
             "WorldLocation:"+
-           player.worldLocation,
-             new Vector2(10, 10),
-             Color.Red);
-
-            spriteBatch.DrawString(
-            pericles10,
-            "Scale:" +
-           ((float)TileGrid.TileWidth / (float)TileGrid.OriginalTileWidth),
-            new Vector2(10, 40),
+            player.worldLocation,
+            new Vector2(10, 10),
             Color.Red);
 
-            spriteBatch.DrawString(
-            pericles10,
-            "Tiles",
-            new Vector2(this.GraphicsDevice.Viewport.Width-100, 70),
-            Color.Red);
+            fps.Draw(spriteBatch, pericles10, new Vector2(10, 40), Color.Red);
 
-
-            spriteBatch.DrawString(
-            pericles10,
-            "Lock",
-            new Vector2(this.GraphicsDevice.Viewport.Width - 100, 170),
-            Color.Red);
-            
             spriteBatch.End();
 
             base.Draw(gameTime);

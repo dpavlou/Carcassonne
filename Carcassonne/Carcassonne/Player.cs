@@ -30,7 +30,7 @@ namespace Carcassonne
         private float timeSinceAutoPilot = 5.0f;
         private float timeSinceLastClick = 2.0f;
         public float scale;
-
+        public MouseState prevMouseState;
 
         #region Properties
 
@@ -56,7 +56,8 @@ namespace Carcassonne
             prevWheelValue = currWheelValue = 0;
             scale = TileGrid.OriginalTileHeight;
             autoPilot = false;
-
+            var prevmouseState = Mouse.GetState();
+            prevMouseState = Mouse.GetState();
         }
 
         #endregion
@@ -67,17 +68,19 @@ namespace Carcassonne
            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
            timeSinceAutoPilot = MathHelper.Min(timeSinceAutoPilot + elapsed, 5.0f);
-           timeSinceLastClick= MathHelper.Min(timeSinceLastClick + elapsed, 5.0f);  
-        
+           timeSinceLastClick= MathHelper.Min(timeSinceLastClick + elapsed, 5.0f);
+   
             var mouseState = Mouse.GetState();
 
             ScrollScalling(mouseState);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A) || mouseState.XButton1 == ButtonState.Pressed)
+            if (Keyboard.GetState().IsKeyDown(Keys.A) || 
+                ( mouseState.XButton1 == ButtonState.Pressed && prevMouseState.XButton1 !=ButtonState.Pressed))
             {
                 TileManager.AddRotatingTile(ID, false);
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.S) || mouseState.XButton2 == ButtonState.Pressed)
+            else if (Keyboard.GetState().IsKeyDown(Keys.S) ||
+                  (mouseState.XButton2 == ButtonState.Pressed && prevMouseState.XButton2 != ButtonState.Pressed))
             {
                 TileManager.AddRotatingTile(ID, true);
             }
@@ -139,6 +142,8 @@ namespace Carcassonne
             //worldLocation += moveAmount;
    
             repositionCamera();
+
+            prevMouseState = mouseState;
 
             TileManager.Update(gameTime, WorldPosition, ID);
         }

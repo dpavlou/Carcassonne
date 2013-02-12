@@ -373,6 +373,19 @@ namespace Carcassonne
              SpriteEffects.None,
               0.02f);
 
+            spriteBatch.DrawString(
+            pericles10,
+            "Tiles" ,
+            new Vector2(Camera.ViewPortWidth - 100, 70),
+            Color.Red * TileSpawner.Transparency);
+
+
+            spriteBatch.DrawString(
+            pericles10,
+            "Lock",
+            new Vector2(Camera.ViewPortWidth - 100, 170),
+            Color.Red * freezeTile.Transparency);
+
         }
         #endregion
 
