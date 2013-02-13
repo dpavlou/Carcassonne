@@ -43,9 +43,9 @@ namespace Carcassonne
             this.IsMouseVisible = true;
 
             this.Window.Title = "Carcassonne ALPHA";
-            this.graphics.IsFullScreen = false;
-            this.graphics.PreferredBackBufferWidth = 1600;
-            this.graphics.PreferredBackBufferHeight = 900;
+            this.graphics.IsFullScreen = true;
+            this.graphics.PreferredBackBufferWidth = 1920;
+            this.graphics.PreferredBackBufferHeight = 1080;
             this.graphics.ApplyChanges();
 
             base.Initialize();
@@ -106,6 +106,11 @@ namespace Carcassonne
             player.Update(gameTime);
            // Camera.Update();
 
+            if ((Keyboard.GetState().IsKeyDown(Keys.LeftAlt)  && Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+                ||( Keyboard.GetState().IsKeyDown(Keys.RightAlt) && Keyboard.GetState().IsKeyDown(Keys.RightShift)))
+            {
+                graphics.ToggleFullScreen();
+            }
             base.Update(gameTime);
 
         }

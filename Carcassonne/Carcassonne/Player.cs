@@ -19,6 +19,7 @@ namespace Carcassonne
         public Vector2 velocity;
         private Vector2 moveAmount;
         private Vector2 newMousePosition;
+        private Vector2 rightClickPosition;
         public Vector2 desiredCenter;
         public bool autoPilot;
 
@@ -29,8 +30,10 @@ namespace Carcassonne
         private float currWheelValue;
         private float timeSinceAutoPilot = 5.0f;
         private float timeSinceLastClick = 2.0f;
+        private float timeSinceLastRightClick = 0.0f;
         public float scale;
         public MouseState prevMouseState;
+        private bool onLock = false;
 
         #region Properties
 
@@ -85,11 +88,7 @@ namespace Carcassonne
                 TileManager.AddRotatingTile(ID, true);
             }
              
-            if (mouseState.RightButton != ButtonState.Pressed)
-            {
-                isScrolling = false;
 
-            }
             
             if (mouseState.RightButton == ButtonState.Pressed
                 && !isScrolling)
@@ -97,13 +96,26 @@ namespace Carcassonne
                 autoPilot = false;
                var mousePos = new Vector2(mouseState.X, mouseState.Y);
                mousePosition = new Vector2(mousePos.X,mousePos.Y);
-               newMousePosition = new Vector2(mouseState.X, mouseState.Y); 
+               newMousePosition = new Vector2(mouseState.X, mouseState.Y);
+               rightClickPosition = new Vector2(mouseState.X, mouseState.Y); 
                 isScrolling=true;
+               
+            }
+            if (mouseState.RightButton == ButtonState.Pressed)
+            {
+                timeSinceLastRightClick = MathHelper.Min(timeSinceLastRightClick + elapsed, 2.0f);
+                velocity = rightClickPosition - new Vector2(mouseState.X, mouseState.Y);
+                rightClickPosition = new Vector2(mouseState.X, mouseState.Y);
+                onLock = true;
+                moveAmount = velocity;
+                velocity *= 8;
             }
 
-            if (isScrolling)
+       /*     if (isScrolling && 
+                mouseState.RightButton != ButtonState.Pressed 
+                && timeSinceLastRightClick<0.4f)
             {
-                newMousePosition = new Vector2(mouseState.X, mouseState.Y);    
+          /*      newMousePosition = new Vector2(mouseState.X, mouseState.Y);    
 
                 if(newMousePosition != mousePosition) //NaN error handler
                     velocity = newMousePosition - mousePosition;
@@ -114,9 +126,17 @@ namespace Carcassonne
                 velocity = Vector2.Negate(velocity);
 
                if (Vector2.Distance(newMousePosition, mousePosition)!=0.0f)
-                velocity = velocity * Vector2.Distance(newMousePosition, mousePosition);
+                velocity = velocity * Vector2.Distance(newMousePosition, mousePosition);*/
               
+            //}
+
+            if (mouseState.RightButton != ButtonState.Pressed)
+            {
+                isScrolling = false;
+                timeSinceLastRightClick = 0.0f;
+                onLock = false;
             }
+
 
             if (simulateDoubleClick(mouseState))
             {
@@ -126,16 +146,19 @@ namespace Carcassonne
                 timeSinceAutoPilot = 0.0f;
             }
 
-            reduceVelocity();
+          
 
-             
-           moveAmount = velocity * elapsed;
+            if (!onLock)
+            {
+                reduceVelocity();
+                moveAmount = velocity * elapsed;
 
 
-           if (ReachedDesiredLocation()) 
-               calculateVelocity();
-   
-            moveAmount *= 2;
+                if (ReachedDesiredLocation())
+                    calculateVelocity();
+
+                moveAmount *= 2;
+            }
               
 
             adjustLocation();
