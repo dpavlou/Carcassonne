@@ -122,7 +122,7 @@ namespace Carcassonne
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            MouseState mouseState =Mouse.GetState();
             spriteBatch.Begin(
             SpriteSortMode.BackToFront,
             BlendState.AlphaBlend);
@@ -135,7 +135,7 @@ namespace Carcassonne
             spriteBatch.DrawString(
             pericles10,
             "WorldLocation:"+
-            player.worldLocation,
+            mouseState.ScrollWheelValue,
             new Vector2(10, 10),
             Color.Red);
 

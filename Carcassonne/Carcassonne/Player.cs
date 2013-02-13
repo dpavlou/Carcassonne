@@ -33,6 +33,8 @@ namespace Carcassonne
         private float timeSinceLastRightClick = 0.0f;
         public float scale;
         public MouseState prevMouseState;
+        private KeyboardState currKeyState;
+        private KeyboardState prevKeyState;
         private bool onLock = false;
 
         #region Properties
@@ -61,6 +63,7 @@ namespace Carcassonne
             autoPilot = false;
             var prevmouseState = Mouse.GetState();
             prevMouseState = Mouse.GetState();
+            prevKeyState = Keyboard.GetState();
         }
 
         #endregion
@@ -74,16 +77,17 @@ namespace Carcassonne
            timeSinceLastClick= MathHelper.Min(timeSinceLastClick + elapsed, 5.0f);
    
             var mouseState = Mouse.GetState();
+            currKeyState = Keyboard.GetState();
 
             ScrollScalling(mouseState);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A) || 
-                ( mouseState.XButton1 == ButtonState.Pressed && prevMouseState.XButton1 !=ButtonState.Pressed))
+            if ((currKeyState.IsKeyDown(Keys.A) && !prevKeyState.IsKeyDown(Keys.A))
+                ||( mouseState.XButton1 == ButtonState.Pressed && prevMouseState.XButton1 !=ButtonState.Pressed))
             {
                 TileManager.AddRotatingTile(ID, false);
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.S) ||
-                  (mouseState.XButton2 == ButtonState.Pressed && prevMouseState.XButton2 != ButtonState.Pressed))
+            else if ((currKeyState.IsKeyDown(Keys.S) && !prevKeyState.IsKeyDown(Keys.S))
+                || (mouseState.XButton2 == ButtonState.Pressed && prevMouseState.XButton2 != ButtonState.Pressed))
             {
                 TileManager.AddRotatingTile(ID, true);
             }
@@ -167,6 +171,7 @@ namespace Carcassonne
             repositionCamera();
 
             prevMouseState = mouseState;
+            prevKeyState = currKeyState;
 
             TileManager.Update(gameTime, WorldPosition, ID);
         }
@@ -266,10 +271,18 @@ namespace Carcassonne
 
         private void ScrollScalling(MouseState mouseState)
         {
-    
-            float newScale = MathHelper.Clamp(scale+(currWheelValue/120 - prevWheelValue/120), 40f, TileGrid.OriginalTileWidth);
+            float newValue=0;
+            if ((currWheelValue / 120 - prevWheelValue / 120) > 0)
+                newValue = 2;
+            else if ((currWheelValue / 120 - prevWheelValue / 120) < 0)
+                newValue = -2;
 
-            ScaleScreen(newScale);
+            if (newValue != 0)
+            {
+
+                float newScale = MathHelper.Clamp(scale + newValue, 40f, TileGrid.OriginalTileWidth);
+                ScaleScreen(newScale);
+            }
 
             prevWheelValue = currWheelValue;
             currWheelValue = mouseState.ScrollWheelValue;
