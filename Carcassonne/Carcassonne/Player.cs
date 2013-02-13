@@ -249,7 +249,7 @@ namespace Carcassonne
                 autoPilot = false;
                 Vector2 screenCenter = TileGrid.GetCellByPixel(new Vector2(worldLocation.X,
                                                                             worldLocation.Y));
-                TileManager.AdjustTileLocation(ID, newScale);
+                TileManager.AdjustTileLocation(ID, newScale,scale);
                 TileGrid.TileWidth = (int)newScale;
                 TileGrid.TileHeight = (int)newScale;
                 float scaleDifference = newScale - scale;

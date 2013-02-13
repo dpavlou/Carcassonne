@@ -78,12 +78,22 @@ namespace Carcassonne
         }
 
 
-        static public void AdjustTileLocation(string ID,float newScale)
+        static public void AdjustTileLocation(string ID,float newScale,float scale)
         {
             foreach (Actor actor in BoxTiles)
                 if (actor.checkID(ID))
-                    actor.position = new Vector2((float)TileGrid.GetCellByPixelX((int)actor.position.X) * newScale
-                                                , (float)TileGrid.GetCellByPixelX((int)actor.position.Y) * newScale);
+                {
+                    if (actor.Available)
+                        actor.position = new Vector2((float)TileGrid.GetCellByPixelX((int)actor.position.X) * newScale
+                                                    , (float)TileGrid.GetCellByPixelX((int)actor.position.Y) * newScale);
+                    else
+                    {
+                        Vector2 tempPos= actor.position - (new Vector2((float)TileGrid.GetCellByPixelX((int)actor.position.X) * scale
+                                            , (float)TileGrid.GetCellByPixelX((int)actor.position.Y) * scale));
+                        actor.position = new Vector2((float)TileGrid.GetCellByPixelX((int)actor.position.X) * newScale
+                                                    , (float)TileGrid.GetCellByPixelX((int)actor.position.Y) * newScale) + tempPos * newScale/scale;
+                    }
+                }
         }
 
 
