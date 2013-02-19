@@ -131,7 +131,7 @@ namespace TileEngine
         public override void Update(GameTime gameTime)
         {
 
-            if (ActiveTile)
+            if (ActiveTile && !Lock)
             {
                 HandleRotation();
             }

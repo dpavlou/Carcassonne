@@ -45,7 +45,7 @@ namespace TileEngine
         {
             get
             {
-                return new Rectangle((int)Location.X - TileGrid.TileWidth / 2, (int)Location.Y - TileGrid.TileHeight / 2,
+                return new Rectangle((int)Location.X - TileGrid.OriginalTileWidth / 2, (int)Location.Y - TileGrid.OriginalTileHeight / 2,
                               TileGrid.OriginalTileWidth, TileGrid.OriginalTileHeight);
             }
 
