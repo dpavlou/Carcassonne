@@ -99,6 +99,7 @@ namespace Carcassonne
         {
             foreach (Tile tile in tiles)
             {
+                if(!tile.Moving)
                 if (tile.OnGrid)
                 {
                     tile.Location = new Vector2((float)TileGrid.GetCellByPixelX((int)tile.Location.X) * newScale
@@ -163,8 +164,7 @@ namespace Carcassonne
 
                 }
             }
-          
-
+        
         }
 
         #endregion

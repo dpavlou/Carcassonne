@@ -91,7 +91,6 @@ namespace TileEngine
 
         #endregion
         
-
         #region Mouse Events
 
         private void setMouseState()
