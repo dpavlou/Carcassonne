@@ -10,7 +10,9 @@ namespace TileEngine
    public static class Camera
     {
         #region Declarations
+
         private static Vector2 position = Vector2.Zero;
+        public static Vector2 worldLocation = Vector2.Zero;
         private static Vector2 viewPortSize = Vector2.Zero;
         private static Rectangle worldRectangle = new Rectangle(0, 0, 0, 0);
         public static Matrix transform;
@@ -23,12 +25,21 @@ namespace TileEngine
 
         #region Properties
 
+        static public Vector2 WorldLocation
+        {
+            get { return worldLocation; }
+            set { worldLocation = value; }
+        }
+
         static public Matrix Transform
         {
             get { return transform; }
         }
 
-
+        static public float Scale
+        {
+            get { return ((float)TileGrid.TileWidth / (float)TileGrid.OriginalTileWidth); }
+        }
        
        public static float Zoom
        {
@@ -95,6 +106,14 @@ namespace TileEngine
             set { viewPortSize.Y = value; }
         }
 
+        public static Rectangle ScreenRectangle
+        {
+            get
+            {
+                return new Rectangle(0, 0,
+                     ViewPortWidth, ViewPortHeight);
+            }
+        }
 
         public static Rectangle ViewPort
         {
@@ -113,7 +132,24 @@ namespace TileEngine
             Position += offset;
         }
 
-      
+        public static Vector2 AdjustInWorldBounds(Vector2 position)
+        {
+
+            position.X = MathHelper.Clamp(position.X, Camera.WorldLocation.X + TileGrid.TileWidth / 2, Camera.WorldLocation.X + Camera.ViewPortWidth - TileGrid.TileWidth / 2);
+            position.Y = MathHelper.Clamp(position.Y, Camera.WorldLocation.Y + TileGrid.TileHeight / 2, Camera.WorldLocation.Y + Camera.ViewPortHeight - TileGrid.TileHeight / 2);
+            return position;
+
+        }
+
+        public static Vector2 AdjustInScreenBounds(Vector2 position)
+        {
+
+            position.X = MathHelper.Clamp(position.X,  TileGrid.TileWidth / 2, Camera.ViewPortWidth - TileGrid.TileWidth / 2);
+            position.Y = MathHelper.Clamp(position.Y, TileGrid.TileHeight / 2,  Camera.ViewPortHeight - TileGrid.TileHeight / 2);
+            return position;
+
+        }
+
         public static Vector2 WorldScreenCenter(Vector2 worldLocation)
         {
 
@@ -129,7 +165,10 @@ namespace TileEngine
             return (ViewPort.Intersects(bounds));
         }
 
-
+        public static bool ObjectOnScreenBounds(Rectangle bounds)
+        {
+            return (ScreenRectangle.Intersects(bounds));
+        }
 
         public static Vector2 WorldToScreen(Vector2 worldLocation)
         {

@@ -107,13 +107,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actor.cs" />
+    <Compile Include="ButtonManager.cs" />
     <Compile Include="FPSMonitor.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="CameraHandler.cs" />
+    <Compile Include="PlayerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="RotatingTile.cs" />
     <Compile Include="TileManager.cs" />
   </ItemGroup>
   <ItemGroup>

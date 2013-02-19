@@ -19,8 +19,9 @@ namespace Carcassonne
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D button;
         SpriteFont pericles10;
-        Player player;
+        CameraHandler cameraHandler;
         FpsMonitor fps;
 
         public Game1()
@@ -61,21 +62,25 @@ namespace Carcassonne
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             pericles10 = Content.Load<SpriteFont>(@"Fonts\Pericles10");
-
-            TileGrid.Initialize(
-              Content.Load<Texture2D>(@"Textures\MapSquare"), Content.Load<Texture2D>(@"Textures\BaseGame\city1"));
-
-            TileManager.Initialize(new Vector2(this.GraphicsDevice.Viewport.Width - 200, 40),
-                                   new Vector2(this.GraphicsDevice.Viewport.Width - 200, 140), pericles10);
-
-            //Camera.newViewPort = GraphicsDevice.Viewport;
+            button = Content.Load<Texture2D>(@"Textures\Button");
 
             Camera.WorldRectangle = new Rectangle(0, 0, TileGrid.MapWidth * TileGrid.TileWidth, TileGrid.MapHeight * TileGrid.TileHeight);
             Camera.Position = Vector2.Zero;
             Camera.ViewPortWidth = this.GraphicsDevice.Viewport.Width;
             Camera.ViewPortHeight = this.GraphicsDevice.Viewport.Height;
 
-            player = new Player(Content,"Kokos",new Vector2(TileGrid.MapWidth/2*TileGrid.TileWidth,TileGrid.MapHeight/2*TileGrid.TileHeight));
+
+            TileGrid.Initialize(
+              Content.Load<Texture2D>(@"Textures\MapSquare"), Content.Load<Texture2D>(@"Textures\Table"));
+
+            ButtonManager.Initialize(button,pericles10,"Kokos");
+
+            TileManager.Initialize(Content.Load<Texture2D>(@"Textures\BaseGame\city1"), pericles10);
+
+            PlayerManager.Initialize("Kokos");
+            //Camera.newViewPort = GraphicsDevice.Viewport;
+
+            cameraHandler = new CameraHandler(new Vector2(TileGrid.MapWidth/2*TileGrid.TileWidth,TileGrid.MapHeight/2*TileGrid.TileHeight));
 
             // TODO: use this.Content to load your game content here
         }
@@ -101,16 +106,20 @@ namespace Carcassonne
                 || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            fps.Update();
-
-            player.Update(gameTime);
-           // Camera.Update();
-
-            if ((Keyboard.GetState().IsKeyDown(Keys.LeftAlt)  && Keyboard.GetState().IsKeyDown(Keys.LeftShift))
-                ||( Keyboard.GetState().IsKeyDown(Keys.RightAlt) && Keyboard.GetState().IsKeyDown(Keys.RightShift)))
+            if ((Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+               || (Keyboard.GetState().IsKeyDown(Keys.RightAlt) && Keyboard.GetState().IsKeyDown(Keys.RightShift)))
             {
                 graphics.ToggleFullScreen();
             }
+
+            fps.Update();
+
+            cameraHandler.Update(gameTime);
+
+            ButtonManager.Update(gameTime);
+            TileManager.Update(gameTime);
+            // Camera.Update();
+
             base.Update(gameTime);
 
         }
@@ -122,7 +131,7 @@ namespace Carcassonne
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            MouseState mouseState =Mouse.GetState();
+
             spriteBatch.Begin(
             SpriteSortMode.BackToFront,
             BlendState.AlphaBlend);
@@ -131,15 +140,15 @@ namespace Carcassonne
 
             TileGrid.Draw(spriteBatch);
             TileManager.Draw(spriteBatch);
-
+            ButtonManager.Draw(spriteBatch);
+            fps.Draw(spriteBatch, pericles10, new Vector2(10, 40), Color.Red);
+            
             spriteBatch.DrawString(
             pericles10,
             "WorldLocation:"+
-            mouseState.ScrollWheelValue,
+            Camera.WorldLocation,
             new Vector2(10, 10),
             Color.Red);
-
-            fps.Draw(spriteBatch, pericles10, new Vector2(10, 40), Color.Red);
 
             spriteBatch.End();
 
