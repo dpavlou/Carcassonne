@@ -32,7 +32,20 @@ namespace Carcassonne
             textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2nw"));
             textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2nws"));
             textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2nwsr"));
-            texturesNo = 10;
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2we"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2wes"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city3"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city3r"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city3s"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city3sr"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city4"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\cloister"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\cloisterr"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road2ns"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road2sw"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road3"));
+            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road4"));
+            texturesNo = 23;
         }
         #endregion
 

@@ -40,9 +40,7 @@ namespace TileEngine
         {
             get
             {
-                if (ActiveTile)
-                    return 1.0f;
-                else if (MouseOver)
+                if (MouseOver)
                     return 0.8f;
                 else
                     return 0.4f;
