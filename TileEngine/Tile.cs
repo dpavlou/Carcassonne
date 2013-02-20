@@ -41,7 +41,7 @@ namespace TileEngine
             get
             {
                 if (MouseOver)
-                    return 0.8f;
+                    return 1.0f;
                 else
                     return 0.4f;
             }
