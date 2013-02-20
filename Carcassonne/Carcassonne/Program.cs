@@ -1,5 +1,7 @@
 using System;
 
+// LOL
+
 namespace Carcassonne
 {
     static class Program
