@@ -95,6 +95,7 @@
     <Compile Include="Button.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="Frame.cs" />
     <Compile Include="RotatingTile.cs" />
     <Compile Include="Square.cs" />
     <Compile Include="Tile.cs" />

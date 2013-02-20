@@ -16,16 +16,17 @@ namespace Carcassonne
 
         public static List<Tile> tiles = new List<Tile>();
         public static SpriteFont font;
-        public static Texture2D texture;
+        public static Texture2D frame1,frame2;
         public static int ID;
 
         #endregion
 
         #region Initialize
 
-        public static void Initialize(Texture2D Texture, SpriteFont Font)
+        public static void Initialize(Texture2D Frame1,Texture2D Frame2, SpriteFont Font)
         {
-            texture = Texture;
+            frame1 = Frame1;
+            frame2 = Frame2;
             font = Font;
             ID = 0;
         }
@@ -38,7 +39,7 @@ namespace Carcassonne
         {
             //texture = randomTexture;
             ID++;
-            tiles.Add(new Tile(owner, new Vector2(-10, -5), Deck.GetRandomTile(), font, location, ID, 0.4f));
+            tiles.Add(new Tile(owner, new Vector2(-23, -10), Deck.GetRandomTile(), font, location, ID, 0.4f,frame1,frame2));
         }
 
         public static void LockTiles(string owner)

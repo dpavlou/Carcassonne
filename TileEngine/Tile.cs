@@ -14,32 +14,49 @@ namespace TileEngine
 
         private bool onGrid;
         private bool idle;
+        private Texture2D frame1;
+        private Texture2D frame2;
 
         #endregion
 
         #region Constructor
 
-        public Tile(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer)
+        public Tile(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer,Texture2D Frame1,Texture2D Frame2)
             :base(CodeValue,labelOffset,texture,font,location,ID,layer)
         {
             onGrid = true;
             Layer = layer;
             Lock = false;
             idle = true;
+            frame1=Frame1;
+            frame2=Frame2;
         }
         
         #endregion
 
         #region Properties
 
+        public float Transparency
+        {
+            get
+            {
+                if (ActiveTile)
+                    return 1.0f;
+                else if (MouseOver)
+                    return 0.8f;
+                else
+                    return 0.4f;
+            }
+        }
+
         public override Color SquareColor
         {
             get
             {
                 if (ActiveTile && !Lock)
-                    return Color.Gray;
+                    return Color.Red;
                 else
-                    return Color.White;
+                    return Color.Blue;
             }
         }
 
@@ -69,6 +86,16 @@ namespace TileEngine
             set { onGrid = value; }
         }
 
+        public Texture2D FrameTexture
+        {
+            get
+            {
+                if (ActiveTile)
+                    return frame1;
+                else
+                    return frame2;
+            }
+        }
 
         public bool Idle
         {
@@ -153,7 +180,7 @@ namespace TileEngine
                          texture,
                          Camera.WorldToScreen(Location),
                          null,
-                         SquareColor,
+                         Color.White,
                          RotationAmount,
                          TileGrid.TileSourceCenter(0),
                          Camera.Scale,
@@ -161,12 +188,25 @@ namespace TileEngine
                          Layer);
 
                 if (!Lock)
+                {
                     spriteBatch.DrawString(
                       font,
                       CodeValue,
                       Camera.WorldToScreen(LabelOffset),
-                      Color.Red);
-                                               
+                      Color.Black*Transparency);
+                
+                    spriteBatch.Draw(
+                        FrameTexture,
+                        Camera.WorldToScreen(Location),
+                        null,
+                        Color.White,
+                        RotationAmount,
+                        TileGrid.TileSourceCenter(0),
+                        Camera.Scale,
+                        SpriteEffects.None,
+                        Layer-0.05f);
+                   
+                }              
             }
         }   
 
