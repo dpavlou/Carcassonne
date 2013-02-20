@@ -38,7 +38,7 @@ namespace Carcassonne
         {
             //texture = randomTexture;
             ID++;
-            tiles.Add(new Tile(owner, new Vector2(-10, -5), texture, font, location, ID, 0.4f));
+            tiles.Add(new Tile(owner, new Vector2(-10, -5), Deck.GetRandomTile(), font, location, ID, 0.4f));
         }
 
         public static void LockTiles(string owner)

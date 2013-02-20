@@ -114,7 +114,7 @@ namespace Carcassonne
 
        public void Draw(SpriteBatch spriteBatch)
        {
-           spriteBatch.Draw(formTexture, FormRectangle,null,Color.White*0.7f,0.0f,Vector2.Zero,SpriteEffects.None,0.05f);
+           spriteBatch.Draw(formTexture, FormRectangle,null,Color.White*0.5f,0.0f,Vector2.Zero,SpriteEffects.None,0.05f);
            handle.Draw(spriteBatch);
 
             spriteBatch.DrawString(

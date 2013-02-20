@@ -81,6 +81,8 @@ namespace Carcassonne
             TileManager.Initialize(Content.Load<Texture2D>(@"Textures\BaseGame\city1"), pericles10);
 
             PlayerManager.Initialize("Kokos");
+
+            Deck.Initialize(Content);
             //Camera.newViewPort = GraphicsDevice.Viewport;
 
             cameraHandler = new CameraHandler(new Vector2(TileGrid.MapWidth/2*TileGrid.TileWidth,TileGrid.MapHeight/2*TileGrid.TileHeight));

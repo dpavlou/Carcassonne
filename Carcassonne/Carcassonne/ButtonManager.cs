@@ -24,8 +24,8 @@ namespace Carcassonne
 
         public static void Initialize(Texture2D texture,SpriteFont font,string owner)
         {
-            buttons.Add( new Button("Generator", new Vector2(60, -20), texture, font, new Vector2((float)Camera.ViewPortWidth - 160, 70), 1,0.1f,owner));
-            buttons.Add( new Button("Lock", new Vector2(60, -20), texture, font, new Vector2((float)Camera.ViewPortWidth - 160, 190), 1, 0.1f, owner));
+            buttons.Add( new Button("Generator", new Vector2(-45, -15), texture, font, new Vector2((float)Camera.ViewPortWidth - 110, 70), 1,0.1f,owner));
+            buttons.Add( new Button("Lock", new Vector2(-20, -15), texture, font, new Vector2((float)Camera.ViewPortWidth - 110, 190), 1, 0.1f, owner));
             keylocker = new Button("KeyLocker", new Vector2(-45, -15), texture, font, new Vector2(60,160), 1, 0.1f, owner);
             keyAdjustment = false;
         }
