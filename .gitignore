@@ -193,7 +193,9 @@ Thumbs.db
 obj/
 [Rr]elease*/
 _ReSharper*/
+<<<<<<< HEAD
 [Tt]est[Rr]esult*
 *.csproj
 *.sln
 *.contentproj
+
