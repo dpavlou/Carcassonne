@@ -97,7 +97,7 @@ namespace Carcassonne
 
                 foreach (Item item in items)
 
-                        item.Lock = true;
+                        item.Lock = false;
 
             }
             
