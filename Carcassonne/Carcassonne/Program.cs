@@ -1,8 +1,9 @@
 using System;
 
+// LOL
+
 namespace Carcassonne
 {
-#if WINDOWS || XBOX
     static class Program
     {
         /// <summary>
@@ -16,6 +17,5 @@ namespace Carcassonne
             }
         }
     }
-#endif
 }
 
