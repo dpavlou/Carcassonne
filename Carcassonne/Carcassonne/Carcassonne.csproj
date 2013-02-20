@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ButtonManager.cs" />
+    <Compile Include="Form.cs" />
     <Compile Include="FPSMonitor.cs" />
     <Compile Include="CameraHandler.cs" />
     <Compile Include="PlayerManager.cs" />

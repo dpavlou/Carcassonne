@@ -177,6 +177,11 @@ namespace TileEngine
             Location += amount;
         }
 
+        public void MoveAt(Vector2 newLocation)
+        {
+            Location = newLocation;
+        }
+
         public virtual void senseClick()
         {
             if (MouseClick && !Lock && !Moving)
