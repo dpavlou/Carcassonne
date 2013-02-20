@@ -95,7 +95,7 @@ namespace TileEngine
         {
             get
             {
-                return new Rectangle((int)Location.X - (int)Width / 2, (int)Location.Y - (int)Height / 2,
+                return new Rectangle((int)Location.X - ((int)Width-8) , (int)Location.Y - ((int)Height-8) ,
                              (int)Width, (int)Height);
             }
 
@@ -152,7 +152,7 @@ namespace TileEngine
                       font,
                       CodeValue,
                       Camera.WorldToScreen(LabelOffset),
-                      Color.Black * Transparency);
+                      Color.DarkRed * Transparency);
 
              
                 }

@@ -47,7 +47,7 @@ namespace Carcassonne
         public static void AddSoldier(Vector2 location, string owner)
         {
             itemID++;
-            items.Add(new Item(owner, new Vector2(-23, -10), Deck.GetSoldier(), font, location, ID, 0.3f - ID * 0.001f, Deck.GetSoldier(),50f));
+            items.Add(new Item(owner, new Vector2(-40, -25), Deck.GetSoldier(), font, location, ID, 0.3f - ID * 0.001f, Deck.GetSoldier(),55f));
         }
 
         public static void LockTiles()

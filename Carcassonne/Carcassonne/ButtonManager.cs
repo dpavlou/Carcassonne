@@ -25,9 +25,10 @@ namespace Carcassonne
 
         public static void Initialize(Texture2D button1,Texture2D button2,Texture2D scoreBoard,SpriteFont font,string owner)
         {
-            buttons.Add(new Button("Generator", new Vector2(-45, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 - 100, 60), 1, 0.1f, false));
-            buttons.Add(new Button("Lock", new Vector2(-20, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2, 60), 1, 0.1f, false));
+            buttons.Add(new Button("Tiles", new Vector2(-45, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 - 100, 60), 1, 0.1f, false));
+            buttons.Add(new Button("Lock", new Vector2(-20, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 + 100, 60), 1, 0.1f, false));
             buttons.Add(new Button("Add Player", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 210), 1, 0.05f, true));
+            buttons.Add(new Button("Soldier", new Vector2(-45, -15), button1, font, new Vector2((Camera.ViewPortWidth /2), 60), 1, 0.05f, false));
             keylocker = new Button("KeyLocker", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 100), 1, 0.05f, true);
             menu = new Form(button1, scoreBoard,new Vector2(600, Camera.ViewPortHeight), font, new Vector2(Camera.ViewPortWidth, 0));
             keyAdjustment = false;
@@ -116,10 +117,13 @@ namespace Carcassonne
             AdjustFormButtonLocation();
 
             if (buttons[0].OnMouseClick())
-                TileManager.AddSoldier(Camera.Position+(buttons[0].Location-new Vector2(TileGrid.OriginalTileWidth,0)),PlayerManager.PlayerTurn);
+                TileManager.AddTile(Camera.Position+(buttons[0].Location-new Vector2(0,-TileGrid.OriginalTileHeight)),PlayerManager.PlayerTurn);
 
             if(buttons[1].OnMouseClick())
                 TileManager.LockTiles();
+
+            if (buttons[3].OnMouseClick())
+                TileManager.AddSoldier(Camera.Position + (buttons[3].Location-new Vector2(-20,-TileGrid.OriginalTileHeight)), PlayerManager.PlayerTurn);
 
             HandleKeyLocker();
 
