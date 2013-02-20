@@ -116,7 +116,7 @@ namespace Carcassonne
             AdjustFormButtonLocation();
 
             if (buttons[0].OnMouseClick())
-                TileManager.AddTile(Camera.Position+(buttons[0].Location-new Vector2(TileGrid.OriginalTileWidth,0)),PlayerManager.PlayerTurn);
+                TileManager.AddSoldier(Camera.Position+(buttons[0].Location-new Vector2(TileGrid.OriginalTileWidth,0)),PlayerManager.PlayerTurn);
 
             if(buttons[1].OnMouseClick())
                 TileManager.LockTiles();

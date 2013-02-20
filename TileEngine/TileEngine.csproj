@@ -97,6 +97,7 @@
     <Compile Include="Entity.cs" />
     <Compile Include="Frame.cs" />
     <Compile Include="RotatingTile.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="Square.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

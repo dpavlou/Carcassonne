@@ -14,7 +14,9 @@ namespace Carcassonne
         #region Declarations
 
         public static List<Texture2D> textures = new List<Texture2D>();
+        public static Texture2D soldier;
         public static int texturesNo;
+
 
         #endregion
 
@@ -45,6 +47,7 @@ namespace Carcassonne
             textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road2sw"));
             textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road3"));
             textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road4"));
+            soldier = (content.Load<Texture2D>(@"Textures\Soldier"));
             texturesNo = 23;
         }
         #endregion
@@ -58,6 +61,11 @@ namespace Carcassonne
             int x = rand.Next(0, texturesNo);
 
             return textures[x];
+        }
+
+        public static Texture2D GetSoldier()
+        {
+            return soldier;
         }
 
         #endregion
