@@ -65,6 +65,11 @@ namespace TileEngine
             }
         }
 
+        public float RotationValue
+        {
+            get { return rotationAmount; }
+        }
+
         #endregion
 
         #region PublicMethods

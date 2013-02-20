@@ -198,7 +198,7 @@ namespace TileEngine
                         Camera.WorldToScreen(Location),
                         null,
                         Color.White,
-                        RotationAmount,
+                        RotationValue,
                         TileGrid.TileSourceCenter(0),
                         Camera.Scale,
                         SpriteEffects.None,

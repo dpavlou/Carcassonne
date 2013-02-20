@@ -23,7 +23,6 @@ namespace Carcassonne
         SpriteFont pericles10;
         CameraHandler cameraHandler;
         FpsMonitor fps;
-        Form menu;
 
         public Game1()
         {
@@ -71,12 +70,10 @@ namespace Carcassonne
             Camera.ViewPortHeight = this.GraphicsDevice.Viewport.Height;
 
 
-            menu = new Form(button, new Vector2(600, this.GraphicsDevice.Viewport.Height), pericles10, new Vector2(this.GraphicsDevice.Viewport.Width, 0));
-
             TileGrid.Initialize(
               Content.Load<Texture2D>(@"Textures\MapSquare"), Content.Load<Texture2D>(@"Textures\Table"));
 
-            ButtonManager.Initialize(button,pericles10,"Kokos");
+            ButtonManager.Initialize(button,Content.Load<Texture2D>(@"Textures\Button2"),Content.Load<Texture2D>(@"Textures\ScoreBoard"),pericles10,"Kokos");
 
             TileManager.Initialize(Content.Load<Texture2D>(@"Textures\Frame1"),Content.Load<Texture2D>(@"Textures\Frame2"), pericles10);
 
@@ -122,7 +119,6 @@ namespace Carcassonne
             fps.Update();
 
             cameraHandler.Update(gameTime);
-            menu.Update(gameTime);
             ButtonManager.Update(gameTime);
             TileManager.Update(gameTime);
             // Camera.Update();
@@ -148,7 +144,6 @@ namespace Carcassonne
             TileGrid.Draw(spriteBatch);
             TileManager.Draw(spriteBatch);
             ButtonManager.Draw(spriteBatch);
-            menu.Draw(spriteBatch);
             fps.Draw(spriteBatch, pericles10, new Vector2(10, 40), Color.Red);
             
             spriteBatch.DrawString(

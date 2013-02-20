@@ -42,45 +42,45 @@ namespace Carcassonne
             tiles.Add(new Tile(owner, new Vector2(-23, -10), Deck.GetRandomTile(), font, location, ID, 0.4f-ID*0.001f,frame1,frame2));
         }
 
-        public static void LockTiles(string owner)
+        public static void LockTiles()
         {
 
             bool lockEverything = false;
 
             foreach (Tile tile in tiles)
-                if (tile.checkValue(owner))
-                {
+            //    if (tile.checkValue(owner))
+             //   {
                     if (!tile.Lock)
 
                     {
                         lockEverything = true;
                         break;
                     }
-                }
+              //  }
 
             if (lockEverything)
             {
                 foreach (Tile tile in tiles)
-                    if (tile.checkValue(owner))
-                    {
+               //     if (tile.checkValue(owner))
+                //    {
                         if (!tile.Lock)
                         {
                             tile.Lock = true;
                         }
-                    }
+                   // }
             }
             else
             {
                 foreach (Tile tile in tiles)
-                    if (tile.checkValue(owner))
-                    {
+                //    if (tile.checkValue(owner))
+                 //   {
                         tile.Lock = false;
-                    }
+                 //   }
             }
             
         }
 
-        static public void LockTiles()
+        static public void LockAllTiles()
         {
             foreach (Tile tile in tiles)
                     tile.Lock = true;

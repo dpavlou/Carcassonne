@@ -14,25 +14,59 @@ namespace TileEngine
         #region Declarations 
 
         private MouseState prevMouseState;
-        private string owner;
+        private Vector2 bounds;
+        private Vector2 boundSize;
+        private bool lockedInBounds;
 
        #endregion
 
         #region Constructor
 
-        public Button(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer,string owner)
+        public Button(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer,bool lockedinbounds)
             : base(CodeValue, labelOffset,texture, font, location, ID, layer)
         {
 
             Lock=true;
             layer = 0.3f;
             prevMouseState = Mouse.GetState();
-            Owner = owner;
+            lockedInBounds = lockedinbounds;
         }
 
         #endregion
 
         #region Properties
+
+        public Vector2 Bounds
+        {
+            get { return bounds; }
+            set { bounds = value; }
+        }
+
+        public Vector2 BoundSize
+        {
+            get { return boundSize; }
+            set
+            {
+                boundSize = value;
+            }
+        }
+
+        public bool LockedInBounds
+        {
+            get { return lockedInBounds; }
+            set { lockedInBounds = value; }
+        }
+
+        public Vector2 AdjustLocationInBounds
+        {
+            get
+            {
+                Vector2 newLocation;
+                newLocation.X = MathHelper.Clamp(location.X, Bounds.X, Bounds.X + BoundSize.X);
+                newLocation.Y = MathHelper.Clamp(location.Y, Bounds.Y, Bounds.Y + BoundSize.Y);
+                return newLocation;
+            }
+        }
 
         public override Vector2 MouseLocation
         {
@@ -51,11 +85,6 @@ namespace TileEngine
 
         }
 
-        public string Owner
-        {
-            get { return owner; }
-            set { owner = value; }
-        }
 
         public float Transparency
         {
@@ -127,6 +156,8 @@ namespace TileEngine
 
             base.Update(gameTime);
 
+            if (LockedInBounds)
+                Location = AdjustLocationInBounds;
         }
 
         #endregion
