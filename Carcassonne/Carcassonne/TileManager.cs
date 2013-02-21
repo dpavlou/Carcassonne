@@ -140,13 +140,13 @@ namespace Carcassonne
             foreach (Tile tile in tiles)
             {
                 if(!tile.Moving)
-                if (tile.OnGrid)
+              /*  if (tile.OnGrid)
                 {
                     tile.Location = new Vector2((float)TileGrid.GetCellByPixelX((int)tile.Location.X) * newScale
                                                 , (float)TileGrid.GetCellByPixelX((int)tile.Location.Y) * newScale);
                     tile.Location += new Vector2(TileGrid.TileWidth / 2, TileGrid.TileHeight / 2);
                 }
-                else
+                else*/        
                 {
                     Vector2 tempPos = tile.Location - (new Vector2((float)TileGrid.GetCellByPixelX((int)tile.Location.X) * scale
                                         , (float)TileGrid.GetCellByPixelX((int)tile.Location.Y) * scale));

@@ -22,6 +22,7 @@ namespace Carcassonne
         private Vector2 newMousePosition;
         private Vector2 rightClickPosition;
         public Vector2 desiredCenter;
+        public Vector2 offSet;
         public bool autoPilot;
 
         private bool active = false; //double click simulation
@@ -44,7 +45,7 @@ namespace Carcassonne
         public CameraHandler(Vector2 position)
         {
             mousePosition = Vector2.Zero;
-            velocity = Vector2.Zero;
+            offSet = velocity = Vector2.Zero;
             worldLocation = position;
             prevWheelValue = currWheelValue = 0;
             scale = TileGrid.OriginalTileHeight;
@@ -136,6 +137,7 @@ namespace Carcassonne
                 autoPilot = false;
                 Vector2 screenCenter = TileGrid.GetCellByPixel(new Vector2(worldLocation.X,
                                                                             worldLocation.Y));
+                CalculateOffset(screenCenter);
                 TileManager.AdjustTileLocation(newScale,scale);
                 TileManager.AdjustItemLocation(newScale, scale);
                 TileGrid.TileWidth = (int)newScale;
@@ -145,11 +147,18 @@ namespace Carcassonne
 
                 worldLocation = new Vector2(screenCenter.X * (float)TileGrid.TileWidth,
                                         (float)screenCenter.Y * TileGrid.TileHeight);
+                worldLocation += offSet;
                 adjustLocation();
 
             }
 
 
+        }
+
+        private void CalculateOffset(Vector2 screenCenter)
+        {
+            offSet = worldLocation - screenCenter* new Vector2(TileGrid.TileWidth,TileGrid.TileHeight);
+            offSet *= Camera.Scale;
         }
 
         private void ScrollScalling(MouseState mouseState)
