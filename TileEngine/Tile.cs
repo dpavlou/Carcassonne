@@ -61,6 +61,8 @@ namespace TileEngine
         public float Layer
         {
             get {
+                if (SnappedToForm)
+                    return layer - 0.15f;
                 if (ActiveTile)
                     return layer - 0.2f;
                 if (Active && OnGrid)
@@ -115,7 +117,7 @@ namespace TileEngine
 
         public void SnapToGrid()
         {
-            if (!MouseClick && !OnGrid && !Moving && !Idle)
+            if (!MouseClick && !OnGrid && !Moving && !Idle && !SnappedToForm)
             {
                 if (TileGrid.mapCells[TileGrid.GetCellByPixelX((int)Location.X),
                         TileGrid.GetCellByPixelY((int)Location.Y)].Occupied)
@@ -159,10 +161,11 @@ namespace TileEngine
 
         public override void Update(GameTime gameTime)
         {
-            
             SnapToGrid();
             ReleaseSquare();
             base.Update(gameTime);
+
+            FormIntersection(FormManager.privateSpace.FormWorldRectangle);
         }
 
         #endregion

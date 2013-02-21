@@ -223,6 +223,7 @@ namespace Carcassonne
             {
                 Camera.Move(new Vector2(screenLocX - Camera.ViewPortWidth / 2, 0));
             }
+
         }
     
         #endregion

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TileEngine;
 
-namespace Carcassonne
+namespace TileEngine
 {
     public class Form
     {
@@ -69,6 +69,11 @@ namespace Carcassonne
            }
        }
 
+       public Vector2 DefaultLocation
+       {
+           get { return defaultLocation; }
+       }
+
        public Vector2 ButtonLocation
        {
            get
@@ -118,12 +123,12 @@ namespace Carcassonne
 
        public Rectangle FormWorldRectangle
        {
-           get { return new Rectangle(((int)currentLocation.X + (int)Camera.WorldLocation.X), ((int)currentLocation.Y + (int)Camera.WorldLocation.Y), (int)formSize.X, (int)formSize.Y); }
+           get { return new Rectangle((int)Location.X + (int)Camera.WorldLocation.X, (int)Location.Y + (int)Camera.WorldLocation.Y, (int)formSize.X, (int)formSize.Y); }
        }
 
         #endregion
 
-        #region Helper Methods
+       #region Helper Methods
 
        public void MoveForm()
        {
@@ -140,7 +145,7 @@ namespace Carcassonne
 
        #endregion
 
-        #region Update
+       #region Update
 
        public void Update(GameTime gameTime)
        {
@@ -169,7 +174,7 @@ namespace Carcassonne
 
        public void Draw(SpriteBatch spriteBatch)
        {
-           spriteBatch.Draw(formTexture, FormWorldRectangle,null,Color.White*0.5f,0.0f,Vector2.Zero,SpriteEffects.None,0.05f);
+           spriteBatch.Draw(formTexture, FormRectangle,null,Color.White*0.5f,0.0f,Vector2.Zero,SpriteEffects.None,0.05f);
 
            handle.Draw(spriteBatch);
 

@@ -47,7 +47,22 @@ namespace Carcassonne
         public static void AddSoldier(Vector2 location, string owner)
         {
             itemID++;
-            items.Add(new Item(owner, new Vector2(-23, -10), Deck.GetSoldier(), font, location, ID, 0.4f - itemID * 0.001f, Deck.GetSoldier(),55f));
+            items.Add(new Item(owner, new Vector2(-23, -10), Deck.GetSoldier(), font, location, ID, 0.4f - itemID * 0.001f, Deck.GetSoldier(),55f*Camera.Scale));
+        }
+
+        public static void AdjustToForm()
+        {
+            foreach (Tile tile in tiles)
+            {
+                if (tile.SnappedToForm)
+                    tile.AdjustToForm();
+            }
+
+            foreach (Item item in items)
+            {
+                if (item.SnappedToForm)
+                    item.AdjustToForm();
+            }
         }
 
         public static void LockTiles()
@@ -217,9 +232,13 @@ namespace Carcassonne
         #region Update
 
         public static void Update(GameTime gameTime)  
-        {    
+        {
+            RotateTileOrItem();
+            UnlockAnObject();
+            AdjustToForm();
+
             PlayerManager.ResetActiveTile();
-        
+            
              if (PlayerManager.ActiveTileType != "tile")
                 UpdateItems(gameTime); 
 
@@ -230,7 +249,10 @@ namespace Carcassonne
                     for (int x = tiles.Count - 1; x >= 0; x--)
                     {
                         if (!tiles[x].OnGrid)
+                        {
                             tiles[x].Update(gameTime);
+
+                        }
                         if (tiles[x].Moving)
                         {
                             NewActiveTile(x);
@@ -266,7 +288,7 @@ namespace Carcassonne
                     }
                 }
             }
-
+            
         }
 
         static public void UpdateItems(GameTime gameTime)
@@ -310,9 +332,8 @@ namespace Carcassonne
 
                 }
             }
-            RotateTileOrItem();
-            UnlockAnObject();
-            
+
+
         }
 
         #endregion

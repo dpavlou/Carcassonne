@@ -60,6 +60,7 @@ namespace Carcassonne
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+           // graphics.PreferMultiSampling = true;
 
             pericles10 = Content.Load<SpriteFont>(@"Fonts\Pericles10");
             button = Content.Load<Texture2D>(@"Textures\Button");
@@ -73,11 +74,15 @@ namespace Carcassonne
             TileGrid.Initialize(
               Content.Load<Texture2D>(@"Textures\MapSquare"), Content.Load<Texture2D>(@"Textures\Table"));
 
-            ButtonManager.Initialize(button,Content.Load<Texture2D>(@"Textures\Button2"),Content.Load<Texture2D>(@"Textures\ScoreBoard"),pericles10,"Kokos");
+            FormManager.Initialize(button, Content.Load<Texture2D>(@"Textures\ScoreBoard"), pericles10, "Kokos");
+
+            ButtonManager.Initialize(button,Content.Load<Texture2D>(@"Textures\Button2"),pericles10,"Kokos");
 
             TileManager.Initialize(Content.Load<Texture2D>(@"Textures\Frame1"),Content.Load<Texture2D>(@"Textures\Frame2"), pericles10);
 
             PlayerManager.Initialize("Kokos");
+
+          
 
             Deck.Initialize(Content);
             //Camera.newViewPort = GraphicsDevice.Viewport;
@@ -118,9 +123,13 @@ namespace Carcassonne
 
             fps.Update();
 
+
             cameraHandler.Update(gameTime);
+
+            FormManager.Update(gameTime);
             ButtonManager.Update(gameTime);
             TileManager.Update(gameTime);
+           
             // Camera.Update();
 
             base.Update(gameTime);
@@ -142,8 +151,10 @@ namespace Carcassonne
            // Camera.Transform);
 
             TileGrid.Draw(spriteBatch);
+            FormManager.Draw(spriteBatch);
             TileManager.Draw(spriteBatch);
             ButtonManager.Draw(spriteBatch);
+            
             fps.Draw(spriteBatch, pericles10, new Vector2(10, 40), Color.Red);
             
             spriteBatch.DrawString(
@@ -152,7 +163,7 @@ namespace Carcassonne
             Camera.WorldLocation,
             new Vector2(10, 10),
             Color.Red);
-
+            
             spriteBatch.End();
 
             base.Draw(gameTime);

@@ -67,7 +67,9 @@ namespace TileEngine
             get
             {
                 if (ActiveTile)
-                    return layer - 0.05f;
+                    return layer - 0.15f;
+                if (SnappedToForm)
+                    return layer - 0.1f;
                 return layer;
             }
             set { layer = value; }
@@ -158,6 +160,8 @@ namespace TileEngine
         {
 
             base.Update(gameTime);
+
+            FormIntersection(FormManager.privateSpace.FormWorldRectangle);
         }
 
         #endregion

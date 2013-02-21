@@ -25,6 +25,8 @@ namespace TileEngine
             private bool activeTile;
             private MouseState previousMouseState;
             private float width;
+            private bool snappedToForm;
+            protected Vector2 offSet;
 
          #endregion
 
@@ -40,15 +42,28 @@ namespace TileEngine
             this.layer = layer;
             this.labelOffset = labelOffset;
             moving = false;
-            start = Vector2.Zero;
+            offSet=start = Vector2.Zero;
             ActiveTile = false;
             previousMouseState = Mouse.GetState();
             Width = TileGrid.TileWidth;
+            snappedToForm = false;
         }
 
         #endregion
 
         #region Properties
+
+        public Vector2 OffSet
+        {
+            get { return offSet; }
+            set { offSet = value; }
+        }
+
+        public bool SnappedToForm
+        {
+            get { return snappedToForm; }
+            set { snappedToForm = value; }
+        }
 
         public float Width
         {
@@ -183,6 +198,26 @@ namespace TileEngine
 
         #region Public Methods
 
+         public virtual void FormIntersection(Rectangle FormRectangle)
+         {
+             if (TileRectangle.Intersects(FormRectangle) && Moving)
+             {
+                 OffSet = Location - (FormManager.privateSpace.Location+Camera.WorldLocation);
+                 offSet.X = MathHelper.Clamp(offSet.X,0, FormManager.privateSpace.FormSize.X-TileGrid.TileWidth/2);
+                 SnappedToForm = true;
+             }
+             else if (!TileRectangle.Intersects(FormRectangle))
+             {
+                 OffSet = Vector2.Zero;
+                 SnappedToForm = false;
+             }
+         }
+
+         public virtual void CalculateOffSet(Vector2 startingPoint)
+         {
+             Location = startingPoint+Camera.WorldLocation + OffSet;
+         }
+
         public void Move(Vector2 amount)
         {
             Location += amount;
@@ -191,6 +226,14 @@ namespace TileEngine
         public void MoveAt(Vector2 newLocation)
         {
             Location = newLocation;
+        }
+
+        public void AdjustToForm()
+        {
+            if (SnappedToForm && !Moving)
+            {
+                CalculateOffSet(FormManager.privateSpace.Location);
+            }
         }
 
         public virtual void senseClick()
@@ -232,6 +275,8 @@ namespace TileEngine
             setMouseState();
             senseClick();
             dragWithMouse();
+
+
         }
 
         #endregion
