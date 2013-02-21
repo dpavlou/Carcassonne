@@ -61,18 +61,18 @@ namespace TileEngine
         public float Layer
         {
             get {
-
-                if (Active && OnGrid)
-                    return layer - 0.1f;
-                if(OnGrid)
-                    return layer+0.1f;
-                if (Active && !OnGrid)
+                if (ActiveTile)
                     return layer - 0.2f;
+                if (Active && OnGrid)
+                    return layer - 0.03f;
+                if(OnGrid)
+                    return layer+0.03f;
+                if (Active && !OnGrid)
+                    return layer - 0.06f;
 
                 if (!OnGrid)
-                    return layer - 0.2f;
-                if(ActiveTile)
-                    return layer-0.3f;
+                    return layer - 0.06f;
+            
                 return layer;
             }
             set { layer = value; }
@@ -147,7 +147,11 @@ namespace TileEngine
             }
         }
 
-
+        public void RotateThis()
+        {
+            if (!Lock)
+                HandleRotation();
+        }
 
         #endregion
      
@@ -155,12 +159,7 @@ namespace TileEngine
 
         public override void Update(GameTime gameTime)
         {
-
-            if (ActiveTile && !Lock)
-            {
-                HandleRotation();
-            }
-
+            
             SnapToGrid();
             ReleaseSquare();
             base.Update(gameTime);
@@ -191,7 +190,7 @@ namespace TileEngine
                       font,
                       CodeValue,
                       Camera.WorldToScreen(LabelOffset),
-                      Color.Black*Transparency);
+                      Color.White*Transparency);
                 
                     spriteBatch.Draw(
                         FrameTexture,

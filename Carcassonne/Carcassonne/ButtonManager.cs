@@ -25,11 +25,12 @@ namespace Carcassonne
 
         public static void Initialize(Texture2D button1,Texture2D button2,Texture2D scoreBoard,SpriteFont font,string owner)
         {
-            buttons.Add(new Button("Tiles", new Vector2(-45, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 - 100, 60), 1, 0.1f, false));
+            buttons.Add(new Button("Tiles", new Vector2(-25, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 - 100, 60), 1, 0.1f, false));
             buttons.Add(new Button("Lock", new Vector2(-20, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 + 100, 60), 1, 0.1f, false));
-            buttons.Add(new Button("Add Player", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 210), 1, 0.05f, true));
-            buttons.Add(new Button("Soldier", new Vector2(-45, -15), button1, font, new Vector2((Camera.ViewPortWidth /2), 60), 1, 0.05f, false));
-            keylocker = new Button("KeyLocker", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 100), 1, 0.05f, true);
+            buttons.Add(new Button("Add Player", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 210), 1, 0.09f, true));
+            buttons.Add(new Button("Soldier", new Vector2(-35, -15), button1, font, new Vector2((Camera.ViewPortWidth /2), 60), 1, 0.05f, false));
+            buttons.Add(new Button("Unlock False", new Vector2(-50, -15), button1, font, new Vector2((Camera.ViewPortWidth / 2 + 200), 60), 1, 0.05f, false));
+            keylocker = new Button("KeyLocker", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 100), 1, 0.09f, true);
             menu = new Form(button1, scoreBoard,new Vector2(600, Camera.ViewPortHeight), font, new Vector2(Camera.ViewPortWidth, 0));
             keyAdjustment = false;
 
@@ -64,7 +65,7 @@ namespace Carcassonne
             if (keylocker.OnMouseClick())
             {
                 ToggleKeyAdjustment();
-                TileManager.LockAllTiles();
+             //   TileManager.LockAllTiles();
             }
             foreach (Button button in buttons)
                  button.Lock = !keyAdjustment;
@@ -104,6 +105,7 @@ namespace Carcassonne
                         if (PlayerManager.ActiveTileType == "button")
                         buttons[PlayerManager.ActiveTileID].ActiveTile = false;
                         PlayerManager.ActiveTileType = "button";
+                        PlayerManager.RotatingType = "";
                         buttons[x].ActiveTile = true;
                         PlayerManager.ActiveTileID = x;
                         PlayerManager.ActiveTile = true;
@@ -122,9 +124,18 @@ namespace Carcassonne
             if(buttons[1].OnMouseClick())
                 TileManager.LockTiles();
 
-            if (buttons[3].OnMouseClick())
-                TileManager.AddSoldier(Camera.Position + (buttons[3].Location-new Vector2(-20,-TileGrid.OriginalTileHeight)), PlayerManager.PlayerTurn);
+            if (buttons[2].OnMouseClick())
+            { ;//add player
+            }
 
+            if (buttons[3].OnMouseClick())
+                TileManager.AddSoldier(Camera.Position + (buttons[3].Location-new Vector2(2,-TileGrid.OriginalTileHeight+10)), PlayerManager.PlayerTurn);
+
+            if (buttons[4].OnMouseClick())
+            {            
+                PlayerManager.UnlockObject = !PlayerManager.UnlockObject;
+                buttons[4].CodeValue = "Unlock " + PlayerManager.UnlockObject;
+            }
             HandleKeyLocker();
 
         }

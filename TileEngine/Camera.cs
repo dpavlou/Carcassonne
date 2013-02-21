@@ -132,20 +132,20 @@ namespace TileEngine
             Position += offset;
         }
 
-        public static Vector2 AdjustInWorldBounds(Vector2 position)
+        public static Vector2 AdjustInWorldBounds(Vector2 position,float dimension)
         {
 
-            position.X = MathHelper.Clamp(position.X, Camera.WorldLocation.X + TileGrid.TileWidth / 2, Camera.WorldLocation.X + Camera.ViewPortWidth - TileGrid.TileWidth / 2);
-            position.Y = MathHelper.Clamp(position.Y, Camera.WorldLocation.Y + TileGrid.TileHeight / 2, Camera.WorldLocation.Y + Camera.ViewPortHeight - TileGrid.TileHeight / 2);
+            position.X = MathHelper.Clamp(position.X, Camera.WorldLocation.X + dimension / 2, Camera.WorldLocation.X + Camera.ViewPortWidth - dimension / 2);
+            position.Y = MathHelper.Clamp(position.Y, Camera.WorldLocation.Y + dimension / 2, Camera.WorldLocation.Y + Camera.ViewPortHeight - dimension / 2);
             return position;
 
         }
 
-        public static Vector2 AdjustInScreenBounds(Vector2 position)
+        public static Vector2 AdjustInScreenBounds(Vector2 position,float dimension)
         {
 
-            position.X = MathHelper.Clamp(position.X,  TileGrid.TileWidth / 2, Camera.ViewPortWidth - TileGrid.TileWidth / 2);
-            position.Y = MathHelper.Clamp(position.Y, TileGrid.TileHeight / 2,  Camera.ViewPortHeight - TileGrid.TileHeight / 2);
+            position.X = MathHelper.Clamp(position.X, dimension / 2, Camera.ViewPortWidth - dimension / 2);
+            position.Y = MathHelper.Clamp(position.Y, dimension / 2, Camera.ViewPortHeight - dimension / 2);
             return position;
 
         }

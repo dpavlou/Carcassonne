@@ -41,13 +41,13 @@ namespace Carcassonne
         {
             //texture = randomTexture;
             ID++;
-            tiles.Add(new Tile(owner, new Vector2(-23, -10), Deck.GetRandomTile(), font, location, ID, 0.4f-ID*0.001f,frame1,frame2));
+            tiles.Add(new Tile(owner, new Vector2(-23, -10), Deck.GetRandomTile(), font, location, ID, 0.5f-ID*0.001f,frame1,frame2));
         }
 
         public static void AddSoldier(Vector2 location, string owner)
         {
             itemID++;
-            items.Add(new Item(owner, new Vector2(-40, -25), Deck.GetSoldier(), font, location, ID, 0.3f - ID * 0.001f, Deck.GetSoldier(),55f));
+            items.Add(new Item(owner, new Vector2(-23, -10), Deck.GetSoldier(), font, location, ID, 0.4f - itemID * 0.001f, Deck.GetSoldier(),55f));
         }
 
         public static void LockTiles()
@@ -118,6 +118,7 @@ namespace Carcassonne
             if (PlayerManager.ActiveTileType == "tile")
                 tiles[PlayerManager.ActiveTileID].ActiveTile = false;
             PlayerManager.ActiveTileType = "tile";
+            PlayerManager.RotatingType = "tile";
             tiles[x].ActiveTile = true;
             PlayerManager.ActiveTileID = x;
             PlayerManager.ActiveTile = true;
@@ -128,6 +129,7 @@ namespace Carcassonne
             if (PlayerManager.ActiveTileType == "item")
                 items[PlayerManager.ActiveTileID].ActiveTile = false;
             PlayerManager.ActiveTileType = "item";
+            PlayerManager.RotatingType = "item";
             items[x].ActiveTile = true;
             PlayerManager.ActiveTileID = x;
             PlayerManager.ActiveTile = true;
@@ -160,6 +162,7 @@ namespace Carcassonne
         {
             foreach (Item item in items)
             {
+                item.Width *= newScale / scale;
                 if (!item.Moving)
                 {
                     Vector2 tempPos = item.Location - (new Vector2((float)TileGrid.GetCellByPixelX((int)item.Location.X) * scale
@@ -170,56 +173,100 @@ namespace Carcassonne
 
             }
         }
-        
+
+        static public void RotateTileOrItem()
+        {
+            if (PlayerManager.RotatingType == "tile")
+                tiles[PlayerManager.ActiveTileID].RotateThis();
+            else if (PlayerManager.RotatingType == "item")
+                items[PlayerManager.ActiveTileID].RotateThis();
+        }
+
+        static public void UnlockAnObject()
+        {
+            if (PlayerManager.UnlockObject)
+            {
+                for (int x = items.Count - 1; x >= 0; x--)
+                    if (items[x].MouseClick && items[x].Lock)
+                    {
+                        items[x].Lock = false;
+                        items[x].Moving = true;
+                        PlayerManager.UnlockObject=false;
+                        ButtonManager.buttons[4].CodeValue = "Unlock " + PlayerManager.UnlockObject;
+                        items[x].Start = items[x].MouseLocation;
+                        NewActiveItem(x);
+                        break;
+                    }
+                for (int x = tiles.Count - 1; x >= 0; x--)
+                    if (tiles[x].MouseClick && tiles[x].Lock)
+                    {
+                        tiles[x].Lock = false;
+                        tiles[x].Moving = true;
+                        PlayerManager.UnlockObject=false;
+                        ButtonManager.buttons[4].CodeValue = "Unlock " + PlayerManager.UnlockObject;
+                        tiles[x].Start = tiles[x].MouseLocation;
+                        NewActiveTile(x);
+                        break;
+                    }
+
+            }
+        }
+
         #endregion
 
         #region Update
 
-        public static void Update(GameTime gameTime)
-        {
-            if (!PlayerManager.ActiveTile)
-            {
-                for (int x = tiles.Count - 1; x >= 0; x--)
-                {
-                    if (!tiles[x].OnGrid)
-                        tiles[x].Update(gameTime);
-                    if (tiles[x].Moving)
-                    {
-                        NewActiveTile(x);
-                        break;
-
-                    }
-                }
-            }
-
-            if (PlayerManager.ActiveTile && PlayerManager.ActiveTileType=="tile")
-            {
-                tiles[PlayerManager.ActiveTileID].Update(gameTime);
-                if (!tiles[PlayerManager.ActiveTileID].Moving)
-                    PlayerManager.ActiveTile = false;
-            }
-            else
-            {
-                for (int x = tiles.Count - 1; x >= 0; x--)
-
-                {
-                    if (x == PlayerManager.ActiveTileID && PlayerManager.ActiveTileType == "tile")
-                       tiles[x].ActiveTile = true;
-                    else
-                       tiles[x].ActiveTile = false;
-
-                    tiles[x].Update(gameTime);
-                    if (tiles[x].Moving)
-                    {
-                        NewActiveTile(x);
-                        break;
-                   
-                    }
-
-                }
-            }
-            UpdateItems(gameTime);
+        public static void Update(GameTime gameTime)  
+        {    
+            PlayerManager.ResetActiveTile();
         
+             if (PlayerManager.ActiveTileType != "tile")
+                UpdateItems(gameTime); 
+
+            if (PlayerManager.ActiveTileType != "item")
+            {
+                if (!PlayerManager.ActiveTile)
+                {
+                    for (int x = tiles.Count - 1; x >= 0; x--)
+                    {
+                        if (!tiles[x].OnGrid)
+                            tiles[x].Update(gameTime);
+                        if (tiles[x].Moving)
+                        {
+                            NewActiveTile(x);
+                            break;
+
+                        }
+                    }
+                }
+
+                if (PlayerManager.ActiveTile && PlayerManager.ActiveTileType == "tile")
+                {
+                    tiles[PlayerManager.ActiveTileID].Update(gameTime);
+                    if (!tiles[PlayerManager.ActiveTileID].Moving)
+                        PlayerManager.ActiveTile = false;
+                }
+                else
+                {
+                    for (int x = tiles.Count - 1; x >= 0; x--)
+                    {
+                        if (x == PlayerManager.ActiveTileID && PlayerManager.ActiveTileType == "tile")
+                            tiles[x].ActiveTile = true;
+                        else
+                            tiles[x].ActiveTile = false;
+
+                        tiles[x].Update(gameTime);
+                        if (tiles[x].Moving)
+                        {
+                            NewActiveTile(x);
+                            break;
+
+                        }
+
+                    }
+                }
+            }
+
         }
 
         static public void UpdateItems(GameTime gameTime)
@@ -263,6 +310,9 @@ namespace Carcassonne
 
                 }
             }
+            RotateTileOrItem();
+            UnlockAnObject();
+            
         }
 
         #endregion

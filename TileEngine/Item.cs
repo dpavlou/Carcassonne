@@ -8,14 +8,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TileEngine
 {
-    public class Item : Entity
+    public class Item : RotatingTile
     {
         #region Declarations
 
         private bool idle;
         private Texture2D onGround;
         private bool lying;
-        public float Width, Height;
 
         #endregion
 
@@ -25,10 +24,10 @@ namespace TileEngine
             : base(CodeValue, labelOffset, texture, font, location, ID, layer)
         {
             Layer = layer;
-            Width = Height = bounds;
             Lock = false;
             onGround = onground;
             Lying = false;
+            Width = bounds;
         }
 
         #endregion
@@ -59,7 +58,7 @@ namespace TileEngine
                 if (ActiveTile && !Lock)
                     return Color.Red;
                 else
-                    return Color.Blue;
+                    return Color.White;
             }
         }
 
@@ -68,7 +67,7 @@ namespace TileEngine
             get
             {
                 if (ActiveTile)
-                    return layer - 0.1f;
+                    return layer - 0.05f;
                 return layer;
             }
             set { layer = value; }
@@ -95,17 +94,24 @@ namespace TileEngine
         {
             get
             {
-                return new Rectangle((int)Location.X - ((int)Width-8) , (int)Location.Y - ((int)Height-8) ,
-                             (int)Width, (int)Height);
+                return new Rectangle((int)Location.X - ((int)Width/2) , (int)Location.Y - ((int)Width/2) ,
+                             (int)Width, (int)Width);
             }
 
         }
-
+        public Vector2 ItemSourceCenter
+        {
+            get { return new Vector2(Texture.Width / 2, Texture.Height / 2); }   
+        }
         
         #endregion
 
         #region Helper Methods
 
+        public void ToggleLying()
+        {
+            Lying = !Lying;
+        }
         public override void senseClick()
         {
             if (OnMouseClick() && !Lock && !Moving)
@@ -113,9 +119,36 @@ namespace TileEngine
                 Moving = true;
                 Start = MouseLocation;
             }
-        }  
+        }
 
+        public override void HandleRotation()
+        {
+            mouseState = Mouse.GetState();
+            currKeyState = Keyboard.GetState();
 
+            if (((currKeyState.IsKeyDown(Keys.A) && !prevKeyState.IsKeyDown(Keys.A))
+                || (mouseState.XButton1 == ButtonState.Pressed && prevMouseState.XButton1 != ButtonState.Pressed))
+                && !Active)
+            {
+                RotateTile(Lying);
+                ToggleLying();
+            }
+            else if (((currKeyState.IsKeyDown(Keys.S) && !prevKeyState.IsKeyDown(Keys.S))
+                || (mouseState.XButton2 == ButtonState.Pressed && prevMouseState.XButton2 != ButtonState.Pressed))
+                  && !Active)
+            {
+                RotateTile(Lying);
+                ToggleLying();
+            }
+            prevMouseState = mouseState;
+            prevKeyState = currKeyState;
+        }
+
+        public void RotateThis()
+        {
+            if (!Lock)
+                HandleRotation();
+        }
 
         #endregion
 
@@ -139,9 +172,9 @@ namespace TileEngine
                          Texture,
                          Camera.WorldToScreen(Location),
                          null,
-                         Color.White,
-                         0.0f,
-                         TileGrid.TileSourceCenter(0),
+                         SquareColor,
+                         RotationAmount,
+                         ItemSourceCenter,
                          Camera.Scale,
                          SpriteEffects.None,
                          Layer);

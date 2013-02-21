@@ -24,6 +24,7 @@ namespace TileEngine
             protected Vector2 labelOffset;
             private bool activeTile;
             private MouseState previousMouseState;
+            private float width;
 
          #endregion
 
@@ -42,11 +43,21 @@ namespace TileEngine
             start = Vector2.Zero;
             ActiveTile = false;
             previousMouseState = Mouse.GetState();
+            Width = TileGrid.TileWidth;
         }
 
         #endregion
 
         #region Properties
+
+        public float Width
+        {
+            get { return width; }
+            set
+            {
+                width = value;
+            }
+        }
 
         public bool Moving
         {
@@ -122,8 +133,8 @@ namespace TileEngine
             get
             {
                 Vector2 mCenter = MouseLocation;
-                mCenter.X = MathHelper.Clamp(MouseLocation.X, Camera.WorldLocation.X + TileGrid.TileWidth / 2, Camera.WorldLocation.X + Camera.ViewPortWidth - TileGrid.TileWidth / 2);
-                mCenter.Y = MathHelper.Clamp(MouseLocation.Y, Camera.WorldLocation.Y + TileGrid.TileHeight / 2, Camera.WorldLocation.Y + Camera.ViewPortHeight - TileGrid.TileHeight / 2);
+                mCenter.X = MathHelper.Clamp(MouseLocation.X, Camera.WorldLocation.X + Width / 2, Camera.WorldLocation.X + Camera.ViewPortWidth - Width / 2);
+                mCenter.Y = MathHelper.Clamp(MouseLocation.Y, Camera.WorldLocation.Y + Width / 2, Camera.WorldLocation.Y + Camera.ViewPortHeight - Width / 2);
                 return mCenter;
             }
         }
@@ -156,7 +167,7 @@ namespace TileEngine
 
         }
 
-        public virtual bool OnMouseClick()
+         public virtual bool OnMouseClick()
         {
             if ((MouseClick && (previousMouseState.LeftButton != ButtonState.Pressed)))
             {
@@ -198,12 +209,12 @@ namespace TileEngine
                 if (Camera.ObjectIsVisible(MouseRectangle))
                 {
                     Location += MouseLocation - start;
-                    Location = Camera.AdjustInWorldBounds(Location);
+                    Location = Camera.AdjustInWorldBounds(Location,Width);
                     start = MouseLocation;
                 }
                 else
                 {
-                    Location = Camera.AdjustInWorldBounds(MouseLocation);
+                    Location = Camera.AdjustInWorldBounds(MouseLocation, Width);
                     start = Location;
                 }
            }

@@ -19,9 +19,9 @@ namespace TileEngine
         private static float rotationRate;
         private float rotationAmount;
         private int rotationTicksRemaining;
-        private MouseState prevMouseState;
-        private KeyboardState currKeyState;
-        private KeyboardState prevKeyState;
+        protected MouseState prevMouseState;
+        protected KeyboardState currKeyState;
+        protected KeyboardState prevKeyState;
 
         #endregion
 
@@ -74,7 +74,7 @@ namespace TileEngine
 
         #region PublicMethods
 
-        public void HandleRotation()
+        public virtual void HandleRotation()
         {
             mouseState = Mouse.GetState();
             currKeyState = Keyboard.GetState();

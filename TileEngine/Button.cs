@@ -114,18 +114,27 @@ namespace TileEngine
 
         }
 
+        public override void senseClick()
+        {
+            if (MouseClick && (prevMouseState.LeftButton != ButtonState.Pressed) && !Lock)
+            {      
+                Moving = true;
+                Start = MouseLocation;
+            }
+        }
+
         public override bool OnMouseClick()
         {
-            if((MouseClick && (prevMouseState.LeftButton != ButtonState.Pressed) ) && Lock) 
+            if(MouseClick && (prevMouseState.LeftButton != ButtonState.Pressed)  && Lock) 
             {
-                prevMouseState=mouseState;
+                prevMouseState = mouseState;
                 return true;
             }
 
              prevMouseState=mouseState;
              return false;
         }
-
+        
         public override void dragWithMouse()
         {
             if (Moving && mouseState.LeftButton == ButtonState.Pressed)
@@ -133,12 +142,12 @@ namespace TileEngine
                 if (Camera.ObjectOnScreenBounds(MouseRectangle))
                 {
                     Location += MouseLocation - Start;
-                    Location = Camera.AdjustInScreenBounds(Location);
+                    Location = Camera.AdjustInScreenBounds(Location,TileGrid.OriginalTileWidth);
                     Start = MouseLocation;
                 }
                 else
                 {
-                    Location = Camera.AdjustInScreenBounds(MouseLocation);
+                    Location = Camera.AdjustInScreenBounds(MouseLocation,TileGrid.OriginalTileWidth);
                     Start = Location;
                 }
             }
@@ -157,7 +166,7 @@ namespace TileEngine
             base.Update(gameTime);
 
             if (LockedInBounds)
-                Location = AdjustLocationInBounds;
+               Location = AdjustLocationInBounds;
         }
 
         #endregion

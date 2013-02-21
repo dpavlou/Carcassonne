@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Carcassonne
 {
@@ -13,8 +15,10 @@ namespace Carcassonne
         private static bool activeTile;
         private static int activeTileID;
         private static string activeTileType;
+        private static string rotatingType;
         public static Dictionary<string, int> PlayerStatus = new Dictionary<string, int>();
         public static string playerTurn;
+        private static bool unlockObject;
 
         #endregion
 
@@ -24,14 +28,21 @@ namespace Carcassonne
         {
             activeTileID = 0;
             activeTile = false;
-            activeTileType = "";
+            rotatingType=activeTileType = "";
             PlayerStatus.Add(player, 0);
             playerTurn = player;
+            UnlockObject = false;
         }
 
         #endregion
 
         #region Properties
+
+        public static bool UnlockObject
+        {
+            get { return unlockObject; }
+            set { unlockObject = value; }
+        }
 
         public static int ActiveTileID
         {
@@ -43,6 +54,12 @@ namespace Carcassonne
         {
             get { return activeTileType; }
             set { activeTileType = value; }
+        }
+
+        public static string RotatingType
+        {
+            get { return rotatingType; }
+            set { rotatingType = value; }
         }
 
         public static bool ActiveTile
@@ -61,6 +78,17 @@ namespace Carcassonne
 
         #region Public Methods
 
+        public static void ResetActiveTile()
+        {
+          MouseState mouse=Mouse.GetState();
+
+          if (mouse.RightButton != ButtonState.Pressed)
+          {
+              ActiveTileType = "";
+              ActiveTile = false;
+          }
+
+        }
         public static void AddPlayer(string player)
         {
             PlayerStatus.Add(player, 0);
