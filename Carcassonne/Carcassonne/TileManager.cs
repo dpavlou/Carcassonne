@@ -233,8 +233,7 @@ namespace Carcassonne
 
         public static void Update(GameTime gameTime)  
         {
-            RotateTileOrItem();
-            UnlockAnObject();
+
             AdjustToForm();
 
             PlayerManager.ResetActiveTile();
@@ -333,7 +332,8 @@ namespace Carcassonne
                 }
             }
 
-
+            UnlockAnObject();
+            RotateTileOrItem();
         }
 
         #endregion
