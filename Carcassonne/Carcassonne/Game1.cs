@@ -131,7 +131,7 @@ namespace Carcassonne
             ButtonManager.Update(gameTime);
             TileManager.Update(gameTime);
            
-            // Camera.Update();
+            //Camera.Update();
 
             base.Update(gameTime);
 

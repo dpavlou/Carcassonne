@@ -90,6 +90,17 @@ namespace TileEngine
             set { onGrid = value; }
         }
 
+        public float Scale
+        {
+            get
+            {
+                if (SnappedToForm)
+                    return 1.0f;
+                else
+                    return Camera.Scale;
+            }
+        }
+
         public Texture2D FrameTexture
         {
             get
@@ -105,6 +116,20 @@ namespace TileEngine
         {
             get { return idle; }
             set { idle = value; }
+        }
+
+        public override Rectangle TileRectangle
+        {
+            get
+            {
+                if(SnappedToForm)
+                    return new Rectangle((int)Location.X - TileGrid.OriginalTileWidth / 2, (int)Location.Y - TileGrid.OriginalTileHeight / 2,
+                          TileGrid.OriginalTileWidth, TileGrid.OriginalTileHeight);       
+                else
+                 return new Rectangle((int)Location.X - TileGrid.TileWidth / 2, (int)Location.Y - TileGrid.TileHeight / 2,
+                                TileGrid.TileWidth, TileGrid.TileHeight);
+            }
+
         }
         #endregion
 
@@ -187,7 +212,7 @@ namespace TileEngine
                          Color.White,
                          RotationAmount,
                          TileGrid.TileSourceCenter(0),
-                         Camera.Scale,
+                         Scale,
                          SpriteEffects.None,
                          Layer);
 
@@ -206,7 +231,7 @@ namespace TileEngine
                         Color.White,
                         RotationValue,
                         TileGrid.TileSourceCenter(0),
-                        Camera.Scale,
+                        Scale,
                         SpriteEffects.None,
                         Layer-0.05f);
                    

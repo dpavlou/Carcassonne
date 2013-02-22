@@ -45,6 +45,23 @@ namespace TileEngine
             set { bounds = value; }
         }
 
+        public override float Width
+        {
+            get
+            {
+                if (SnappedToForm)
+                    return 55;
+                else if (LockedInBounds)
+                    return 55;
+                else
+                    return width;
+            }
+            set
+            {
+                width = value;
+            }
+        }
+
         public Vector2 BoundSize
         {
             get { return boundSize; }
@@ -144,6 +161,20 @@ namespace TileEngine
             }
 
         }
+
+        public float Scale
+        {
+            get
+            {
+                if (SnappedToForm)
+                    return 1.0f;
+                else if (LockedInBounds)
+                    return 1.0f;
+                else
+                    return Camera.Scale;
+            }
+        }
+
         public Vector2 ItemSourceCenter
         {
             get { return new Vector2(Texture.Width / 2, Texture.Height / 2); }   
@@ -229,8 +260,7 @@ namespace TileEngine
             
                 AdjustToMenu();
                 Location = AdjustLocationInBounds;
-                Width = Texture.Width;
-            
+                          
         }
 
         #endregion
@@ -263,7 +293,7 @@ namespace TileEngine
                          SquareColor,
                          RotationAmount,
                          ItemSourceCenter,
-                         Camera.Scale, //update scale for snapped to menu items
+                         Scale,
                          SpriteEffects.None,
                          Layer);
 

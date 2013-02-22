@@ -24,7 +24,7 @@ namespace TileEngine
             protected Vector2 labelOffset;
             private bool activeTile;
             private MouseState previousMouseState;
-            private float width;
+            protected float width;
             private bool snappedToForm;
             protected Vector2 offSet;
 
@@ -68,7 +68,7 @@ namespace TileEngine
             set { snappedToForm = value; }
         }
 
-        public float Width
+        public virtual float Width
         {
             get { return width; }
             set
@@ -219,7 +219,7 @@ namespace TileEngine
          public virtual void CalculateOffSet(Vector2 startingPoint)
          {
              Location = startingPoint+Camera.WorldLocation + OffSet;
-             location.X = MathHelper.Min(Location.X,( startingPoint.X + Camera.WorldLocation.X+FormManager.privateSpace.FormSize.X-TileGrid.TileWidth/2));
+             location.X = MathHelper.Min(Location.X,( startingPoint.X + Camera.WorldLocation.X+FormManager.privateSpace.FormSize.X-TileGrid.OriginalTileWidth/2));
          }
 
         public void Move(Vector2 amount)
