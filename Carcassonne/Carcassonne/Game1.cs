@@ -70,7 +70,7 @@ namespace Carcassonne
             Camera.ViewPortWidth = this.GraphicsDevice.Viewport.Width;
             Camera.ViewPortHeight = this.GraphicsDevice.Viewport.Height;
 
-
+            PlayerManager.Initialize("Kokos");
             TileGrid.Initialize(
               Content.Load<Texture2D>(@"Textures\MapSquare"), Content.Load<Texture2D>(@"Textures\Table"));
 
@@ -80,7 +80,7 @@ namespace Carcassonne
 
             TileManager.Initialize(Content.Load<Texture2D>(@"Textures\Frame1"),Content.Load<Texture2D>(@"Textures\Frame2"), pericles10);
 
-            PlayerManager.Initialize("Kokos");
+            
 
           
 
@@ -90,6 +90,7 @@ namespace Carcassonne
             Frame.Initialize(GraphicsDevice);
 
             cameraHandler = new CameraHandler(new Vector2(TileGrid.MapWidth/2*TileGrid.TileWidth,TileGrid.MapHeight/2*TileGrid.TileHeight));
+            TileManager.AddScoreBoardSoldier("Kokos");
 
             // TODO: use this.Content to load your game content here
         }

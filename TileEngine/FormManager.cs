@@ -60,7 +60,7 @@ namespace TileEngine
        {
            menu.Draw(spriteBatch);
            privateSpace.Draw(spriteBatch);
-           spriteBatch.Draw(ScoreBoard, ScoreBoardRectangle, Color.White);
+           spriteBatch.Draw(ScoreBoard, ScoreBoardRectangle,null, Color.White,0.0f,Vector2.Zero,SpriteEffects.None,0.05f);
        }
 
        #endregion

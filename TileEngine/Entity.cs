@@ -47,6 +47,7 @@ namespace TileEngine
             previousMouseState = Mouse.GetState();
             Width = TileGrid.TileWidth;
             snappedToForm = false;
+
         }
 
         #endregion
@@ -58,6 +59,8 @@ namespace TileEngine
             get { return offSet; }
             set { offSet = value; }
         }
+
+
 
         public bool SnappedToForm
         {

@@ -15,12 +15,16 @@ namespace TileEngine
         private bool idle;
         private Texture2D onGround;
         private bool lying;
+        private Vector2 bounds;
+        private Vector2 boundSize;
+        private bool lockedInBounds;
+        private Color itemColor;
 
         #endregion
 
         #region Constructor
 
-        public Item(string CodeValue, Vector2 labelOffset, Texture2D texture, SpriteFont font, Vector2 location, int ID, float layer, Texture2D onground,float bounds)
+        public Item(string CodeValue, Vector2 labelOffset, Texture2D texture, SpriteFont font, Vector2 location, int ID, float layer, Texture2D onground,float bounds,Color ItemColor)
             : base(CodeValue, labelOffset, texture, font, location, ID, layer)
         {
             Layer = layer;
@@ -28,11 +32,46 @@ namespace TileEngine
             onGround = onground;
             Lying = false;
             Width = bounds;
+            itemColor = ItemColor;
         }
 
         #endregion
 
         #region Properties
+
+        public Vector2 Bounds
+        {
+            get { return bounds; }
+            set { bounds = value; }
+        }
+
+        public Vector2 BoundSize
+        {
+            get { return boundSize; }
+            set
+            {
+                boundSize = value;
+            }
+        }
+
+        public bool LockedInBounds
+        {
+            get { return lockedInBounds; }
+            set { lockedInBounds = value; }
+        }
+
+        public Vector2 AdjustLocationInBounds
+        {
+            get
+            {
+                Vector2 newLocation;
+                newLocation.X = MathHelper.Clamp(location.X, Bounds.X, Bounds.X + BoundSize.X);
+                newLocation.Y = MathHelper.Clamp(location.Y, Bounds.Y, Bounds.Y + BoundSize.Y);
+                return newLocation;
+            }
+        }
+
+
 
         public bool Lying
         {
@@ -58,7 +97,7 @@ namespace TileEngine
                 if (ActiveTile && !Lock)
                     return Color.Red;
                 else
-                    return Color.White;
+                    return itemColor;
             }
         }
 
@@ -66,6 +105,8 @@ namespace TileEngine
         {
             get
             {
+                if (ActiveTile && LockedInBounds)
+                    return 0.04f;
                 if (SnappedToForm && ActiveTile)
                     return layer - 0.32f;
                 if (SnappedToForm)
@@ -112,6 +153,35 @@ namespace TileEngine
 
         #region Helper Methods
 
+        public void CalculateLocation(Vector2 startingPoint)
+        {
+            Location = startingPoint + Camera.WorldLocation + OffSet;
+           // location.X = MathHelper.Min(Location.X, (startingPoint.X + Camera.WorldLocation.X + FormManager.menu.FormSize.X - TileGrid.TileWidth / 2));
+        }
+
+
+        public void AdjustToMenu()
+        {
+
+           
+
+            if (!Moving)
+            {
+                
+                CalculateLocation(FormManager.menu.Location);
+            }
+            else
+                CalculateMenuOffSet();
+     
+            
+        }
+        public void CalculateMenuOffSet()
+        {
+   
+           offSet=   Location - (FormManager.menu.Location+Camera.WorldLocation);
+           // offSet.X = MathHelper.Clamp(offSet.X, 0, FormManager.menu.FormSize.X + TileGrid.TileWidth / 2);
+        }
+
         public void ToggleLying()
         {
             Lying = !Lying;
@@ -154,6 +224,15 @@ namespace TileEngine
                 HandleRotation();
         }
 
+        public void AdjustLocationToOrigin()
+        {
+            
+                AdjustToMenu();
+                Location = AdjustLocationInBounds;
+                Width = Texture.Width;
+            
+        }
+
         #endregion
 
         #region Update
@@ -162,8 +241,11 @@ namespace TileEngine
         {
 
             base.Update(gameTime);
-
+             if (LockedInBounds)
+                AdjustLocationToOrigin();
+             else
             FormIntersection(FormManager.privateSpace.FormWorldRectangle);
+
         }
 
         #endregion
@@ -181,7 +263,7 @@ namespace TileEngine
                          SquareColor,
                          RotationAmount,
                          ItemSourceCenter,
-                         Camera.Scale,
+                         Camera.Scale, //update scale for snapped to menu items
                          SpriteEffects.None,
                          Layer);
 

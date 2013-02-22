@@ -17,6 +17,8 @@ namespace Carcassonne
         public static Button keylocker;
         public static List<Button> buttons = new List<Button>();
         private static bool keyAdjustment;
+        private static Texture2D buttonTexture;
+        private static SpriteFont Font;
 
         #endregion
 
@@ -24,35 +26,62 @@ namespace Carcassonne
 
         public static void Initialize(Texture2D button1,Texture2D button2,SpriteFont font,string owner)
         {
-            buttons.Add(new Button("Tiles", new Vector2(-25, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 - 100, 60), 1, 0.1f, false));
-            buttons.Add(new Button("Lock", new Vector2(-20, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 + 100, 60), 1, 0.1f, false));
-            buttons.Add(new Button("Add Player", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 210), 1, 0.09f, true));
-            buttons.Add(new Button("Soldier", new Vector2(-35, -15), button1, font, new Vector2((Camera.ViewPortWidth /2), 60), 1, 0.05f, false));
-            buttons.Add(new Button("Unlock False", new Vector2(-50, -15), button1, font, new Vector2((Camera.ViewPortWidth / 2 + 200), 60), 1, 0.05f, false));
-            keylocker = new Button("KeyLocker", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 100), 1, 0.09f, true);
+            buttons.Add(new Button("Tiles", new Vector2(-25, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 - 100, 60), 1, 0.1f, false,Color.Black));
+            buttons.Add(new Button("Lock", new Vector2(-20, -15), button1, font, new Vector2((float)Camera.ViewPortWidth / 2 + 100, 60), 1, 0.1f, false, Color.Black));
+            buttons.Add(new Button("Add Player", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 210), 1, 0.09f, true, Color.Black));
+            buttons.Add(new Button("Soldier", new Vector2(-35, -15), button1, font, new Vector2((Camera.ViewPortWidth / 2), 60), 1, 0.05f, false, Color.Black));
+            buttons.Add(new Button("Unlock False", new Vector2(-50, -15), button1, font, new Vector2((Camera.ViewPortWidth / 2 + 200), 60), 1, 0.05f, false, Color.Black));
+            keylocker = new Button("KeyLocker", new Vector2(-45, -15), button2, font, new Vector2(Camera.ViewPortWidth + 100, 100), 1, 0.09f, true, Color.Black);
+            Font = font;
+            buttonTexture = button1;
             
             keyAdjustment = false;
 
             keylocker.BoundSize = buttons[2].BoundSize = FormManager.menu.FormSize;
 
             AdjustFormButtonLocation();
+
+            AddPlayer("Kokos");
+          
         }
 
         #endregion
 
         #region Helper Methods
 
+        public static void AddPlayer(string player)
+        {
+
+            buttons.Add(new Button(player, new Vector2(-45, -15), buttonTexture, Font, PlayerManager.NewPlayerLocation, 1, 0.095f, true, PlayerManager.PlayerColor(PlayerManager.activePlayers)));
+
+            PlayerManager.AddPlayer(player);
+            buttons[buttons.Count - 1].BoundSize = FormManager.menu.FormSize;
+            AdjustPlayerLocation();
+
+        }
+
         public static void AdjustFormButtonLocation()
         {
 
             keylocker.Bounds = buttons[2].Bounds = FormManager.menu.Location + new Vector2(TileGrid.OriginalTileWidth / 2, 0);
-
             buttons[2].Move(FormManager.menu.Step);
             keylocker.Move(FormManager.menu.Step);
+            AdjustPlayerLocation();
+            TileManager.AdjustToMenu();
             FormManager.menu.PreviousLocation = FormManager.menu.Location;
-          
+         
         }
-        
+
+        public static void AdjustPlayerLocation()
+        {
+            for (int x = buttons.Count - 1; x >= 5; x--)
+            {
+
+                buttons[x].Bounds = FormManager.menu.Location + new Vector2(TileGrid.OriginalTileWidth / 2, 0);
+                buttons[x].Move(FormManager.menu.Step);
+            }
+        }
+
         public static void ToggleKeyAdjustment()
         {
             keyAdjustment = !keyAdjustment;
@@ -66,8 +95,20 @@ namespace Carcassonne
                 ToggleKeyAdjustment();
              //   TileManager.LockAllTiles();
             }
-            foreach (Button button in buttons)
-                 button.Lock = !keyAdjustment;
+            for (int x = 0; x <= 4; x++)
+                 buttons[x].Lock = !keyAdjustment;
+        }
+
+        public static void PlayerButtons()
+        {
+            for (int x = buttons.Count - 1; x >= 5; x--)
+            {
+                if (buttons[x].OnMouseClick())
+                {
+                    PlayerManager.PlayerTurn = buttons[x].CodeValue;
+                    PlayerManager.ActivePlayerID = x - 4;
+                }
+            }
         }
 
         #endregion
@@ -124,7 +165,12 @@ namespace Carcassonne
                 TileManager.LockTiles();
 
             if (buttons[2].OnMouseClick())
-            { ;//add player
+            {
+                if (PlayerManager.activePlayers < 7)
+                {
+                    AddPlayer("Kokos" + PlayerManager.activePlayers);
+                    TileManager.AddScoreBoardSoldier("Kokos" + (PlayerManager.activePlayers-1));
+                }
             }
 
             if (buttons[3].OnMouseClick())
@@ -135,6 +181,9 @@ namespace Carcassonne
                 PlayerManager.UnlockObject = !PlayerManager.UnlockObject;
                 buttons[4].CodeValue = "Unlock " + PlayerManager.UnlockObject;
             }
+
+            PlayerButtons();
+
             HandleKeyLocker();
 
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using TileEngine;
 
 namespace Carcassonne
 {
@@ -18,7 +19,9 @@ namespace Carcassonne
         private static string rotatingType;
         public static Dictionary<string, int> PlayerStatus = new Dictionary<string, int>();
         public static string playerTurn;
+        public static int activePlayers;
         private static bool unlockObject;
+        private static int activePlayerID;
 
         #endregion
 
@@ -29,9 +32,11 @@ namespace Carcassonne
             activeTileID = 0;
             activeTile = false;
             rotatingType=activeTileType = "";
-            PlayerStatus.Add(player, 0);
+            activePlayers = 1;
             playerTurn = player;
             UnlockObject = false;
+            ActivePlayerID = 1;
+           // AddPlayer(player);
         }
 
         #endregion
@@ -50,6 +55,12 @@ namespace Carcassonne
             set { activeTileID = value; }
         }
 
+        public static int ActivePlayerID
+        {
+            get { return activePlayerID; }
+            set { activePlayerID = value; }
+        }
+
         public static string ActiveTileType
         {
             get { return activeTileType; }
@@ -62,6 +73,14 @@ namespace Carcassonne
             set { rotatingType = value; }
         }
 
+        public static Vector2 NewPlayerLocation
+        {
+            get
+            {
+                return
+                    new Vector2(FormManager.menu.Location.X - TileGrid.OriginalTileWidth/2 +((activePlayers ) * TileGrid.OriginalTileWidth) + 2 * activePlayers, 330);
+            }
+        }
         public static bool ActiveTile
         {
             get { return activeTile; }
@@ -73,10 +92,38 @@ namespace Carcassonne
             get { return playerTurn; }
             set { playerTurn = value; }
         }
+        public static Color ActivePlayerColor
+        {
+            get { return PlayerColor(activePlayerID); }
+        }
+
+        public static Color PlayerColor(int index)
+        {
         
+                if (index == 1)
+                    return Color.Black;
+                if (index == 2)
+                    return Color.Blue;
+                else if (index == 3)
+                    return Color.Green;
+                else if (index == 4)
+                      return Color.Brown;
+                else if (index == 5)
+                     return Color.Red;
+                else
+                    return Color.Yellow;
+        }
+        
+
         #endregion
 
         #region Public Methods
+
+        public static void AddPlayer(string Player)
+        {
+            PlayerStatus.Add(Player, activePlayers);
+            activePlayers++;
+        }
 
         public static void ResetActiveTile()
         {
@@ -88,11 +135,6 @@ namespace Carcassonne
               ActiveTile = false;
           }
 
-        }
-        public static void AddPlayer(string player)
-        {
-            PlayerStatus.Add(player, 0);
-            //add button with player name if playing localy
         }
 
         public static void IncrementTiles()

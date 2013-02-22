@@ -16,12 +16,13 @@ namespace TileEngine
         private bool idle;
         private Texture2D frame1;
         private Texture2D frame2;
+        private Color fontColor;
 
         #endregion
 
         #region Constructor
 
-        public Tile(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer,Texture2D Frame1,Texture2D Frame2)
+        public Tile(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer,Texture2D Frame1,Texture2D Frame2,Color FontColor)
             :base(CodeValue,labelOffset,texture,font,location,ID,layer)
         {
             onGrid = true;
@@ -30,6 +31,7 @@ namespace TileEngine
             idle = true;
             frame1=Frame1;
             frame2=Frame2;
+            fontColor = FontColor;
         }
         
         #endregion
@@ -195,7 +197,7 @@ namespace TileEngine
                      font,
                      CodeValue, 
                      Camera.WorldToScreen(LabelOffset),
-                     Color.White*Transparency);
+                     fontColor*Transparency);
                 
                     spriteBatch.Draw(
                         FrameTexture,

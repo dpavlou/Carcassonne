@@ -46,7 +46,7 @@ namespace TileEngine
            else
                buttonLocation =  new Vector2(location.X+formSize.X, Camera.ViewPortHeight / 2 - TileGrid.TileHeight / 2);
 
-           handle = new Button(buttonTag, new Vector2(-45, -10), texture, font, buttonLocation, 1, 0.05f, false);
+           handle = new Button(buttonTag, new Vector2(-45, -10), texture, font, buttonLocation, 1, 0.05f, false,Color.Red);
        }
 
         #endregion

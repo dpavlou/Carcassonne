@@ -17,12 +17,13 @@ namespace TileEngine
         private Vector2 bounds;
         private Vector2 boundSize;
         private bool lockedInBounds;
+        private Color color;
 
        #endregion
 
         #region Constructor
 
-        public Button(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer,bool lockedinbounds)
+        public Button(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer,bool lockedinbounds,Color color)
             : base(CodeValue, labelOffset,texture, font, location, ID, layer)
         {
 
@@ -30,11 +31,18 @@ namespace TileEngine
             layer = 0.3f;
             prevMouseState = Mouse.GetState();
             lockedInBounds = lockedinbounds;
+            FontColor = color;
         }
 
         #endregion
 
         #region Properties
+
+        public Color FontColor
+        {
+            get { return color; }
+            set { color = value; }
+        }
 
         public Vector2 Bounds
         {
@@ -191,7 +199,7 @@ namespace TileEngine
                       font,
                       CodeValue,
                       LabelOffset,
-                      Color.Red * Transparency);
+                      FontColor * Transparency);
             
         }
 
