@@ -138,7 +138,7 @@ namespace TileEngine
 
         public void ReleaseSquare()
         {
-            if (MouseClick && Moving)
+            if (Moving)
             {
                 Idle = false;
                 if (OnGrid)
@@ -163,10 +163,10 @@ namespace TileEngine
 
         public override void Update(GameTime gameTime)
         {
+
+            base.Update(gameTime);
             SnapToGrid();
             ReleaseSquare();
-            base.Update(gameTime);
-
             FormIntersection(FormManager.privateSpace.FormWorldRectangle);
         }
 
@@ -192,10 +192,10 @@ namespace TileEngine
                 if (!Lock)
                 {
                     spriteBatch.DrawString(
-                      font,
-                      CodeValue,
-                      Camera.WorldToScreen(LabelOffset),
-                      Color.White*Transparency);
+                     font,
+                     CodeValue, 
+                     Camera.WorldToScreen(LabelOffset),
+                     Color.White*Transparency);
                 
                     spriteBatch.Draw(
                         FrameTexture,
