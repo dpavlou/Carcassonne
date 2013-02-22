@@ -216,6 +216,7 @@ namespace TileEngine
          public virtual void CalculateOffSet(Vector2 startingPoint)
          {
              Location = startingPoint+Camera.WorldLocation + OffSet;
+             location.X = MathHelper.Min(Location.X,( startingPoint.X + Camera.WorldLocation.X+FormManager.privateSpace.FormSize.X-TileGrid.TileWidth/2));
          }
 
         public void Move(Vector2 amount)

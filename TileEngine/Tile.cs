@@ -61,8 +61,10 @@ namespace TileEngine
         public float Layer
         {
             get {
+                if (SnappedToForm && ActiveTile)
+                    return layer - 0.4f;
                 if (SnappedToForm)
-                    return layer - 0.15f;
+                    return layer - 0.31f;
                 if (ActiveTile)
                     return layer - 0.2f;
                 if (Active && OnGrid)

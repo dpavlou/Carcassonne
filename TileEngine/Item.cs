@@ -66,10 +66,12 @@ namespace TileEngine
         {
             get
             {
+                if (SnappedToForm && ActiveTile)
+                    return layer - 0.32f;
+                if (SnappedToForm)
+                    return layer -0.29f;
                 if (ActiveTile)
                     return layer - 0.15f;
-                if (SnappedToForm)
-                    return layer - 0.1f;
                 return layer;
             }
             set { layer = value; }
