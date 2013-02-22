@@ -172,6 +172,13 @@ namespace Carcassonne
             new Vector2(10, 70),
             Color.Red);
 
+            spriteBatch.DrawString(
+            pericles10,
+            "Active Player:" +
+            PlayerManager.PlayerTurn,
+            new Vector2(10, 100),
+            Color.Red);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
