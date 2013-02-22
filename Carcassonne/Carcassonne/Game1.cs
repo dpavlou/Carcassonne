@@ -163,7 +163,14 @@ namespace Carcassonne
             Camera.WorldLocation,
             new Vector2(10, 10),
             Color.Red);
-            
+
+            spriteBatch.DrawString(
+            pericles10,
+            "Tiles Left:" +
+            Deck.deck.Count,
+            new Vector2(10, 70),
+            Color.Red);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
