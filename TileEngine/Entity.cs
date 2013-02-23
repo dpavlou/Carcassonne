@@ -276,10 +276,12 @@ namespace TileEngine
 
         public virtual void Update(GameTime gameTime)
         {
-            setMouseState();
-            senseClick();
-            dragWithMouse();
-
+            if (!FormManager.Dragging)
+            {
+                setMouseState();
+                senseClick();
+                dragWithMouse();
+            }
 
         }
 

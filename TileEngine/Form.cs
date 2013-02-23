@@ -69,6 +69,7 @@ namespace TileEngine
            }
        }
 
+
        public Vector2 DefaultLocation
        {
            get { return defaultLocation; }
@@ -134,12 +135,33 @@ namespace TileEngine
        {
            previousLocation = Location;
            MoveAmount = MouseLocation - start;
-           Location += MoveAmount;
+           CheckFormLocation();
+           //if (MouseLocation.X > DefaultLocation.X - FormSize.X)
+               Location += MoveAmount;
+              // MouseLocation.X = DefaultLocation.X + FormSize.X;
+
+               
+
            start = MouseLocation;
            if(DragLeft)
              handle.MoveAt(new Vector2(Location.X,handle.Location.Y));
            else
               handle.MoveAt(new Vector2(Location.X+formSize.X, handle.Location.Y));
+
+       }
+
+       public void CheckFormLocation()
+       {
+           if (DragLeft)
+           {
+               if (Location.X == DefaultLocation.X - FormSize.X
+                   && MouseLocation.X < DefaultLocation.X - FormSize.X)
+                   MoveAmount = Vector2.Zero;
+           }
+           else if (!DragLeft)
+               if (Location.X == 0
+                    && MouseLocation.X > DefaultLocation.X + FormSize.X)
+                   MoveAmount = Vector2.Zero;
 
        }
 

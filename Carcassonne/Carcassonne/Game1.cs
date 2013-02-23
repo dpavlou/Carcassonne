@@ -22,7 +22,6 @@ namespace Carcassonne
         Texture2D button;
         SpriteFont pericles10;
         CameraHandler cameraHandler;
-        FpsMonitor fps;
 
         public Game1()
         {
@@ -39,8 +38,6 @@ namespace Carcassonne
         /// </summary>
         protected override void Initialize()
         {
-            fps = new FpsMonitor();
-
             this.IsMouseVisible = true;
 
             this.Window.Title = "Carcassonne ALPHA";
@@ -73,22 +70,13 @@ namespace Carcassonne
             PlayerManager.Initialize("Kokos");
             TileGrid.Initialize(
               Content.Load<Texture2D>(@"Textures\MapSquare"), Content.Load<Texture2D>(@"Textures\Table"));
-
             FormManager.Initialize(button, Content.Load<Texture2D>(@"Textures\ScoreBoard"), pericles10, "Kokos");
-
             ButtonManager.Initialize(button,Content.Load<Texture2D>(@"Textures\Button2"),pericles10,"Kokos");
-
             TileManager.Initialize(Content.Load<Texture2D>(@"Textures\Frame1"),Content.Load<Texture2D>(@"Textures\Frame2"), pericles10);
-
-            
-
-          
-
             Deck.Initialize(Content);
             //Camera.newViewPort = GraphicsDevice.Viewport;
-
             Frame.Initialize(GraphicsDevice);
-
+            MenuText.Initialize(Content.Load<SpriteFont>(@"Fonts\Pescadero14"));
             cameraHandler = new CameraHandler(new Vector2(TileGrid.MapWidth/2*TileGrid.TileWidth,TileGrid.MapHeight/2*TileGrid.TileHeight));
             TileManager.AddScoreBoardSoldier("Kokos");
 
@@ -122,15 +110,11 @@ namespace Carcassonne
                 graphics.ToggleFullScreen();
             }
 
-            fps.Update();
-
-
             cameraHandler.Update(gameTime);
-
             FormManager.Update(gameTime);
             ButtonManager.Update(gameTime);
             TileManager.Update(gameTime);
-           
+            MenuText.Update(gameTime);
             //Camera.Update();
 
             base.Update(gameTime);
@@ -155,29 +139,7 @@ namespace Carcassonne
             FormManager.Draw(spriteBatch);
             TileManager.Draw(spriteBatch);
             ButtonManager.Draw(spriteBatch);
-            
-            fps.Draw(spriteBatch, pericles10, new Vector2(10, 40), Color.Red);
-            
-            spriteBatch.DrawString(
-            pericles10,
-            "WorldLocation:"+
-            Camera.WorldLocation,
-            new Vector2(10, 10),
-            Color.Red);
-
-            spriteBatch.DrawString(
-            pericles10,
-            "Tiles Left:" +
-            Deck.deck.Count,
-            new Vector2(10, 70),
-            Color.Red);
-
-            spriteBatch.DrawString(
-            pericles10,
-            "Active Player:" +
-            PlayerManager.PlayerTurn,
-            new Vector2(10, 100),
-            Color.Red);
+            MenuText.Draw(spriteBatch);            
 
             spriteBatch.End();
 

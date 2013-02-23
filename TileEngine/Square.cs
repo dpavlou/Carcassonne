@@ -42,7 +42,7 @@ namespace TileEngine
         {
             get { return location; }
             set {
-                location.X = MathHelper.Clamp(value.X,-TileGrid.TileWidth/2,TileGrid.TileWidth * TileGrid.MapWidth);
+                location.X = MathHelper.Clamp(value.X, -TileGrid.TileWidth / 2, TileGrid.TileWidth * TileGrid.MapWidth + TileGrid.TileWidth / 2);
                 location.Y = MathHelper.Clamp(value.Y, 0, TileGrid.TileHeight * TileGrid.MapHeight);
             }
         }

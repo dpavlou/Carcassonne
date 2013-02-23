@@ -79,7 +79,19 @@ namespace TileEngine
         public override Vector2 MouseLocation
         {
 
-            get { return new Vector2(mouseState.X, mouseState.Y); }
+            get
+            {
+                if (LockedInBounds && Moving)
+                {
+                    if (mouseState.X < Bounds.X)
+                        return new Vector2(Bounds.X, Location.Y);
+                  /*  else if (mouseState.Y < 0)
+                        return new Vector2(0, 0);
+                    else if (mouseState.Y > Camera.ViewPortHeight)
+                        return new Vector2(0, Camera.ViewPortHeight);*/
+                }
+                return new Vector2(mouseState.X, mouseState.Y);
+            }
 
         }
 
@@ -104,6 +116,16 @@ namespace TileEngine
                     return 0.8f;
                 else
                     return 0.4f;
+            }
+        }
+
+        public override Vector2 Location
+        {
+            get { return location; }
+            set
+            {
+                location.X = MathHelper.Clamp(value.X, -400, TileGrid.TileWidth * TileGrid.MapWidth);
+                location.Y = MathHelper.Clamp(value.Y, 0, TileGrid.TileHeight * TileGrid.MapHeight);
             }
         }
 

@@ -40,7 +40,6 @@ namespace Carcassonne
 
         public static void AddTile(Vector2 location,string owner)
         {
-            //texture = randomTexture;
             ID++;
             tiles.Add(new Tile(owner, new Vector2(-23, -10), Deck.GetRandomTile(), font, location, ID, 0.5f - ID * 0.001f, frame1, frame2, PlayerManager.ActivePlayerColor));
         }
@@ -48,14 +47,14 @@ namespace Carcassonne
         public static void AddSoldier(Vector2 location, string owner)
         {
             itemID++;
-            items.Add(new Item(owner, new Vector2(-23, -10), Deck.GetSoldier(), font, location, ID, 0.4f - itemID * 0.001f, Deck.GetSoldier(), 55f * Camera.Scale, PlayerManager.ActivePlayerColor));
+            items.Add(new Item(owner, new Vector2(-23, -10), Deck.GetSoldier(), font, location, ID, 0.4f - itemID * 0.001f, Deck.GetSoldier(), 55f * Camera.Scale, PlayerManager.ActivePlayerColor,true));
         }
 
         public static void AddScoreBoardSoldier(string owner)
         {
             itemID++;
             items.Add(new Item(owner, new Vector2(-23, -10), Deck.GetSoldier(), font, (Camera.WorldLocation+ButtonManager.buttons[3+PlayerManager.activePlayers].Location+new Vector2(0,+TileGrid.OriginalTileHeight)),
-                    ID, 0.05f - itemID * 0.001f, Deck.GetSoldier(), 55f,PlayerManager.PlayerColor(PlayerManager.activePlayers-1)));
+                    ID, 0.05f - itemID * 0.001f, Deck.GetSoldier(), 55f,PlayerManager.PlayerColor(PlayerManager.activePlayers-1),false));
             items[itemID - 1].LockedInBounds = true;
             items[itemID - 1].BoundSize = FormManager.menu.FormSize;
             items[itemID - 1].Bounds = Camera.WorldLocation+FormManager.menu.Location + new Vector2(TileGrid.OriginalTileWidth / 2, 0);

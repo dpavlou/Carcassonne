@@ -14,6 +14,7 @@ namespace TileEngine
 
         public static Form menu;
         public static Form privateSpace;
+        private static bool dragging;
         private static Texture2D scoreboard;
 
         #endregion
@@ -23,8 +24,9 @@ namespace TileEngine
         public static void Initialize(Texture2D button1, Texture2D scoreBoard, SpriteFont font, string owner)
         {
             menu = new Form(button1,"MENU",new Vector2(600, Camera.ViewPortHeight), font, new Vector2(Camera.ViewPortWidth, 0),true);
-            privateSpace = new Form(button1,"PRIVATE",new Vector2(300, Camera.ViewPortHeight), font, new Vector2(0, 0),false);
+            privateSpace = new Form(button1,"  PRIVATE",new Vector2(300, Camera.ViewPortHeight), font, new Vector2(0, 0),false);
             ScoreBoard = scoreBoard;
+            dragging = false;
         }
 
         #endregion
@@ -37,9 +39,15 @@ namespace TileEngine
             set { scoreboard = value; }
         }
 
+        public static bool Dragging
+        {
+            get { return dragging; }
+            set { dragging = value; }
+        }
+
        public static Rectangle ScoreBoardRectangle
        {
-           get { return new Rectangle((int)menu.Location.X + 30, Camera.ViewPortHeight - 470, ScoreBoard.Width+50, ScoreBoard.Height+50); }
+           get { return new Rectangle((int)menu.Location.X + 10, Camera.ViewPortHeight - 510, ScoreBoard.Width+80, ScoreBoard.Height+80); }
        }
 
         #endregion
@@ -48,8 +56,15 @@ namespace TileEngine
 
        public static void Update(GameTime gameTime)
        {
+
            menu.Update(gameTime);
            privateSpace.Update(gameTime);
+
+           if (menu.Dragging || privateSpace.Dragging)
+               Dragging = true;
+           else
+               Dragging = false;
+
        }
 
        #endregion

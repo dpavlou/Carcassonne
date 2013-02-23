@@ -19,12 +19,14 @@ namespace TileEngine
         private Vector2 boundSize;
         private bool lockedInBounds;
         private Color itemColor;
+        private bool mouseOutOfBounds;
+        public float lastY;
 
         #endregion
 
         #region Constructor
 
-        public Item(string CodeValue, Vector2 labelOffset, Texture2D texture, SpriteFont font, Vector2 location, int ID, float layer, Texture2D onground,float bounds,Color ItemColor)
+        public Item(string CodeValue, Vector2 labelOffset, Texture2D texture, SpriteFont font, Vector2 location, int ID, float layer, Texture2D onground,float bounds,Color ItemColor,bool snappedtoform)
             : base(CodeValue, labelOffset, texture, font, location, ID, layer)
         {
             Layer = layer;
@@ -33,6 +35,13 @@ namespace TileEngine
             Lying = false;
             Width = bounds;
             itemColor = ItemColor;
+            MouseOutOfBounds = false;
+            lastY = 0f;
+            if (snappedtoform)
+            {
+                SnappedToForm = true;
+                OffSet = Location - (FormManager.privateSpace.Location + Camera.WorldLocation);
+            }
         }
 
         #endregion
@@ -152,6 +161,12 @@ namespace TileEngine
             set { idle = value; }
         }
 
+        public bool MouseOutOfBounds
+        {
+            get { return mouseOutOfBounds; }
+            set { mouseOutOfBounds = value; }
+        }
+
         public override Rectangle TileRectangle
         {
             get
@@ -160,6 +175,42 @@ namespace TileEngine
                              (int)Width, (int)Width);
             }
 
+        }
+
+        public override Vector2 MouseLocation
+        {
+            get
+            {
+                Vector2 mCenter;
+                float X = mouseState.X;
+                float Y = mouseState.Y;
+                if (LockedInBounds)
+                {
+                    if (mouseState.X < Bounds.X - Camera.WorldLocation.X)
+                    {
+                        location.X = Bounds.X - Camera.WorldLocation.X;
+                        if (!MouseOutOfBounds)
+                        {
+                            Y = Location.Y - Camera.WorldLocation.Y;
+                            lastY = Y;
+                        }
+                        else
+                            Y = lastY;
+                        MouseOutOfBounds = true;
+                    }
+                    else
+                    { 
+                            MouseOutOfBounds = false;
+                    }
+              
+                }
+
+                mCenter.X = MathHelper.Clamp((X + (Camera.WorldLocation.X)), 0, TileGrid.TileWidth * TileGrid.MapWidth);
+                mCenter.Y = MathHelper.Clamp((Y + (Camera.WorldLocation.Y)), 0, TileGrid.TileHeight * TileGrid.MapHeight);
+               
+                return mCenter;
+
+            }
         }
 
         public float Scale
@@ -194,7 +245,6 @@ namespace TileEngine
         public void AdjustToMenu()
         {
 
-           
 
             if (!Moving)
             {
@@ -271,10 +321,12 @@ namespace TileEngine
         {
 
             base.Update(gameTime);
-             if (LockedInBounds)
+            if (LockedInBounds)
+            {
                 AdjustLocationToOrigin();
-             else
-            FormIntersection(FormManager.privateSpace.FormWorldRectangle);
+            }
+            else
+                FormIntersection(FormManager.privateSpace.FormWorldRectangle);
 
         }
 

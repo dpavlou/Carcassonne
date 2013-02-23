@@ -32,6 +32,8 @@ namespace TileEngine
             frame1=Frame1;
             frame2=Frame2;
             fontColor = FontColor;
+            SnappedToForm = true;
+            OffSet = Location - (FormManager.privateSpace.Location + Camera.WorldLocation);
         }
         
         #endregion
