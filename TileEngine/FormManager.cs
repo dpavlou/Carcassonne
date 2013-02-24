@@ -50,6 +50,15 @@ namespace TileEngine
            get { return new Rectangle((int)menu.Location.X + 10, Camera.ViewPortHeight - 510, ScoreBoard.Width+80, ScoreBoard.Height+80); }
        }
 
+      /* public static Rectangle ScoreBoardRectangle
+        {
+            get
+            {
+                int textureOffSet = Camera.ViewPortHeight - (Camera.ViewPortHeight / 2 + 30 + ScoreBoard.Height);
+                return new Rectangle((int)menu.Location.X + 10, Camera.ViewPortHeight / 2 + 30, ScoreBoard.Width + textureOffSet - 10, ScoreBoard.Height + textureOffSet - 10);
+            }
+        }*/
+
         #endregion
 
         #region Update

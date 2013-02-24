@@ -164,9 +164,11 @@ namespace Carcassonne
         private void ScrollScalling(MouseState mouseState)
         {
             float newValue=0;
-            if ((currWheelValue / 120 - prevWheelValue / 120) > 0)
+            if (((currWheelValue / 120 - prevWheelValue / 120) > 0) 
+                || currKeyState.IsKeyDown(Keys.Q) )
                 newValue = 2;
-            else if ((currWheelValue / 120 - prevWheelValue / 120) < 0)
+            else if (((currWheelValue / 120 - prevWheelValue / 120) < 0)
+                || currKeyState.IsKeyDown(Keys.W) )
                 newValue = -2;
 
             if (newValue != 0)
@@ -298,7 +300,8 @@ namespace Carcassonne
    
             repositionCamera();
 
-            Camera.WorldLocation = WorldPosition;
+            Camera.WorldLocation = Camera.Position;
+            //    WorldPosition;
 
             prevMouseState = mouseState;
             prevKeyState = currKeyState;
