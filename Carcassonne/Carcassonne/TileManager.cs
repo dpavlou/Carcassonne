@@ -225,7 +225,7 @@ namespace Carcassonne
 
         static public void UnlockAnObject()
         {
-         
+
             if (PlayerManager.UnlockObject)
             {
                 for (int x = items.Count - 1; x >= 0; x--)
@@ -239,6 +239,9 @@ namespace Carcassonne
                         NewActiveItem(x);
                         break;
                     }
+            }
+            if (PlayerManager.UnlockObject)
+            {
                 for (int x = tiles.Count - 1; x >= 0; x--)
                     if (tiles[x].MouseClick && tiles[x].Lock)
                     {
