@@ -225,6 +225,7 @@ namespace Carcassonne
 
         static public void UnlockAnObject()
         {
+         
             if (PlayerManager.UnlockObject)
             {
                 for (int x = items.Count - 1; x >= 0; x--)
@@ -232,7 +233,7 @@ namespace Carcassonne
                     {
                         items[x].Lock = false;
                         items[x].Moving = true;
-                        PlayerManager.UnlockObject=false;
+                        PlayerManager.UnlockObject = false;
                         ButtonManager.buttons[4].CodeValue = "Unlock " + PlayerManager.UnlockObject;
                         items[x].Start = items[x].MouseLocation;
                         NewActiveItem(x);
@@ -243,7 +244,7 @@ namespace Carcassonne
                     {
                         tiles[x].Lock = false;
                         tiles[x].Moving = true;
-                        PlayerManager.UnlockObject=false;
+                        PlayerManager.UnlockObject = false;
                         ButtonManager.buttons[4].CodeValue = "Unlock " + PlayerManager.UnlockObject;
                         tiles[x].Start = tiles[x].MouseLocation;
                         NewActiveTile(x);
@@ -261,7 +262,8 @@ namespace Carcassonne
         {
 
             AdjustToForm();
-
+            UnlockAnObject();
+            RotateTileOrItem();
             PlayerManager.ResetActiveTile();
             
              if (PlayerManager.ActiveTileType != "tile")
@@ -358,8 +360,8 @@ namespace Carcassonne
                 }
             }
 
-            UnlockAnObject();
-            RotateTileOrItem();
+      
+
         }
 
         #endregion

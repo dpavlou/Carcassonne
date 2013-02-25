@@ -46,7 +46,7 @@ namespace TileEngine
         }
 
        public static Rectangle ScoreBoardRectangle
-       {
+       { 
            get { return new Rectangle((int)menu.Location.X + 10, Camera.ViewPortHeight - 510, ScoreBoard.Width+80, ScoreBoard.Height+80); }
        }
 
