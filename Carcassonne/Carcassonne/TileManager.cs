@@ -38,16 +38,26 @@ namespace Carcassonne
 
         #region Helper Methods
 
-        public static void AddTile(Vector2 location,string owner)
+        public static void AddTile(Vector2 location, string owner)
         {
-            ID++;
-            tiles.Add(new Tile(owner, new Vector2(-23, -10), Deck.GetRandomTile(), font, location, ID, 0.5f - ID * 0.001f, frame1, frame2, PlayerManager.ActivePlayerColor));
+           
+            location = AdjustNewTileLocation(location,1);
+            if (location != Vector2.Zero)
+            {
+                ID++;
+                tiles.Add(new Tile(owner, new Vector2(-23, -10), Deck.GetRandomTile(), font, location, ID, 0.5f - ID * 0.001f, frame1, frame2, PlayerManager.ActivePlayerColor));
+            }
         }
 
         public static void AddSoldier(Vector2 location, string owner)
         {
-            itemID++;
-            items.Add(new Item(owner, new Vector2(-23, -10), Deck.GetSoldier(), font, location, ID, 0.4f - itemID * 0.001f, Deck.GetSoldier(), 55f * Camera.Scale, PlayerManager.ActivePlayerColor,true));
+          
+            location = AdjustNewItemLocation(location, 1);
+            if (location != Vector2.Zero)
+            {
+                itemID++;
+                items.Add(new Item(owner, new Vector2(-23, -10), Deck.GetSoldier(), font, location, ID, 0.4f - itemID * 0.001f, Deck.GetSoldier(), 55f * Camera.Scale, PlayerManager.ActivePlayerColor, true));
+            }
         }
 
         public static void AddScoreBoardSoldier(string owner)
@@ -60,6 +70,36 @@ namespace Carcassonne
             items[itemID - 1].Bounds = Camera.WorldLocation+FormManager.menu.Location + new Vector2(TileGrid.OriginalTileWidth / 2, 0);
             items[itemID - 1].CalculateMenuOffSet();
            // item.Move(FormManager.menu.Step);
+        }
+
+        public static Vector2 AdjustNewTileLocation(Vector2 location,int reps)
+        {
+            for (int x = tiles.Count - 1; x >= 0; x--)
+                if (tiles[x].TileRectangle.Intersects(new Rectangle((int)location.X,(int)location.Y,TileGrid.OriginalTileWidth,TileGrid.OriginalTileHeight/10))
+                    && tiles[x].SnappedToForm)
+                {
+                    AdjustNewTileLocation(location += new Vector2(0, TileGrid.OriginalTileHeight),reps++);
+                    x = tiles.Count;
+                }
+            if (reps >= 6)
+                return Vector2.Zero;
+            else
+            return location;
+        }
+
+        public static Vector2 AdjustNewItemLocation(Vector2 location, int reps)
+        {
+            for (int x = items.Count - 1; x >= 0; x--)
+                if (items[x].TileRectangle.Intersects(new Rectangle((int)location.X, (int)location.Y, 15, 15))
+                    && items[x].SnappedToForm)
+                {
+                    AdjustNewItemLocation(location += new Vector2(0, 65), reps++);
+                    x = items.Count;
+                }
+            if (reps >= 8)
+                return Vector2.Zero;
+            else
+                return location;
         }
 
         public static void AdjustToForm()
@@ -278,7 +318,7 @@ namespace Carcassonne
                 {
                     for (int x = tiles.Count - 1; x >= 0; x--)
                     {
-                        if (!tiles[x].OnGrid)
+                        if (!tiles[x].OnGrid || tiles[x].SnappedToForm)
                         {
                             tiles[x].Update(gameTime);
 
@@ -327,7 +367,9 @@ namespace Carcassonne
             {
                 for (int x = items.Count - 1; x >= 0; x--)
                 {
+                    if(items[x].SnappedToForm || items[x].LockedInBounds)
                         items[x].Update(gameTime);
+
                     if (items[x].Moving)
                     {
                         NewActiveItem(x);
