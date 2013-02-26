@@ -184,6 +184,23 @@ namespace TileEngine
 
        }
 
+       public void Close()
+       {
+           if (dragLeft)
+               MoveAmount = new Vector2(formSize.X, 0);
+           else
+               MoveAmount = new Vector2(-formSize.X, 0);
+
+           Location += MoveAmount;
+
+           if (DragLeft)
+               handle.MoveAt(new Vector2(Location.X, handle.Location.Y));
+           else
+               handle.MoveAt(new Vector2(Location.X + formSize.X, handle.Location.Y));
+
+           CheckFormLocation();
+       }
+
        public void CheckFormLocation()
        {
            if (DragLeft)

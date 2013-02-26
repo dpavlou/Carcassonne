@@ -24,7 +24,8 @@ namespace TileEngine
         public static void Initialize(Texture2D button1, Texture2D scoreBoard, SpriteFont font, string owner)
         {
             menu = new Form(button1,"MENU",new Vector2(600, Camera.ViewPortHeight), font, new Vector2(Camera.ViewPortWidth, 0),true);
-            privateSpace = new Form(button1,"  PRIVATE",new Vector2(300, Camera.ViewPortHeight), font, new Vector2(0, 0),false);
+            privateSpace = new Form(button1,"     BANK",new Vector2(300, Camera.ViewPortHeight), font, new Vector2(0, 0),false);
+            privateSpace.Close();
             ScoreBoard = scoreBoard;
             dragging = false;
         }
