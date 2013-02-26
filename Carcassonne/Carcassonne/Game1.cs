@@ -139,7 +139,7 @@ namespace Carcassonne
             FormManager.Draw(spriteBatch);
             TileManager.Draw(spriteBatch);
             ButtonManager.Draw(spriteBatch);
-            MenuText.Draw(spriteBatch);            
+            MenuText.Draw(spriteBatch);
 
             spriteBatch.End();
 

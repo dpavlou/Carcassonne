@@ -58,6 +58,14 @@ namespace Carcassonne
 
         #region Properties
 
+        public bool MouseInBounds
+        {
+            get { return ((mouseState.X>Camera.ViewPortWidth || mouseState.X<0 
+                        || mouseState.Y>Camera.ViewPortHeight || mouseState.Y<0) 
+                        || (MouseRectangle.Intersects(FormManager.menu.FormRectangle))
+                        || (MouseRectangle.Intersects(FormManager.privateSpace.FormRectangle)));}
+        }
+
         public Vector2 WorldPosition
         {
             get { return new Vector2(worldLocation.X - Camera.ViewPortWidth / 2,
@@ -65,6 +73,15 @@ namespace Carcassonne
             }
                  
         }
+
+        public Rectangle MouseRectangle
+        {
+            get
+            {
+                return new Rectangle((int)mouseState.X, (int)mouseState.Y,1, 1);
+            }
+        }
+        
 
         #endregion
 
@@ -274,7 +291,7 @@ namespace Carcassonne
             }
 
 
-            if (simulateDoubleClick(mouseState))
+            if (simulateDoubleClick(mouseState) && !MouseInBounds)
             {
                 desiredCenter = (new Vector2(mouseState.X, mouseState.Y)+ worldLocation);
                 calculateVelocity();
