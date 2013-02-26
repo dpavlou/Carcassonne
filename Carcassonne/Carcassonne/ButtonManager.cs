@@ -19,6 +19,7 @@ namespace Carcassonne
         private static bool keyAdjustment;
         private static Texture2D buttonTexture;
         private static SpriteFont Font;
+        private static MouseState prevMouse, currMouse;
 
         #endregion
 
@@ -48,7 +49,7 @@ namespace Carcassonne
             AdjustFormButtonLocation();
 
             AddPlayer("Kokos");
-          
+            currMouse = Mouse.GetState();
         }
 
         #endregion
@@ -170,13 +171,15 @@ namespace Carcassonne
 
             AdjustFormButtonLocation();
 
+             currMouse  = Mouse.GetState();
+
                 if (buttons[0].OnMouseClick())
                     TileManager.AddTile(Camera.Position + (buttons[0].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), PlayerManager.PlayerTurn);
 
                 if (buttons[1].OnMouseClick())
                     TileManager.AddSoldier(Camera.Position + (buttons[1].Location - new Vector2(2, -TileGrid.OriginalTileHeight + 10)), PlayerManager.PlayerTurn);
 
-                if (buttons[2].OnMouseClick())
+                if (buttons[2].OnMouseClick() || (currMouse.MiddleButton==ButtonState.Pressed && prevMouse.MiddleButton!=ButtonState.Pressed))
                     TileManager.LockTiles();
 
                 if (buttons[3].OnMouseClick())
@@ -188,8 +191,6 @@ namespace Carcassonne
                     }
                 }
 
-               
-
                 if (buttons[4].OnMouseClick())
                 {
                     PlayerManager.UnlockObject = !PlayerManager.UnlockObject;
@@ -197,7 +198,7 @@ namespace Carcassonne
                 }
             
             PlayerButtons();
-
+            prevMouse = currMouse;
            // HandleKeyLocker();
 
         }
