@@ -6,23 +6,33 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace TileEngine
+namespace TileEngine.Entity
 {
+
+    using TileEngine.Camera;
+    using TileEngine.Form;
+    using MultiplayerGame.Args;
+    using MultiplayerGame.Networking.Messages;
+    using MultiplayerGame.Networking;
+
     public class Tile : RotatingTile
     {
+        
         #region Declarations
+
+        public event EventHandler<TileStateChangedArgs> SnapTileToGrid;
+        public event EventHandler<TileStateChangedArgs> RemoveFromGrid;
 
         private bool onGrid;
         private bool idle;
         private Texture2D frame1;
-        private Texture2D frame2;
         private Color fontColor;
 
         #endregion
 
         #region Constructor
 
-        public Tile(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer,Texture2D Frame1,Texture2D Frame2,Color FontColor)
+        public Tile(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer,Texture2D Frame1,Color FontColor)
             :base(CodeValue,labelOffset,texture,font,location,ID,layer)
         {
             onGrid = true;
@@ -30,12 +40,31 @@ namespace TileEngine
             Lock = false;
             idle = true;
             frame1=Frame1;
-            frame2=Frame2;
             fontColor = FontColor;
             SnappedToForm = true;
             OffSet = Location - (FormManager.privateSpace.Location + Camera.WorldLocation);
+            SnapTileToGrid += (sender, e) => TileGrid.networkManager.SendMessage(new SnapToGridMessage(e.tile));
+            RemoveFromGrid += (sender, e) => TileGrid.networkManager.SendMessage(new RemoveFromGridMessage(e.tile));
         }
         
+        #endregion
+
+        #region Networking Events
+
+        public void OnSnapToGrid(Tile tile)
+        {
+            EventHandler<TileStateChangedArgs> snapToGrid = SnapTileToGrid;
+            if (snapToGrid != null)
+                snapToGrid(snapToGrid, new TileStateChangedArgs(tile));
+        }
+
+        public void OnRemoveFromGrid(Tile tile)
+        {
+            EventHandler<TileStateChangedArgs> removeFromGrid = RemoveFromGrid;
+            if (removeFromGrid != null)
+                removeFromGrid(removeFromGrid, new TileStateChangedArgs(tile));
+        }
+
         #endregion
 
         #region Properties
@@ -107,10 +136,7 @@ namespace TileEngine
         {
             get
             {
-                if (ActiveTile)
                     return frame1;
-                else
-                    return frame2;
             }
         }
 
@@ -148,21 +174,33 @@ namespace TileEngine
 
         public void SnapToGrid()
         {
-            if (!MouseClick && !OnGrid && !Moving && !Idle && !SnappedToForm)
+            if (IsReadyToSnap()) 
             {
-                if (TileGrid.mapCells[TileGrid.GetCellByPixelX((int)Location.X),
-                        TileGrid.GetCellByPixelY((int)Location.Y)].Occupied)
-                {
-                    TileGrid.mapCells[TileGrid.GetCellByPixelX((int)Location.X),
-                    TileGrid.GetCellByPixelY((int)Location.Y)].CodeValue = CodeValue;
-                    Location = TileGrid.GetCellLocation(Location)+ new Vector2(TileGrid.TileWidth / 2, TileGrid.TileHeight / 2);
-                    OnGrid = true;
-                }
-                else
-                    OnGrid = false;
-                Idle = true;        
+                OnSnapToGrid(this);
+                CheckCell();
             }
 
+        }
+
+        public bool IsReadyToSnap()
+        {
+            return (!MouseClick && !OnGrid && !Moving && !Idle && !SnappedToForm);
+        }
+
+        public void CheckCell()
+        {
+            if (TileGrid.mapCells[TileGrid.GetCellByPixelX((int)Location.X),
+                TileGrid.GetCellByPixelY((int)Location.Y)].Occupied)
+            {
+                TileGrid.mapCells[TileGrid.GetCellByPixelX((int)Location.X),
+                TileGrid.GetCellByPixelY((int)Location.Y)].CodeValue = CodeValue;
+                Location = TileGrid.GetCellLocation(Location) + new Vector2(TileGrid.TileWidth / 2, TileGrid.TileHeight / 2);
+                OnGrid = true;
+                
+            }
+            else
+                OnGrid = false;
+            Idle = true;
         }
 
         public void ReleaseSquare()
@@ -172,12 +210,18 @@ namespace TileEngine
                 Idle = false;
                 if (OnGrid)
                 {
-                    TileGrid.mapCells[TileGrid.GetCellByPixelX((int)Location.X),
-                    TileGrid.GetCellByPixelY((int)Location.Y)].CodeValue = "";
-                    OnGrid = false;
-
+                 
+                    ResetMapCell();
+                    OnRemoveFromGrid(this);
                 }
             }
+        }
+
+        public void ResetMapCell()
+        {
+            TileGrid.mapCells[TileGrid.GetCellByPixelX((int)Location.X),
+            TileGrid.GetCellByPixelY((int)Location.Y)].CodeValue = "";
+            OnGrid = false;
         }
 
         public void RotateThis()
@@ -197,6 +241,7 @@ namespace TileEngine
             SnapToGrid();
             ReleaseSquare();
             FormIntersection(FormManager.privateSpace.FormWorldRectangle);
+
         }
 
         #endregion
@@ -226,7 +271,7 @@ namespace TileEngine
                      Camera.WorldToScreen(LabelOffset),
                      fontColor*Transparency);
                 
-                    spriteBatch.Draw(
+                     /*spriteBatch.Draw(
                         FrameTexture,
                         Camera.WorldToScreen(Location),
                         null,
@@ -235,7 +280,7 @@ namespace TileEngine
                         TileGrid.TileSourceCenter(0),
                         Scale,
                         SpriteEffects.None,
-                        Layer-0.05f);
+                        Layer-0.05f);*/
                    
                 }              
             }

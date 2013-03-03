@@ -5,9 +5,10 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TileEngine
-
+namespace TileEngine.Entity
 {
+
+    using TileEngine.Camera;
 
     public class Square
     {

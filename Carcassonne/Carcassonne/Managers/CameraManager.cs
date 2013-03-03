@@ -5,11 +5,14 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using TileEngine;
 
 namespace Carcassonne
 {
-    public class CameraHandler
+    using TileEngine.Camera;
+    using TileEngine.Entity;
+    using TileEngine.Form;
+
+    public class CameraManager
     {
 
         #region Declarations
@@ -37,21 +40,23 @@ namespace Carcassonne
         private KeyboardState currKeyState;
         private KeyboardState prevKeyState;
         private bool onLock = false;
+        private readonly TileManager tileManager;
 
         #endregion
 
         #region Constructor
 
-        public CameraHandler(Vector2 position)
+        public CameraManager(TileManager tileManager)
         {
             mousePosition = Vector2.Zero;
             offSet = velocity = Vector2.Zero;
-            worldLocation = position;
+            worldLocation = new Vector2(TileGrid.MapWidth / 2 * TileGrid.TileWidth, TileGrid.MapHeight / 2 * TileGrid.TileHeight);
             prevWheelValue = currWheelValue = 0;
             scale = TileGrid.OriginalTileHeight;
             autoPilot = false;
             prevMouseState = Mouse.GetState();
             prevKeyState = Keyboard.GetState();
+            this.tileManager = tileManager;
         }
 
         #endregion
@@ -155,8 +160,8 @@ namespace Carcassonne
                 Vector2 screenCenter = TileGrid.GetCellByPixel(new Vector2(worldLocation.X,
                                                                             worldLocation.Y));
                 CalculateOffset(screenCenter);
-                TileManager.AdjustTileLocation(newScale,scale);
-                TileManager.AdjustItemLocation(newScale, scale);
+                tileManager.AdjustTileLocation(newScale,scale);
+                tileManager.AdjustItemLocation(newScale, scale);
                 TileGrid.TileWidth = (int)newScale;
                 TileGrid.TileHeight = (int)newScale;
                 float scaleDifference = newScale - scale;
@@ -312,7 +317,6 @@ namespace Carcassonne
                 moveAmount *= 2;
             }
               
-
             adjustLocation();
    
             repositionCamera();
@@ -323,11 +327,9 @@ namespace Carcassonne
             prevMouseState = mouseState;
             prevKeyState = currKeyState;
 
-      //      TileManager.Update(gameTime, WorldPosition, ID);
         }
 
          #endregion
 
     }
-
-    }
+}

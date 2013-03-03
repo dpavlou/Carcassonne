@@ -13,8 +13,14 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace TileEngine
+namespace TileEngine.Entity
 {
+    using TileEngine.Camera;
+    using MultiplayerGame.Networking;
+    using MultiplayerGame.Args;
+
+
+
     public static class TileGrid
     {
         #region Declarations
@@ -25,14 +31,18 @@ namespace TileEngine
         public const int MapWidth = 100;
         public const int MapHeight = 100;
 
+
+        static public INetworkManager networkManager;
         static public Square[,] mapCells =
             new Square[MapWidth, MapHeight];
 
         #endregion
 
         #region Initialization
-        static public void Initialize(Texture2D square,Texture2D border)
+        static public void Initialize(ContentManager Content)
         {
+            Texture2D border = Content.Load<Texture2D>(@"Textures\Table");
+            Texture2D square = Content.Load<Texture2D>(@"Textures\MapSquare");
 
             for (int x = 0; x < MapWidth; x++)
             {
@@ -45,6 +55,7 @@ namespace TileEngine
 
                 }
             }
+            
         }
 
         #endregion
@@ -268,11 +279,14 @@ namespace TileEngine
                         if ((x >= 0) && (y >= 0) &&
                             (x < MapWidth) && (y < MapHeight))
                         {
+                            Color color = Color.White;
+                            if (mapCells[x, y].CodeValue != "")
+                                color = Color.Red;
                             spriteBatch.Draw(
                                   mapCells[x,y].texture,
                                   CellScreenRectangle(x, y),
                                   TileSourceRectangle(0),
-                                  Color.White,
+                                  color,
                                   0.0f,
                                   Vector2.Zero,
                                   SpriteEffects.None,

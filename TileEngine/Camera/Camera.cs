@@ -5,8 +5,10 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TileEngine
+namespace TileEngine.Camera
 {
+   using TileEngine.Entity;
+
    public static class Camera
     {
         #region Declarations

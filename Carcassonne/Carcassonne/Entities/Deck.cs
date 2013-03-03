@@ -8,21 +8,21 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Carcassonne
 {
-    public static class Deck
+    public class Deck
     {
 
         #region Declarations
 
-        public static List<Texture2D> textures = new List<Texture2D>();
-        public static List<int> deck = new List<int>();
-        public static Texture2D soldier;
-        public static int texturesNo;
+        public List<Texture2D> textures = new List<Texture2D>();
+        public List<int> deck = new List<int>();
+        public Texture2D soldier;
+        public int texturesNo;
 
         #endregion
 
         #region Initialize
 
-        public static void Initialize(ContentManager content)
+        public void Initialize(ContentManager content)
         {
             textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city1"));
             textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city11ne"));
@@ -55,9 +55,18 @@ namespace Carcassonne
         }
         #endregion
 
+        #region Properties
+
+        public int Count
+        {
+            get { return deck.Count; }
+        }
+
+        #endregion
+
         #region Public Methods
 
-        public static void LoadDeck()
+        public  void LoadDeck()
         {
             for (int i = 0; i < 5; i++)
                 deck.Add(0);
@@ -112,27 +121,30 @@ namespace Carcassonne
             //    deck.Add(0);
 
         }
-        public static Texture2D GetRandomTile()
+        public int GetRandomTile()
         {
             Random rand = new Random();
 
             if (deck.Count == 0)
             {
                 LoadDeck();
-                TileManager.itemID = 0;
-                TileManager.ID = 0;
+              //  TileManager.itemID = 0;
+                //TileManager.Id = 0;
             }
 
 
-            int x = rand.Next(0, deck.Count);
+            return (rand.Next(0, deck.Count));
 
+        }
+
+        public Texture2D GetTileTexture(int x)
+        {
             int textureID = deck[x];
             deck.RemoveAt(x);
 
             return textures[textureID];
         }
-
-        public static Texture2D GetSoldier()
+        public  Texture2D GetSoldier()
         {
             return soldier;
         }

@@ -1,6 +1,5 @@
 using System;
-
-// LOL
+using MultiplayerGame.Networking;
 
 namespace Carcassonne
 {
@@ -11,7 +10,7 @@ namespace Carcassonne
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1())
+            using (Game1 game = new Game1(new ServerNetworkManager()))
             {
                 game.Run();
             }

@@ -7,8 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TileEngine;
 
-namespace TileEngine
+namespace TileEngine.Form
 {
+    using TileEngine.Entity;
+    using TileEngine.Camera;
+
     public class Form
     {
 

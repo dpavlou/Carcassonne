@@ -6,8 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace TileEngine
+namespace TileEngine.Entity
 {
+    using TileEngine.Camera;
+    using TileEngine.Form;
+
     public class Item : RotatingTile
     {
         #region Declarations

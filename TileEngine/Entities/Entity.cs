@@ -6,8 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace TileEngine
+namespace TileEngine.Entity
 {
+    using TileEngine.Camera;
+    using TileEngine.Form;
+
     public class Entity : Square
     {
 
@@ -17,7 +20,7 @@ namespace TileEngine
             public MouseState mouseState;
             private bool locked;
             private bool moving;
-            private int ID;
+            private int Id;
             private Vector2 start;
             public float layer;
             public SpriteFont font;
@@ -35,7 +38,7 @@ namespace TileEngine
         public Entity(string CodeValue,Vector2 labelOffset, Texture2D texture,SpriteFont font, Vector2 location,int ID,float layer)
                 : base(CodeValue, texture, location)
         {
-            this.ID = ID;
+            this.Id = ID;
             setMouseState();
             locked = false;
             this.font = font;
@@ -60,8 +63,12 @@ namespace TileEngine
             set { offSet = value; }
         }
 
-
-
+        public int ID
+        {
+            get { return Id; }
+            set { Id = value; }
+        }
+        
         public bool SnappedToForm
         {
             get { return snappedToForm; }

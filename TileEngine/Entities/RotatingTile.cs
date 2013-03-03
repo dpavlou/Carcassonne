@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace TileEngine
+namespace TileEngine.Entity
 {
 
     public class RotatingTile : Entity
@@ -67,6 +67,7 @@ namespace TileEngine
 
         public float RotationValue
         {
+            set { rotationAmount = value; }
             get { return rotationAmount; }
         }
 

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TileEngine
+namespace TileEngine.Form
 {
+    using TileEngine.Camera;
+
     public static class FormManager
     {
 
@@ -21,12 +24,15 @@ namespace TileEngine
 
         #region Initialize
 
-        public static void Initialize(Texture2D button1, Texture2D scoreBoard, SpriteFont font, string owner)
+        public static void Initialize(ContentManager Content, string owner)
         {
+            Texture2D button1=Content.Load<Texture2D>(@"Textures\button");
+            SpriteFont font = Content.Load<SpriteFont>(@"Fonts\pericles10");
+
             menu = new Form(button1,"MENU",new Vector2(600, Camera.ViewPortHeight), font, new Vector2(Camera.ViewPortWidth, 0),true);
             privateSpace = new Form(button1,"     BANK",new Vector2(300, Camera.ViewPortHeight), font, new Vector2(0, 0),false);
             privateSpace.Close();
-            ScoreBoard = scoreBoard;
+            ScoreBoard = Content.Load<Texture2D>(@"Textures\ScoreBoard");
             dragging = false;
         }
 
@@ -45,26 +51,21 @@ namespace TileEngine
             get { return dragging; }
             set { dragging = value; }
         }
-
+        
        public static Rectangle ScoreBoardRectangle
-       { 
-           get { return new Rectangle((int)menu.Location.X + 10, Camera.ViewPortHeight - 510, ScoreBoard.Width+80, ScoreBoard.Height+80); }
-       }
-
-      /* public static Rectangle ScoreBoardRectangle
         {
             get
             {
                 int textureOffSet = Camera.ViewPortHeight - (Camera.ViewPortHeight / 2 + 30 + ScoreBoard.Height);
-                return new Rectangle((int)menu.Location.X + 10, Camera.ViewPortHeight / 2 + 30, ScoreBoard.Width + textureOffSet - 10, ScoreBoard.Height + textureOffSet - 10);
+                return new Rectangle((int)menu.Location.X + 20, Camera.ViewPortHeight / 2 + 30, ScoreBoard.Width + textureOffSet/2 - 10, ScoreBoard.Height + textureOffSet/2 - 10);
             }
-        }*/
+        }
 
         #endregion
 
         #region Update
 
-       public static void Update(GameTime gameTime)
+       public  static void Update(GameTime gameTime)
        {
 
            menu.Update(gameTime);
@@ -81,7 +82,7 @@ namespace TileEngine
 
         #region Draw
 
-       public static void Draw(SpriteBatch spriteBatch)
+       public  static void Draw(SpriteBatch spriteBatch)
        {
            menu.Draw(spriteBatch);
            privateSpace.Draw(spriteBatch);

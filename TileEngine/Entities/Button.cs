@@ -6,8 +6,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace TileEngine
+namespace TileEngine.Entity
 {
+    using TileEngine.Camera;
+
     public class Button : Entity
     {
 
