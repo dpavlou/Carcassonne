@@ -223,6 +223,17 @@ namespace Carcassonne
 
         }
 
+        public Vector2 adjustLocationAt(Vector2 Location, float newScale)
+        {
+
+            Vector2 tempPos = Location - (new Vector2((float)TileGrid.GetCellByPixelX((int)Location.X) * newScale
+                                , (float)TileGrid.GetCellByPixelX((int)Location.Y) * newScale));
+            Vector2 newLocation = new Vector2((float)TileGrid.GetCellByPixelX((int)Location.X) * scale
+                                        , (float)TileGrid.GetCellByPixelX((int)Location.Y) * scale) + tempPos * scale / newScale;
+
+            return newLocation;
+        }
+
         private void repositionCamera()
         {
             int screenLocX = (int)Camera.WorldToScreen(worldLocation).X;

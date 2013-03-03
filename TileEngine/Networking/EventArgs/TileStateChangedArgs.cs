@@ -15,9 +15,11 @@
         /// Initializes a new instance of the <see cref="TileStateChangedArgs"/> class.
         /// </summary>
 
-        public TileStateChangedArgs(Tile tile)
+        public TileStateChangedArgs(Tile tile,string playerID,float scale)
         {
             this.tile = tile;
+            this.scale = scale;
+            this.playerID = playerID;
         }
 
         #endregion
@@ -26,6 +28,10 @@
 
 
         public Tile tile { get; private set; }
+
+        public float scale { get; private set; }
+
+        public string playerID { get; private set; }
 
         #endregion
     }

@@ -78,95 +78,112 @@ namespace Carcassonne
 
         #region Tile Events
 
-        public void UpdateTile(int ID, Vector2 location, float rotation)
+        public void UpdateTile(int ID,string playerID, Vector2 location)
         {
             foreach (Tile tile in tiles)
-                if (tile.ID == ID)
+                if (tile.ID == ID && player.playerTurn!=playerID)
                 {
                     tile.SnappedToForm = false;
                     tile.Location = location;
-                    tile.RotationValue = rotation;
+                   // tile.RotationValue = rotation;
                     break;
                 }
         }
 
-        public void OnUpdateTile(Tile tile)
+        public void OnUpdateTile(Tile tile,string playerID)
         {
             EventHandler<TileStateChangedArgs> tileStateUpdated = TileStateUpdated;
             if (tileStateUpdated != null)
-                tileStateUpdated(tileStateUpdated, new TileStateChangedArgs(tile));
+                tileStateUpdated(tileStateUpdated, new TileStateChangedArgs(tile, playerID,TileGrid.TileWidth));
         }
 
         public void OnAddTile(string codeValue, int id,int count)
         {
             EventHandler<IdentificationArgs> tileStateAdd = TileStateAdd;
             if (tileStateAdd != null)
-                tileStateAdd(tileStateAdd, new IdentificationArgs(codeValue,id,count));
+                tileStateAdd(tileStateAdd, new IdentificationArgs(codeValue,id,count,0));
         }
 
-        public void OnRequestTile(string codeValue, int id,int count)
+        public void OnRequestTile(string codeValue, int id,int count,int colorID)
         {
             EventHandler<IdentificationArgs> tileStateRequest = TileStateRequest;
             if (tileStateRequest != null)
-                tileStateRequest(tileStateRequest, new IdentificationArgs(codeValue, id, count));
+                tileStateRequest(tileStateRequest, new IdentificationArgs(codeValue, id, count,colorID));
         }
         #endregion
 
         #region Item Events
 
-        public void OnAddItem(string codeValue, int id, int count)
+        public void OnAddItem(string codeValue, int id, int count,int colorID)
         {
             EventHandler<IdentificationArgs> itemStateAdd = ItemStateAdd;
             if (itemStateAdd != null)
-                itemStateAdd(itemStateAdd, new IdentificationArgs(codeValue, id, count));
+                itemStateAdd(itemStateAdd, new IdentificationArgs(codeValue, id, count,colorID));
         }
 
-        public void OnRequestItem(string codeValue, int id, int count)
+        public void OnRequestItem(string codeValue, int id, int count,int colorID)
         {
             EventHandler<IdentificationArgs> itemStateRequest = ItemStateRequest;
             if (itemStateRequest != null)
-                itemStateRequest(itemStateRequest, new IdentificationArgs(codeValue, id, count));
+                itemStateRequest(itemStateRequest, new IdentificationArgs(codeValue, id, count,colorID));
         }
 
-        public void OnUpdateItem(Item item)
+        public void OnUpdateItem(Item item,string playerID)
         {
             EventHandler<ItemStateChangedArgs> itemStateUpdated = ItemStateUpdated;
             if (itemStateUpdated != null)
-                itemStateUpdated(itemStateUpdated, new ItemStateChangedArgs(item));
+                itemStateUpdated(itemStateUpdated, new ItemStateChangedArgs(item, playerID, TileGrid.TileWidth,0));
         }
 
-        public void UpdateItem(int Id, Vector2 location, float rotation)
+        public void UpdateItem(int Id, string playerID,Vector2 location)
         {
             foreach (Item item in items)
-                if (item.ID == Id)
+                if (item.ID == Id && playerID != player.playerTurn)
                 {
                     item.SnappedToForm = false;
                     item.Location = location;
-                    item.RotationValue = rotation;
+                    //item.RotationValue = rotation;
                     break;
                 }
         }
 
         #endregion
 
-        public void snapToGrid(int ID, Vector2 location)
+        public void rotateManually(float rotationValue,int ID, string playerID, string type)
+        {
+            if (player.playerTurn != playerID)
+            {
+                if (type == "item")
+                    getItemFromList(ID).RotationValue = rotationValue;
+                else if (type == "tile")
+                    getTileFromList(ID).RotationValue = rotationValue;
+            }
+        }
+
+        public void snapToGrid(int ID, string playerID,Vector2 location)
         {
             foreach (Tile tile in tiles)
-                if (tile.ID == ID)
+                if (tile.ID == ID && player.playerTurn != playerID)
                 {
+                    if (this.IsHost)
+                        TileGrid.OnSnapToGrid(tile,playerID);
                     tile.CheckCell();
                     break;
                 }
         }
 
-        public void removeFromGrid(int ID, Vector2 location)
+        public void removeFromGrid(int ID, string playerID,Vector2 location)
         {
             foreach (Tile tile in tiles)
-                if (tile.ID == ID)
+                if (tile.ID == ID && player.playerTurn != playerID)
                 {
+                    if (this.IsHost)
+                        TileGrid.OnRemoveFromGrid(tile, playerID);
+
                     TileGrid.mapCells[TileGrid.GetCellByPixelX((int)location.X),
                     TileGrid.GetCellByPixelY((int)location.Y)].CodeValue = "";
                     tile.OnGrid = false;
+
                     break;
                 }
         }
@@ -176,23 +193,41 @@ namespace Carcassonne
             location = AdjustNewTileLocation(location, 1);
             if (location != Vector2.Zero)
             {
-                tiles.Add(new Tile(owner, new Vector2(-23, -10), deck.GetTileTexture(ID), font, location, tileCount, 0.5f - tileCount * 0.001f, frame1, player.ActivePlayerColor));
+                tiles.Add(new Tile(owner, new Vector2(-23, -10), deck.GetTileTexture(ID), font, location, tileCount, 0.5f - tileCount * 0.001f, frame1, Color.Black));
 
             }
         }
 
-        public void AddItem(Vector2 location, string owner, int ID, int itemCount)
+        public void AddItem(Vector2 location, string owner, int ID, int itemCount,int colorID)
         {
              location = AdjustNewItemLocation(location, 1);
             if (location != Vector2.Zero)
             {
-                items.Add(new Item(owner, new Vector2(-23, -10), deck.GetSoldier(), font, location, itemCount, 0.4f - itemCount * 0.001f, deck.GetSoldier(), 55f * Camera.Scale, player.ActivePlayerColor, true));
+                items.Add(new Item(owner, new Vector2(-23, -10), deck.GetSoldier(), font, location, itemCount, 0.4f - itemCount * 0.001f, deck.GetSoldier(), 55f * Camera.Scale, player.PlayerColor(colorID), true));
             }
         }
 
         #endregion
 
         #region Helper Methods
+
+        public Tile getTileFromList(int x)
+        {
+            foreach (Tile tile in tiles)
+                if (tile.ID == x)
+                    return tile;
+
+            return tiles[0]; //update later
+        }
+
+        public Item getItemFromList(int x)
+        {
+            foreach (Item item in items)
+                if (item.ID == x)
+                    return item;
+
+            return items[0]; //update later
+        }
 
 
         public void AddTile(Vector2 location, string owner)
@@ -205,16 +240,16 @@ namespace Carcassonne
                 {
                     int deckX = deck.GetRandomTile();
                     Id++;
-                    tiles.Add(new Tile(owner, new Vector2(-23, -10), deck.GetTileTexture(deckX), font, location, Id, 0.5f - Id * 0.001f, frame1, player.ActivePlayerColor));
+                    tiles.Add(new Tile(owner, new Vector2(-23, -10), deck.GetTileTexture(deckX), font, location, Id, 0.5f - Id * 0.001f, frame1, Color.Black));
                     OnAddTile(owner,deckX,Id);
             
                 }
                 else
-                    OnRequestTile(player.PlayerTurn,0,0);
+                    OnRequestTile(owner,0,0,0);
             }
         }
 
-        public void AddSoldier(Vector2 location, string owner)
+        public void AddSoldier(Vector2 location, string owner,int colorID)
         {
 
             location = AdjustNewItemLocation(location, 1);
@@ -223,11 +258,11 @@ namespace Carcassonne
                 if (this.IsHost)
                 {
                     itemID++;
-                    items.Add(new Item(owner, new Vector2(-23, -10), deck.GetSoldier(), font, location, itemID, 0.4f - itemID * 0.001f, deck.GetSoldier(), 55f * Camera.Scale, player.ActivePlayerColor, true));
-                    OnAddItem(owner, 0, itemID);
+                    items.Add(new Item(owner, new Vector2(-23, -10), deck.GetSoldier(), font, location, itemID, 0.4f - itemID * 0.001f, deck.GetSoldier(), 55f * Camera.Scale, player.PlayerColor(colorID), true));
+                    OnAddItem(owner, 0, itemID,colorID);
                 }
                 else
-                    OnRequestItem(player.PlayerTurn, 0, 0);
+                    OnRequestItem(owner, 0, 0, player.ActivePlayerID);
             }
         }
 
@@ -539,9 +574,9 @@ namespace Carcassonne
         public void HandleUpdateEvents()
         {
             if (player.ActiveTileType == "tile")
-                OnUpdateTile(tiles[player.ActiveTileID]); //Event
+                OnUpdateTile(tiles[player.ActiveTileID],player.playerTurn); //Event
             if (player.ActiveTileType == "item")
-                OnUpdateItem(items[player.ActiveTileID]); //Event
+                OnUpdateItem(items[player.ActiveTileID],player.playerTurn); //Event
         }
 
         public void UpdateItems(GameTime gameTime)

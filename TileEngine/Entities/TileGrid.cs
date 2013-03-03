@@ -18,7 +18,7 @@ namespace TileEngine.Entity
     using TileEngine.Camera;
     using MultiplayerGame.Networking;
     using MultiplayerGame.Args;
-
+    using MultiplayerGame.Networking.Messages;
 
 
     public static class TileGrid
@@ -30,7 +30,7 @@ namespace TileEngine.Entity
         public const int OriginalTileHeight = 90;
         public const int MapWidth = 100;
         public const int MapHeight = 100;
-
+        static public string PlayerID = "";
 
         static public INetworkManager networkManager;
         static public Square[,] mapCells =
@@ -38,11 +38,17 @@ namespace TileEngine.Entity
 
         #endregion
 
+        public static event EventHandler<TileStateChangedArgs> SnapTileToGrid;
+        public static event EventHandler<TileStateChangedArgs> RemoveFromGrid;
+        public static event EventHandler<RotationValueChangedArgs> RotateValue;
+
         #region Initialization
-        static public void Initialize(ContentManager Content)
+        static public void Initialize(ContentManager Content,string playerID)
         {
             Texture2D border = Content.Load<Texture2D>(@"Textures\Table");
             Texture2D square = Content.Load<Texture2D>(@"Textures\MapSquare");
+
+            PlayerID = playerID;
 
             for (int x = 0; x < MapWidth; x++)
             {
@@ -55,14 +61,41 @@ namespace TileEngine.Entity
 
                 }
             }
-            
+            SnapTileToGrid += (sender, e) => TileGrid.networkManager.SendMessage(new SnapToGridMessage(e.tile, e.playerID,e.scale));
+            RemoveFromGrid += (sender, e) => TileGrid.networkManager.SendMessage(new RemoveFromGridMessage(e.tile,e.playerID, e.scale));
+            RotateValue += (sender, e) => TileGrid.networkManager.SendMessage(new RotationMessage(e.rotationValue,e.ID,e.playerID,e.type));
+        }
+
+        #endregion
+
+        #region Static Events
+
+        public static void OnSnapToGrid(Tile tile,string playerID)
+        {
+            EventHandler<TileStateChangedArgs> snapToGrid = SnapTileToGrid;
+            if (snapToGrid != null)
+                snapToGrid(snapToGrid, new TileStateChangedArgs(tile,playerID, TileGrid.TileWidth));
+        }
+
+        public static void OnRemoveFromGrid(Tile tile,string playerID)
+        {
+            EventHandler<TileStateChangedArgs> removeFromGrid = RemoveFromGrid;
+            if (removeFromGrid != null)
+                removeFromGrid(removeFromGrid, new TileStateChangedArgs(tile, playerID, TileGrid.TileWidth));
+        }
+
+        public static void OnRotation(float rotationAmount,string playerID,int ID,string type)
+        {
+            EventHandler<RotationValueChangedArgs> rotateValue = RotateValue;
+            if (rotateValue != null)
+                rotateValue(rotateValue, new RotationValueChangedArgs(rotationAmount, ID, playerID, type));
         }
 
         #endregion
 
         #region Tile and Tile Sheet Handling
 
-        
+
         public static Rectangle TileSourceRectangle(int tileIndex)
         {
             return new Rectangle(

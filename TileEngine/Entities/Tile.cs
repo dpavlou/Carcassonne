@@ -20,8 +20,7 @@ namespace TileEngine.Entity
         
         #region Declarations
 
-        public event EventHandler<TileStateChangedArgs> SnapTileToGrid;
-        public event EventHandler<TileStateChangedArgs> RemoveFromGrid;
+
 
         private bool onGrid;
         private bool idle;
@@ -43,27 +42,15 @@ namespace TileEngine.Entity
             fontColor = FontColor;
             SnappedToForm = true;
             OffSet = Location - (FormManager.privateSpace.Location + Camera.WorldLocation);
-            SnapTileToGrid += (sender, e) => TileGrid.networkManager.SendMessage(new SnapToGridMessage(e.tile));
-            RemoveFromGrid += (sender, e) => TileGrid.networkManager.SendMessage(new RemoveFromGridMessage(e.tile));
+            type = "tile";
+
         }
         
         #endregion
 
         #region Networking Events
 
-        public void OnSnapToGrid(Tile tile)
-        {
-            EventHandler<TileStateChangedArgs> snapToGrid = SnapTileToGrid;
-            if (snapToGrid != null)
-                snapToGrid(snapToGrid, new TileStateChangedArgs(tile));
-        }
 
-        public void OnRemoveFromGrid(Tile tile)
-        {
-            EventHandler<TileStateChangedArgs> removeFromGrid = RemoveFromGrid;
-            if (removeFromGrid != null)
-                removeFromGrid(removeFromGrid, new TileStateChangedArgs(tile));
-        }
 
         #endregion
 
@@ -176,7 +163,7 @@ namespace TileEngine.Entity
         {
             if (IsReadyToSnap()) 
             {
-                OnSnapToGrid(this);
+                TileGrid.OnSnapToGrid(this, TileGrid.PlayerID);
                 CheckCell();
             }
 
@@ -212,7 +199,7 @@ namespace TileEngine.Entity
                 {
                  
                     ResetMapCell();
-                    OnRemoveFromGrid(this);
+                    TileGrid.OnRemoveFromGrid(this, TileGrid.PlayerID);
                 }
             }
         }

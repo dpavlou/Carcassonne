@@ -52,7 +52,12 @@ namespace MultiplayerGame.Networking.Messages
         /// <summary>
         /// Update item state
         /// </summary>
-        UpdateItemState
+        UpdateItemState,
+
+        /// <summary>
+        /// Rotation state
+        /// </summary>
+        RotationValueState
      
     }
 }

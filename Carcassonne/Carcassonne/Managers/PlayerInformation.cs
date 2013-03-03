@@ -124,7 +124,7 @@ namespace Carcassonne
 
         public void AddPlayer(string Player)
         {
-            PlayerStatus.Add(Player, activePlayers);
+          //  PlayerStatus.Add(Player, activePlayers);
             activePlayers++;
         }
 

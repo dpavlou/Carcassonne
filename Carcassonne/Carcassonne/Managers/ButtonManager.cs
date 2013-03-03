@@ -61,7 +61,7 @@ namespace Carcassonne
             
             AdjustFormButtonLocation();
 
-            AddPlayer("Kokos");
+            AddPlayer("Kokos",1);
             currMouse = Mouse.GetState();
         }
 
@@ -69,10 +69,10 @@ namespace Carcassonne
 
         #region Helper Methods
 
-        public  void AddPlayer(string player)
+        public  void AddPlayer(string player,int colorID)
         {
 
-            buttons.Add(new Button(player, new Vector2(-30, -15), buttonTexture, Font, this.player.NewPlayerLocation+new Vector2(10,0), 1, 0.095f, true, this.player.PlayerColor(this.player.activePlayers)));
+            buttons.Add(new Button(player, new Vector2(-30, -15), buttonTexture, Font, this.player.NewPlayerLocation+new Vector2(10,0), 1, 0.095f, true, this.player.PlayerColor(colorID)));
 
             this.player.AddPlayer(player);
             buttons[buttons.Count - 1].BoundSize = FormManager.menu.FormSize;
@@ -130,7 +130,7 @@ namespace Carcassonne
             {
                 if (buttons[x].OnMouseClick())
                 {
-                    player.PlayerTurn = buttons[x].CodeValue;
+                  //  player.PlayerTurn = buttons[x].CodeValue;
                     player.ActivePlayerID = x - 4;
                 }
             }
@@ -195,7 +195,7 @@ namespace Carcassonne
                    tileManager.AddTile(Camera.Position + (buttons[0].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), player.PlayerTurn);
 
                 if (buttons[1].OnMouseClick())
-                    tileManager.AddSoldier(Camera.Position + (buttons[1].Location - new Vector2(2, -TileGrid.OriginalTileHeight + 10)), player.PlayerTurn);
+                    tileManager.AddSoldier(Camera.Position + (buttons[1].Location - new Vector2(2, -TileGrid.OriginalTileHeight + 10)), player.PlayerTurn,player.ActivePlayerID);
 
                 if (buttons[2].OnMouseClick() || (currMouse.MiddleButton==ButtonState.Pressed && prevMouse.MiddleButton!=ButtonState.Pressed))
                     tileManager.LockTiles();
@@ -204,8 +204,8 @@ namespace Carcassonne
                 {
                     if (player.activePlayers < 7)
                     {
-                        AddPlayer("Kokos" + player.activePlayers);
-                        tileManager.AddScoreBoardSoldier( scoreboardItemLocation(),"Kokos" + (player.activePlayers - 1));
+                        AddPlayer("Kokos" + player.activePlayers,player.activePlayers);
+                      //  tileManager.AddScoreBoardSoldier( scoreboardItemLocation(),"Kokos" + (player.activePlayers - 1));
                     }
                 }
 

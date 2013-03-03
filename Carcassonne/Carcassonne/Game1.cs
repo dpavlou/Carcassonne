@@ -32,15 +32,18 @@ namespace Carcassonne
         private readonly Deck deck;
         private readonly TileManager tileManager;
         private readonly PlayerInformation playerInformation;
+        private string serverName;
+        private string IP;
 
-        public Game1(INetworkManager networkManager)
+        public Game1(INetworkManager networkManager,string serverName,string IP,string playerName)
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.networkManager = networkManager;
+            this.serverName = serverName;
+            this.IP = IP;
             TileGrid.networkManager = this.networkManager;
-            Random rand = new Random();//TODO: remove after debugging
-            playerInformation = new PlayerInformation("Kokos"+rand.Next(100));
+            playerInformation = new PlayerInformation(playerName);
             tileManager = new TileManager(playerInformation);
             buttonManager = new ButtonManager(playerInformation,tileManager);
             menuText = new MenuText(playerInformation);
@@ -48,9 +51,8 @@ namespace Carcassonne
             deck = new Deck();
 
         }
-
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
+        
+        /// <summary>        /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
@@ -82,7 +84,7 @@ namespace Carcassonne
             this.graphics.PreferredBackBufferHeight = 600;
             this.graphics.ApplyChanges();
 
-            this.networkManager.Connect();
+            this.networkManager.Connect(serverName,IP);
 
          /*   if (this.IsHost)
             {
@@ -106,21 +108,21 @@ namespace Carcassonne
             Camera.ViewPortWidth = this.GraphicsDevice.Viewport.Width;
             Camera.ViewPortHeight = this.GraphicsDevice.Viewport.Height;
 
-            TileGrid.Initialize(Content);
+            TileGrid.Initialize(Content,playerInformation.playerTurn);
             FormManager.Initialize(Content,"Kokos");
             buttonManager.Initialize(Content, "Kokos");
             deck.Initialize(Content);
             tileManager.Initialize(Content,deck,this.IsHost);
             menuText.Initialize(Content, deck);
 
-            tileManager.AddScoreBoardSoldier(buttonManager.scoreboardItemLocation(),"Kokos");
+           // tileManager.AddScoreBoardSoldier(buttonManager.scoreboardItemLocation(),"Kokos");
 
             tileManager.TileStateAdd += (sender, e) => networkManager.SendMessage(new AddTileMessage(e.codeValue, e.ID, e.Count));
             tileManager.TileStateRequest += (sender, e) => networkManager.SendMessage(new RequestTileMessage(e.codeValue,e.ID,e.Count));
-            tileManager.TileStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateTileMessage(e.tile));
-            tileManager.ItemStateRequest += (sender, e) => networkManager.SendMessage(new RequestItemMessage(e.codeValue, e.ID, e.Count));
-            tileManager.ItemStateAdd += (sender, e) => networkManager.SendMessage(new AddItemMessage(e.codeValue, e.ID, e.Count));
-            tileManager.ItemStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateItemMessage(e.item));
+            tileManager.TileStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateTileMessage(e.tile,e.playerID,e.scale));
+            tileManager.ItemStateRequest += (sender, e) => networkManager.SendMessage(new RequestItemMessage(e.codeValue, e.ID, e.Count,e.ColorID));
+            tileManager.ItemStateAdd += (sender, e) => networkManager.SendMessage(new AddItemMessage(e.codeValue, e.ID, e.Count,e.ColorID));
+            tileManager.ItemStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateItemMessage(e.item,e.playerID,e.scale));
         }
 
         /// <summary>
@@ -193,7 +195,7 @@ namespace Carcassonne
             var timeDelay = (float)(NetTime.Now - im.SenderConnection.GetLocalTime(message.MessageTime));
 
             if (!this.IsHost)
-                tileManager.AddItem(Camera.Position + (buttonManager.buttons[1].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), message.CodeValue, message.ID, message.Count);
+                tileManager.AddItem(Camera.Position + (buttonManager.buttons[1].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), message.CodeValue, message.ID, message.Count,message.ColorID);
         }
 
         private void HandleRequestItemMessage(NetIncomingMessage im)
@@ -203,33 +205,47 @@ namespace Carcassonne
             var timeDelay = (float)(NetTime.Now - im.SenderConnection.GetLocalTime(message.MessageTime));
 
             if (this.IsHost)
-                tileManager.AddSoldier(Camera.Position + (buttonManager.buttons[1].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), message.CodeValue);
+                tileManager.AddSoldier(Camera.Position + (buttonManager.buttons[1].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), message.CodeValue,message.ColorID);
         }
 
         private void HandleUpdateTileMessage(NetIncomingMessage im)
         {
             var message = new UpdateTileMessage(im);
-            tileManager.UpdateTile(message.ID,message.Location,message.Rotation);
+
+            tileManager.UpdateTile(message.ID, message.PlayerID, cameraHandler.adjustLocationAt(message.Location, message.Scale));
+            if (this.IsHost)
+               tileManager.OnUpdateTile(tileManager.getTileFromList(message.ID),message.PlayerID);
         }
 
         private void HandleUpdateItemMessage(NetIncomingMessage im)
         {
             var message = new UpdateItemMessage(im);
-            tileManager.UpdateItem(message.ID, message.Location, message.Rotation);
-
+            tileManager.UpdateItem(message.ID, message.PlayerID,cameraHandler.adjustLocationAt(message.Location, message.Scale));
+            if (this.IsHost)
+                tileManager.OnUpdateItem(tileManager.getItemFromList(message.ID), message.PlayerID);
         }
 
         private void HandleRemoveFromGridMessage(NetIncomingMessage im)
         {
             var message = new RemoveFromGridMessage(im);
-            tileManager.removeFromGrid(message.ID, message.Location);
+            tileManager.removeFromGrid(message.ID,message.PlayerID, cameraHandler.adjustLocationAt(message.Location, message.Scale));
+
         }
 
         private void HandleSnapToGridMessage(NetIncomingMessage im)
         {
             var message = new SnapToGridMessage(im);
+            tileManager.snapToGrid(message.ID, message.PlayerID, cameraHandler.adjustLocationAt(message.Location, message.Scale));
 
-            tileManager.snapToGrid(message.ID, message.Location);
+        }
+
+        private void HandleRotationMessage(NetIncomingMessage im)
+        {
+            var message = new RotationMessage(im);
+
+            tileManager.rotateManually(message.RotationValue,message.ID, message.PlayerID, message.Type);
+            if (this.IsHost)
+                TileGrid.OnRotation(message.RotationValue, message.PlayerID, message.ID, message.Type);
         }
 
         #endregion
@@ -329,6 +345,9 @@ namespace Carcassonne
                                 break;
                             case GameMessageTypes.RequestItemState:
                                 this.HandleRequestItemMessage(im);
+                                break;
+                            case GameMessageTypes.RotationValueState:
+                                this.HandleRotationMessage(im);
                                 break;
                         }
 

@@ -27,18 +27,20 @@ namespace MultiplayerGame.Networking.Messages
         }
 
 
-        public AddItemMessage(string codeValue, int id,int Count)
+        public AddItemMessage(string codeValue, int id,int Count,int colorID)
         {
             this.ID = id;
             this.CodeValue = codeValue;
             this.MessageTime = NetTime.Now;
             this.Count = Count;
+            this.ColorID = colorID;
         }
 
         #endregion
 
         #region Public Properties
 
+        public int ColorID { get; set; }
         /// <summary>
         /// Gets or sets CodeValue.
         /// </summary>
@@ -88,6 +90,7 @@ namespace MultiplayerGame.Networking.Messages
             this.MessageTime = im.ReadDouble();
             this.ID = im.ReadInt32();
             this.Count = im.ReadInt32();
+            this.ColorID = im.ReadInt32();
 
         }
 
@@ -103,6 +106,7 @@ namespace MultiplayerGame.Networking.Messages
             om.Write(this.MessageTime);
             om.Write(this.ID);
             om.Write(this.Count);
+            om.Write(this.ColorID);
         }
 
         #endregion

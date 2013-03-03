@@ -39,9 +39,9 @@ namespace MultiplayerGame.Networking
         /// <summary>
         /// The connect.
         /// </summary>
-        public void Connect()
+        public void Connect(string serverName,string IP)
         {
-            var config = new NetPeerConfiguration("Kokos")
+            var config = new NetPeerConfiguration(serverName)
                 {
                     Port = Convert.ToInt32("14242"), 
                     // SimulatedMinimumLatency = 0.2f, 
@@ -116,7 +116,7 @@ namespace MultiplayerGame.Networking
             NetOutgoingMessage om = this.netServer.CreateMessage();
             om.Write((byte)gameMessage.MessageType);
             gameMessage.Encode(om);
-
+            //TODO update SendToAll to SendToAll + exception overload
             this.netServer.SendToAll(om, NetDeliveryMethod.ReliableUnordered);
         }
 

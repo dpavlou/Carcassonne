@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Input;
 namespace TileEngine.Entity
 {
 
+    using MultiplayerGame.Args;
+
     public class RotatingTile : Entity
     {
 
@@ -22,8 +24,9 @@ namespace TileEngine.Entity
         protected MouseState prevMouseState;
         protected KeyboardState currKeyState;
         protected KeyboardState prevKeyState;
-
+        protected string type;
         #endregion
+
 
         #region Constructor
 
@@ -36,9 +39,11 @@ namespace TileEngine.Entity
             rotationTicksRemaining = 10;
             rotationAmount = 0;
             active = false;
+            type = "";
         }
 
         #endregion
+
 
         #region Properties
 
@@ -53,12 +58,15 @@ namespace TileEngine.Entity
             {
                 if (Active)
                 {
-                    UpdateRotation();
+                    UpdateRotation();                 
                     if (clockwise)
-                        return rotationAmount += rotationRate;
+                        rotationAmount += rotationRate;
                     else
+                        rotationAmount -= rotationRate;
 
-                        return rotationAmount -= rotationRate;
+                    TileGrid.OnRotation(rotationAmount, TileGrid.PlayerID, ID, type);
+
+                    return rotationAmount;
                 }
                 else
                     return rotationAmount;
@@ -80,17 +88,20 @@ namespace TileEngine.Entity
             mouseState = Mouse.GetState();
             currKeyState = Keyboard.GetState();
 
-            if (((currKeyState.IsKeyDown(Keys.A) && !prevKeyState.IsKeyDown(Keys.A))
-                || (mouseState.XButton1 == ButtonState.Pressed && prevMouseState.XButton1 != ButtonState.Pressed))
-                && !Active)
+         //   if (TileEngine.Camera.Camera.inScreenBounds(new Vector2(mouseState.X, mouseState.Y)))
             {
-                RotateTile(true);
-            }
-            else if (((currKeyState.IsKeyDown(Keys.S) && !prevKeyState.IsKeyDown(Keys.S))
-                || (mouseState.XButton2 == ButtonState.Pressed && prevMouseState.XButton2 != ButtonState.Pressed))
-                  && !Active)
-            {
-                RotateTile(false);
+                if (((currKeyState.IsKeyDown(Keys.A) && !prevKeyState.IsKeyDown(Keys.A))
+                    || (mouseState.XButton1 == ButtonState.Pressed && prevMouseState.XButton1 != ButtonState.Pressed))
+                    && !Active)
+                {
+                    RotateTile(true);
+                }
+                else if (((currKeyState.IsKeyDown(Keys.S) && !prevKeyState.IsKeyDown(Keys.S))
+                    || (mouseState.XButton2 == ButtonState.Pressed && prevMouseState.XButton2 != ButtonState.Pressed))
+                      && !Active)
+                {
+                    RotateTile(false);
+                }
             }
             prevMouseState = mouseState;
             prevKeyState = currKeyState;

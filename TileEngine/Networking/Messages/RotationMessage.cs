@@ -7,11 +7,11 @@ namespace MultiplayerGame.Networking.Messages
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
 
-
+    using TileEngine.Entity;
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class RequestItemMessage : IGameMessage
+    public class RotationMessage : IGameMessage
     {
         #region Constructors and Destructors
 
@@ -21,54 +21,51 @@ namespace MultiplayerGame.Networking.Messages
         /// <param name="im">
         /// The im.
         /// </param>
-        public RequestItemMessage(NetIncomingMessage im)
+        public RotationMessage(NetIncomingMessage im)
         {
             this.Decode(im);
         }
 
 
-        public RequestItemMessage(string codeValue, int id,int Count,int colorID)
+        public RotationMessage(float rotationValue,int Id, string playerID, string type)
         {
-            this.ID = id;
-            this.CodeValue = codeValue;
-            this.MessageTime = NetTime.Now;
-            this.Count = Count;
-            this.ColorID = colorID;
+            this.RotationValue = rotationValue;
+            this.PlayerID = playerID;
+            this.Type = type;
+            this.ID = Id;
         }
 
         #endregion
 
         #region Public Properties
 
-        public int ColorID { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// Gets or sets CodeValue.
         /// </summary>
-        public string CodeValue { get; set; }
+        public float RotationValue { get; set; }
 
         /// <summary>
         /// Gets or sets MessageTime.
         /// </summary>
-        public double MessageTime { get; set; }
+        public string PlayerID { get; set; }
 
         /// <summary>
         /// Gets MessageType.
         /// </summary>
-        /// 
+
         public GameMessageTypes MessageType
         {
             get
             {
-                return GameMessageTypes.RequestItemState;
+                return GameMessageTypes.RotationValueState; //TODO: update message type
             }
         }
 
         /// <summary>
-        /// Gets or sets ID
+        /// Gets or sets type
         /// </summary>
-        public int ID { get; set; }
-
-        public int Count { get; set; }
+        public string Type { get; set; }
 
         #endregion
 
@@ -82,12 +79,10 @@ namespace MultiplayerGame.Networking.Messages
         /// </param>
         public void Decode(NetIncomingMessage im)
         {
-            this.CodeValue = im.ReadString();
-            this.MessageTime = im.ReadDouble();
+            this.RotationValue = im.ReadFloat();
             this.ID = im.ReadInt32();
-            this.Count = im.ReadInt32();
-            this.ColorID = im.ReadInt32();
-            //an int representing the Texture
+            this.PlayerID = im.ReadString();
+            this.Type = im.ReadString();
         }
 
         /// <summary>
@@ -98,11 +93,10 @@ namespace MultiplayerGame.Networking.Messages
         /// </param>
         public void Encode(NetOutgoingMessage om)
         {
-            om.Write(this.CodeValue);
-            om.Write(this.MessageTime);
+            om.Write(this.RotationValue);
             om.Write(this.ID);
-            om.Write(this.Count);
-            om.Write(this.ColorID);
+            om.Write(this.PlayerID);
+            om.Write(this.Type);
         }
 
         #endregion

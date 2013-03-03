@@ -27,13 +27,15 @@ namespace MultiplayerGame.Networking.Messages
         }
 
 
-        public UpdateItemMessage(Item item)
+        public UpdateItemMessage(Item item,string playerID,float scale)
         {
             this.ID = item.ID;
             this.CodeValue = item.CodeValue;
             this.Location = item.Location;
             this.Rotation = item.RotationValue; //not necessary 
             this.MessageTime = NetTime.Now;
+            this.Scale = scale;
+            this.PlayerID = playerID;
             //TODO: add layer message
         }
 
@@ -78,9 +80,12 @@ namespace MultiplayerGame.Networking.Messages
         public float Rotation { get; set; }
 
         /// <summary>
-        /// Gets or sets Texture;
+        /// Gets or sets Scale;
         /// </summary>
-        public int Texture { get; set; }
+        public float Scale { get; set; }
+
+
+        public string PlayerID { get; set; }
 
         #endregion
 
@@ -99,6 +104,8 @@ namespace MultiplayerGame.Networking.Messages
             this.Location = im.ReadVector2();
             this.Rotation = im.ReadSingle();
             this.ID = im.ReadInt32();
+            this.Scale = im.ReadFloat();
+            this.PlayerID = im.ReadString();
             //an int representing the Texture
         }
 
@@ -115,7 +122,8 @@ namespace MultiplayerGame.Networking.Messages
             om.Write(this.Location);
             om.Write(this.Rotation);
             om.Write(this.ID);
-
+            om.Write(this.Scale);
+            om.Write(this.PlayerID);
         }
 
         #endregion

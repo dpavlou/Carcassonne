@@ -25,7 +25,7 @@ namespace MultiplayerGame.Networking
         /// <summary>
         /// The connect.
         /// </summary>
-        void Connect();
+        void Connect(string serverName, string IP);
 
         /// <summary>
         /// The create message.

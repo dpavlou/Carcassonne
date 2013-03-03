@@ -40,9 +40,9 @@ namespace MultiplayerGame.Networking
         /// <summary>
         /// The connect.
         /// </summary>
-        public void Connect()
+        public void Connect(string serverName, string IP)
         {
-            var config = new NetPeerConfiguration("Kokos")
+            var config = new NetPeerConfiguration(serverName)
                 {
                     SimulatedMinimumLatency = 0.2f, 
                     // SimulatedLoss = 0.1f
@@ -58,7 +58,7 @@ namespace MultiplayerGame.Networking
             this.netClient = new NetClient(config);
             this.netClient.Start();
 
-            this.netClient.Connect(new IPEndPoint(NetUtility.Resolve("127.0.0.1"), Convert.ToInt32("14242")));
+            this.netClient.Connect(new IPEndPoint(NetUtility.Resolve(IP), Convert.ToInt32("14242")));
         }
 
         /// <summary>
@@ -144,6 +144,7 @@ namespace MultiplayerGame.Networking
 
                 this.isDisposed = true;
             }
+
         }
 
         #endregion

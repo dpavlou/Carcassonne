@@ -12,14 +12,15 @@
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TileStateChangedArgs"/> class.
+        /// Initializes a new instance of the <see cref="IdentificationdArgs"/> class.
         /// </summary>
 
-        public IdentificationArgs(string codeValue,int id,int count)
+        public IdentificationArgs(string codeValue,int id,int count,int colorID)
         {
             this.codeValue = codeValue;
             this.ID = id;
             this.Count = count;
+            this.ColorID = colorID;
         }
 
         #endregion
@@ -32,6 +33,8 @@
         public int ID { get; private set; }
 
         public int Count { get; private set; }
+
+        public int ColorID { get; set; }
 
         #endregion
     }

@@ -45,6 +45,7 @@ namespace TileEngine.Entity
                 SnappedToForm = true;
                 OffSet = Location - (FormManager.privateSpace.Location + Camera.WorldLocation);
             }
+            type = "item";
         }
 
         #endregion
@@ -331,7 +332,9 @@ namespace TileEngine.Entity
             else
                 FormIntersection(FormManager.privateSpace.FormWorldRectangle);
 
+
         }
+
 
         #endregion
 

@@ -42,7 +42,7 @@ namespace TileEngine.Camera
         {
             get { return ((float)TileGrid.TileWidth / (float)TileGrid.OriginalTileWidth); }
         }
-       
+
        public static float Zoom
        {
            get { return zoom; }
@@ -90,6 +90,11 @@ namespace TileEngine.Camera
             }
         }
 
+       public static bool inScreenBounds(Vector2 location)
+       {
+           return (location.X > Camera.Position.X && location.X < Camera.Position.X + Camera.ViewPortWidth
+                && location.Y > Camera.Position.Y && location.Y < Camera.Position.Y + Camera.ViewPortHeight);
+       }
         public static Rectangle WorldRectangle
         {
             get { return worldRectangle; }

@@ -9,6 +9,7 @@
 
 namespace Server
 {
+    using System;
     using Carcassonne;
     using MultiplayerGame;
     using MultiplayerGame.Networking;
@@ -28,9 +29,16 @@ namespace Server
         /// </param>
         private static void Main(string[] args)
         {
-            using (var game = new Game1(new ServerNetworkManager()))
+
+            Console.WriteLine("Server Name: ");
+            string serverName = Console.ReadLine();
+
+            Console.WriteLine("Player Name: ");
+            string playerName = Console.ReadLine();
+
+            using (var game = new Game1(new ServerNetworkManager(), serverName, "", playerName))
             {
-                game.Run();
+               game.Run();
             }
         }
 
