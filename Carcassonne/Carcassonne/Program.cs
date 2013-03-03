@@ -10,7 +10,7 @@ namespace Carcassonne
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1(new ServerNetworkManager(),"","","Kokos"))
+            using (Game1 game = new Game1(new ServerNetworkManager(),"kokos","127.0.0.1","Kokos"))
             {
                 game.Run();
             }
