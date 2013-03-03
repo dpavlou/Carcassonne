@@ -95,6 +95,10 @@ namespace TileEngine.Entity
 
         #region Tile and Tile Sheet Handling
 
+        public static Vector2 mapCenter
+        {
+            get { return new Vector2(MapWidth / 2 * TileWidth, MapHeight / 2 * TileHeight); }
+        }
 
         public static Rectangle TileSourceRectangle(int tileIndex)
         {

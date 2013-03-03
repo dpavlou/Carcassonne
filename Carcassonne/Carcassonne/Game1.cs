@@ -80,8 +80,8 @@ namespace Carcassonne
 
             this.Window.Title = "Carcassonne ALPHA";
             this.graphics.IsFullScreen = false;
-            this.graphics.PreferredBackBufferWidth = 800;
-            this.graphics.PreferredBackBufferHeight = 600;
+            this.graphics.PreferredBackBufferWidth = 1600;
+            this.graphics.PreferredBackBufferHeight = 900;
             this.graphics.ApplyChanges();
 
             this.networkManager.Connect(serverName,IP);

@@ -61,6 +61,11 @@ namespace Carcassonne
             frame1 = Content.Load<Texture2D>(@"Textures\Frame1");
             font = Content.Load<SpriteFont>(@"Fonts\Pericles10");
             this.isHost = isHost;
+
+            Id++;
+            tiles.Add(new Tile("  C", new Vector2(-23, -10), deck.GetTileTexture(deck.Count-1), font,TileGrid.mapCenter, Id, 0.5f - Id * 0.001f, frame1, Color.Red));
+            tiles[0].SnappedToForm = false;
+            tiles[0].CheckCell();
         }
 
         #endregion
