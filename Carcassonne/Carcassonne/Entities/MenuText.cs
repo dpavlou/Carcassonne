@@ -22,7 +22,7 @@ namespace Carcassonne
         private  Vector2 text4offSet;
         private  readonly FpsMonitor fps;
         private readonly PlayerInformation player;
-        private Deck deck;
+        private DeckManager deckManager;
         private  SpriteFont font;
 
         #endregion
@@ -42,9 +42,9 @@ namespace Carcassonne
 
         #region Initialize
 
-        public  void Initialize(ContentManager Content,Deck deck)
+        public  void Initialize(ContentManager Content,DeckManager deckManager)
         {
-            this.deck=deck;
+            this.deckManager=deckManager;
             font = Content.Load<SpriteFont>(@"Fonts\Pescadero14");
         }
 
@@ -69,11 +69,11 @@ namespace Carcassonne
              Camera.WorldLocation,
               text1offSet+FormManager.menu.Location,
             Color.Black);
-
+             
             spriteBatch.DrawString(
             font,
             "Tiles Left: " +
-             deck.Count,
+             deckManager.Count,
              text2offSet+FormManager.menu.Location,
             Color.Black);
             

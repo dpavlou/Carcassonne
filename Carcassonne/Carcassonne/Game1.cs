@@ -29,9 +29,10 @@ namespace Carcassonne
         private readonly INetworkManager networkManager;
         private readonly ButtonManager buttonManager;
         private readonly MenuText menuText;
-        private readonly Deck deck;
         private readonly TileManager tileManager;
         private readonly PlayerInformation playerInformation;
+        private readonly DatabaseManager databaseManager;
+        private readonly DeckManager deckManager;
         private string serverName;
         private string IP;
 
@@ -48,7 +49,8 @@ namespace Carcassonne
             buttonManager = new ButtonManager(playerInformation,tileManager);
             menuText = new MenuText(playerInformation);
             cameraHandler = new CameraManager(tileManager);
-            deck = new Deck();
+            deckManager = new DeckManager();
+            databaseManager = new DatabaseManager(deckManager);
 
         }
         
@@ -86,10 +88,6 @@ namespace Carcassonne
 
             this.networkManager.Connect(serverName,IP);
 
-         /*   if (this.IsHost)
-            {
-                TileManager.TileStateChanged += (sender, e) => networkManager.SendMessage(new AddTileMessage(e.tile));
-            }*/
             base.Initialize();
         }
 
@@ -111,9 +109,10 @@ namespace Carcassonne
             TileGrid.Initialize(Content,playerInformation.playerTurn);
             FormManager.Initialize(Content,"Kokos");
             buttonManager.Initialize(Content, "Kokos");
-            deck.Initialize(Content);
-            tileManager.Initialize(Content,deck,this.IsHost);
-            menuText.Initialize(Content, deck);
+            databaseManager.loadFromDatabase();
+            deckManager.Initialize(Content);
+            tileManager.Initialize(Content,deckManager,this.IsHost);
+            menuText.Initialize(Content, deckManager);
 
            // tileManager.AddScoreBoardSoldier(buttonManager.scoreboardItemLocation(),"Kokos");
 

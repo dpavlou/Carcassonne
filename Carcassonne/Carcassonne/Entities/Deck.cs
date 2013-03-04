@@ -15,47 +15,35 @@ namespace Carcassonne
 
         public List<Texture2D> textures = new List<Texture2D>();
         public List<int> deck = new List<int>();
-        public Texture2D soldier;
-        public int texturesNo;
+        public List<string> textureName = new List<string>();
+        public int reservedTile;
+        public bool reserved;
+        public int fullDeck;
 
         #endregion
 
         #region Initialize
 
         public void Initialize(ContentManager content)
-        {
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city1"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city11ne"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city11we"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city1rse"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city1rsw"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city1rswe"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2nw"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2nwr"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2nws"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2nwsr"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2we"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city2wes"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city3"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city3r"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city3s"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city3sr"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city4"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\cloister"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\cloisterr"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road2ns"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road2sw"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road3"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\road4"));
-            textures.Add(content.Load<Texture2D>(@"Textures\BaseGame\city1rwe"));
-            soldier = (content.Load<Texture2D>(@"Textures\Soldier"));
-            texturesNo = 24;
+        {    
 
-            LoadDeck();
+            foreach (string texturename in textureName)
+            {
+                textures.Add(content.Load<Texture2D>(texturename));
+            }
+            fullDeck = deck.Count;
+            reserved = false;
+          
         }
         #endregion
 
         #region Properties
+
+        public bool Reserve
+        {
+            get { return reserved; }
+            set { reserved = value; }
+        }
 
         public int Count
         {
@@ -66,70 +54,29 @@ namespace Carcassonne
 
         #region Public Methods
 
-        public  void LoadDeck()
+        public void reserveTile()
         {
-            for (int i = 0; i < 5; i++)
-                deck.Add(0);
-            for (int i = 0; i < 2; i++)
-                deck.Add(1);
-            for (int i = 0; i < 3; i++)
-                deck.Add(2);
-            for (int i = 0; i < 3; i++)
-                deck.Add(3);
-            for (int i = 0; i < 3; i++)
-                deck.Add(4);
-            for (int i = 0; i < 3; i++)
-                deck.Add(5);
-            for (int i = 0; i < 3; i++)
-                deck.Add(6);
-            for (int i = 0; i < 3; i++)
-                deck.Add(7);
-            for (int i = 0; i < 3; i++)
-                deck.Add(8);
-            for (int i = 0; i < 2; i++)
-                deck.Add(9);
-            for (int i = 0; i < 2; i++)
-                deck.Add(10);
-            for (int i = 0; i < 1; i++)
-                deck.Add(11);
-            for (int i = 0; i < 2; i++)
-                deck.Add(12);
-            for (int i = 0; i < 3; i++)
-                deck.Add(13);
-            for (int i = 0; i < 1; i++)
-                deck.Add(14);
-            for (int i = 0; i < 1; i++)
-                deck.Add(15);
-            for (int i = 0; i < 2; i++)
-                deck.Add(16);
-            for (int i = 0; i < 1; i++)
-                deck.Add(17);
-            for (int i = 0; i < 4; i++)
-                deck.Add(18);
-            for (int i = 0; i < 2; i++)
-                deck.Add(19);
-            for (int i = 0; i < 8; i++)
-                deck.Add(20);
-            for (int i = 0; i < 9; i++)
-                deck.Add(21);
-            for (int i = 0; i < 4; i++)
-                deck.Add(22);
-            for (int i = 0; i < 1; i++)
-                deck.Add(23);
-
-          //  for (int i = 0; i < 1; i++)
-            //    deck.Add(0);
-
+            reserved = true;
+            reservedTile = textureName.Count - 1;
+            deck.RemoveAt(deck.Count - 1);
         }
+        public Texture2D getReservedTile()
+        {
+            Reserve = false;
+            return textures[reservedTile];
+        }
+
+
         public int GetRandomTile()
         {
             Random rand = new Random();
 
             if (deck.Count == 0)
             {
-                LoadDeck();
-              //  TileManager.itemID = 0;
-                //TileManager.Id = 0;
+                if (reserved)
+                {
+                    return reservedTile;
+                }
             }
 
 
@@ -144,9 +91,15 @@ namespace Carcassonne
 
             return textures[textureID];
         }
-        public  Texture2D GetSoldier()
+
+        public Texture2D getEndingTexture(int x)
         {
-            return soldier;
+            return textures[x];
+        }
+
+        public Texture2D GetRandomTileTexture()
+        {
+            return GetTileTexture(GetRandomTile());
         }
 
         #endregion

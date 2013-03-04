@@ -33,9 +33,10 @@ namespace Carcassonne
         private List<Item> items;
         private SpriteFont font;
         private Texture2D frame1;
+        private Texture2D soldier;
         private int Id;
         private int itemID;
-        private Deck deck;
+        private DeckManager deckManager;
         private PlayerInformation player;
         private bool isHost;
 
@@ -55,15 +56,16 @@ namespace Carcassonne
 
         #region Initialize
 
-        public void Initialize(ContentManager Content, Deck deck,bool isHost)
+        public void Initialize(ContentManager Content, DeckManager deckManager,bool isHost)
         {
-            this.deck = deck;
+            this.deckManager = deckManager;
             frame1 = Content.Load<Texture2D>(@"Textures\Frame1");
             font = Content.Load<SpriteFont>(@"Fonts\Pericles10");
+            soldier = Content.Load<Texture2D>(@"Textures\Soldier");
             this.isHost = isHost;
 
             Id++;
-            tiles.Add(new Tile("  C", new Vector2(-23, -10), deck.GetTileTexture(deck.Count-1), font,TileGrid.mapCenter, Id, 0.5f - Id * 0.001f, frame1, Color.Red));
+            tiles.Add(new Tile("  C", new Vector2(-23, -10), deckManager.GetTileTexture(0,0), font,TileGrid.mapCenter, Id, 0.5f - Id * 0.001f, frame1, Color.Red));
             tiles[0].SnappedToForm = false;
             tiles[0].CheckCell();
         }
@@ -198,7 +200,7 @@ namespace Carcassonne
             location = AdjustNewTileLocation(location, 1);
             if (location != Vector2.Zero)
             {
-                tiles.Add(new Tile(owner, new Vector2(-23, -10), deck.GetTileTexture(ID), font, location, tileCount, 0.5f - tileCount * 0.001f, frame1, Color.Black));
+                tiles.Add(new Tile(owner, new Vector2(-23, -10), deckManager.GetTileTexture(ID), font, location, tileCount, 0.5f - tileCount * 0.001f, frame1, Color.Black));
 
             }
         }
@@ -208,7 +210,7 @@ namespace Carcassonne
              location = AdjustNewItemLocation(location, 1);
             if (location != Vector2.Zero)
             {
-                items.Add(new Item(owner, new Vector2(-23, -10), deck.GetSoldier(), font, location, itemCount, 0.4f - itemCount * 0.001f, deck.GetSoldier(), 55f * Camera.Scale, player.PlayerColor(colorID), true));
+                items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location, itemCount, 0.4f - itemCount * 0.001f, soldier, 55f * Camera.Scale, player.PlayerColor(colorID), true));
             }
         }
 
@@ -243,9 +245,9 @@ namespace Carcassonne
             {
                 if (this.IsHost)
                 {
-                    int deckX = deck.GetRandomTile();
+                    int deckX = deckManager.GetRandomTileNo();
                     Id++;
-                    tiles.Add(new Tile(owner, new Vector2(-23, -10), deck.GetTileTexture(deckX), font, location, Id, 0.5f - Id * 0.001f, frame1, Color.Black));
+                    tiles.Add(new Tile(owner, new Vector2(-23, -10), deckManager.GetTileTexture(deckX), font, location, Id, 0.5f - Id * 0.001f, frame1, Color.Black));
                     OnAddTile(owner,deckX,Id);
             
                 }
@@ -263,7 +265,7 @@ namespace Carcassonne
                 if (this.IsHost)
                 {
                     itemID++;
-                    items.Add(new Item(owner, new Vector2(-23, -10), deck.GetSoldier(), font, location, itemID, 0.4f - itemID * 0.001f, deck.GetSoldier(), 55f * Camera.Scale, player.PlayerColor(colorID), true));
+                    items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location, itemID, 0.4f - itemID * 0.001f, soldier, 55f * Camera.Scale, player.PlayerColor(colorID), true));
                     OnAddItem(owner, 0, itemID,colorID);
                 }
                 else
@@ -274,8 +276,8 @@ namespace Carcassonne
         public void AddScoreBoardSoldier(Vector2 location, string owner)
         {
             itemID++;
-            items.Add(new Item(owner, new Vector2(-23, -10), deck.GetSoldier(), font, location,
-                    itemID, 0.05f - itemID * 0.001f, deck.GetSoldier(), 55f, player.PlayerColor(player.activePlayers - 1), false));
+            items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location,
+                    itemID, 0.05f - itemID * 0.001f, soldier, 55f, player.PlayerColor(player.activePlayers - 1), false));
             items[itemID - 1].LockedInBounds = true;
             items[itemID - 1].BoundSize = FormManager.menu.FormSize;
             items[itemID - 1].Bounds = Camera.WorldLocation + FormManager.menu.Location + new Vector2(TileGrid.OriginalTileWidth / 2, 0);
