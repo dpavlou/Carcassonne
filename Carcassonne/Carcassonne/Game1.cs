@@ -119,8 +119,8 @@ namespace Carcassonne
             tileManager.TileStateAdd += (sender, e) => networkManager.SendMessage(new AddTileMessage(e.codeValue, e.ID, e.Count));
             tileManager.TileStateRequest += (sender, e) => networkManager.SendMessage(new RequestTileMessage(e.codeValue,e.ID,e.Count));
             tileManager.TileStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateTileMessage(e.tile,e.playerID,e.scale));
-            tileManager.ItemStateRequest += (sender, e) => networkManager.SendMessage(new RequestItemMessage(e.codeValue, e.ID, e.Count,e.ColorID));
-            tileManager.ItemStateAdd += (sender, e) => networkManager.SendMessage(new AddItemMessage(e.codeValue, e.ID, e.Count,e.ColorID));
+            tileManager.ItemStateRequest += (sender, e) => networkManager.SendMessage(new RequestItemMessage(e.codeValue, e.ID, e.Count,e.ColorID,e.Size));
+            tileManager.ItemStateAdd += (sender, e) => networkManager.SendMessage(new AddItemMessage(e.codeValue, e.ID, e.Count,e.ColorID,e.Size));
             tileManager.ItemStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateItemMessage(e.item,e.playerID,e.scale));
         }
 
@@ -196,7 +196,7 @@ namespace Carcassonne
             var timeDelay = (float)(NetTime.Now - im.SenderConnection.GetLocalTime(message.MessageTime));
 
             if (!this.IsHost)
-                tileManager.AddItem(Camera.Position + (buttonManager.buttons[1].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), message.CodeValue, message.ID, message.Count,message.ColorID);
+                tileManager.AddItem(Camera.Position + (buttonManager.buttons[1].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), message.CodeValue, message.ID, message.Count,message.ColorID,message.Size);
         }
 
         private void HandleRequestItemMessage(NetIncomingMessage im)
@@ -206,7 +206,7 @@ namespace Carcassonne
             var timeDelay = (float)(NetTime.Now - im.SenderConnection.GetLocalTime(message.MessageTime));
 
             if (this.IsHost)
-                tileManager.AddSoldier(Camera.Position + (buttonManager.buttons[1].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), message.CodeValue,message.ColorID);
+                tileManager.AddSoldier(Camera.Position + (buttonManager.buttons[1].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), message.CodeValue,message.ColorID,message.Size);
         }
 
         private void HandleUpdateTileMessage(NetIncomingMessage im)

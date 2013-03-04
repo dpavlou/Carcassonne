@@ -68,6 +68,7 @@ namespace MultiplayerGame.Networking.Messages
 
         public int Count { get; set; }
 
+
         #endregion
 
         #region Public Methods and Operators

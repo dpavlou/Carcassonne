@@ -25,18 +25,22 @@ namespace TileEngine.Entity
         private bool mouseOutOfBounds;
         public float lastY;
         private float OriginalWidth;
+        private bool large;
 
         #endregion
 
         #region Constructor
 
-        public Item(string CodeValue, Vector2 labelOffset, Texture2D texture, SpriteFont font, Vector2 location, int ID, float layer, Texture2D onground,float bounds,Color ItemColor,bool snappedtoform)
+        public Item(string CodeValue, Vector2 labelOffset, Texture2D texture, SpriteFont font, Vector2 location, int ID, float layer, Texture2D onground,float bounds,Color ItemColor,bool snappedtoform,bool large)
             : base(CodeValue, labelOffset, texture, font, location, ID, layer)
         {
+            this.large = large;
             Layer = layer;
             Lock = false;
             onGround = onground;
             Lying = false;
+            if (!large)
+                bounds -= 20f;
             width = OriginalWidth = bounds;
             itemColor = ItemColor;
             MouseOutOfBounds = false;
@@ -106,8 +110,17 @@ namespace TileEngine.Entity
             }
         }
 
-
-
+        public float ScaleOffset
+        {
+            get
+            {
+                if (!large)
+                    return 0.2f;
+                else
+                    return 0.0f;
+            }
+        }
+        
         public bool Lying
         {
             get { return lying; }
@@ -356,7 +369,7 @@ namespace TileEngine.Entity
                          SquareColor,
                          RotationAmount,
                          ItemSourceCenter,
-                         Scale,
+                         Scale-ScaleOffset,
                          SpriteEffects.None,
                          Layer);
 

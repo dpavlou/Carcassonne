@@ -25,6 +25,7 @@ namespace Carcassonne
         private  MouseState prevMouse, currMouse;
         private readonly PlayerInformation player;
         private readonly TileManager tileManager;
+        private bool largeSoldier;
         #endregion
 
         #region Constructor
@@ -33,6 +34,7 @@ namespace Carcassonne
         {
             this.player = player;
             this.tileManager = tileManager;
+            largeSoldier = true;
         }
 
         #endregion
@@ -194,8 +196,11 @@ namespace Carcassonne
                  if (buttons[0].OnMouseClick())
                    tileManager.AddTile(Camera.Position + (buttons[0].Location - new Vector2(0, -TileGrid.OriginalTileHeight)), player.PlayerTurn);
 
-                if (buttons[1].OnMouseClick())
-                    tileManager.AddSoldier(Camera.Position + (buttons[1].Location - new Vector2(2, -TileGrid.OriginalTileHeight + 10)), player.PlayerTurn,player.ActivePlayerID);
+                 if (buttons[1].OnMouseClick())
+                 {
+                     tileManager.AddSoldier(Camera.Position + (buttons[1].Location - new Vector2(2, -TileGrid.OriginalTileHeight + 10)), player.PlayerTurn, player.ActivePlayerID,largeSoldier);
+                     largeSoldier = false;
+                 }
 
                 if (buttons[2].OnMouseClick() || (currMouse.MiddleButton==ButtonState.Pressed && prevMouse.MiddleButton!=ButtonState.Pressed))
                     tileManager.LockTiles();

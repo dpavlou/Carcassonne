@@ -15,18 +15,20 @@
         /// Initializes a new instance of the <see cref="IdentificationdArgs"/> class.
         /// </summary>
 
-        public IdentificationArgs(string codeValue,int id,int count,int colorID)
+        public IdentificationArgs(string codeValue,int id,int count,int colorID,bool size)
         {
             this.codeValue = codeValue;
             this.ID = id;
             this.Count = count;
             this.ColorID = colorID;
+            this.Size = size;
         }
 
         #endregion
 
         #region Public Properties
 
+        public bool Size { get; private set; }
 
         public string codeValue { get; private set; }
 

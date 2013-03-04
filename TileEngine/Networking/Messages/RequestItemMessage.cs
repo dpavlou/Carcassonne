@@ -27,18 +27,22 @@ namespace MultiplayerGame.Networking.Messages
         }
 
 
-        public RequestItemMessage(string codeValue, int id,int Count,int colorID)
+        public RequestItemMessage(string codeValue, int id,int Count,int colorID,bool Size)
         {
             this.ID = id;
             this.CodeValue = codeValue;
             this.MessageTime = NetTime.Now;
             this.Count = Count;
             this.ColorID = colorID;
+            this.Size = Size;
+
         }
 
         #endregion
 
         #region Public Properties
+
+        public bool Size { get; set; }
 
         public int ColorID { get; set; }
         /// <summary>
@@ -87,6 +91,7 @@ namespace MultiplayerGame.Networking.Messages
             this.ID = im.ReadInt32();
             this.Count = im.ReadInt32();
             this.ColorID = im.ReadInt32();
+            this.Size = im.ReadBoolean();
             //an int representing the Texture
         }
 
@@ -103,6 +108,7 @@ namespace MultiplayerGame.Networking.Messages
             om.Write(this.ID);
             om.Write(this.Count);
             om.Write(this.ColorID);
+            om.Write(this.Size);
         }
 
         #endregion

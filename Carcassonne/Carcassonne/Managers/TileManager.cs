@@ -39,7 +39,6 @@ namespace Carcassonne
         private DeckManager deckManager;
         private PlayerInformation player;
         private bool isHost;
-        private int largeSoldiersLeft;
 
         #endregion
 
@@ -51,6 +50,7 @@ namespace Carcassonne
             items = new List<Item>();
             itemID = Id = 0;
             this.player = player;
+
         }
 
         #endregion
@@ -65,7 +65,6 @@ namespace Carcassonne
             soldier = Content.Load<Texture2D>(@"Textures\Soldier");
             this.isHost = isHost;
 
-            largeSoldiersLeft = 1;
             Id++;
             tiles.Add(new Tile("  C", new Vector2(-23, -10), deckManager.GetTileTexture(0,0), font,TileGrid.mapCenter, Id, 0.5f - Id * 0.001f, frame1, Color.Red));
             tiles[0].SnappedToForm = false;
@@ -110,31 +109,31 @@ namespace Carcassonne
         {
             EventHandler<IdentificationArgs> tileStateAdd = TileStateAdd;
             if (tileStateAdd != null)
-                tileStateAdd(tileStateAdd, new IdentificationArgs(codeValue,id,count,0));
+                tileStateAdd(tileStateAdd, new IdentificationArgs(codeValue,id,count,0,true));
         }
 
         public void OnRequestTile(string codeValue, int id,int count,int colorID)
         {
             EventHandler<IdentificationArgs> tileStateRequest = TileStateRequest;
             if (tileStateRequest != null)
-                tileStateRequest(tileStateRequest, new IdentificationArgs(codeValue, id, count,colorID));
+                tileStateRequest(tileStateRequest, new IdentificationArgs(codeValue, id, count,colorID,true));
         }
         #endregion
 
         #region Item Events
 
-        public void OnAddItem(string codeValue, int id, int count,int colorID)
+        public void OnAddItem(string codeValue, int id, int count,int colorID,bool large)
         {
             EventHandler<IdentificationArgs> itemStateAdd = ItemStateAdd;
             if (itemStateAdd != null)
-                itemStateAdd(itemStateAdd, new IdentificationArgs(codeValue, id, count,colorID));
+                itemStateAdd(itemStateAdd, new IdentificationArgs(codeValue, id, count,colorID,large));
         }
 
-        public void OnRequestItem(string codeValue, int id, int count,int colorID)
+        public void OnRequestItem(string codeValue, int id, int count,int colorID,bool large)
         {
             EventHandler<IdentificationArgs> itemStateRequest = ItemStateRequest;
             if (itemStateRequest != null)
-                itemStateRequest(itemStateRequest, new IdentificationArgs(codeValue, id, count,colorID));
+                itemStateRequest(itemStateRequest, new IdentificationArgs(codeValue, id, count,colorID,large));
         }
 
         public void OnUpdateItem(Item item,string playerID)
@@ -207,12 +206,12 @@ namespace Carcassonne
             }
         }
 
-        public void AddItem(Vector2 location, string owner, int ID, int itemCount,int colorID)
+        public void AddItem(Vector2 location, string owner, int ID, int itemCount,int colorID,bool large)
         {
              location = AdjustNewItemLocation(location, 1);
             if (location != Vector2.Zero)
             {
-                items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location, itemCount, 0.4f - itemCount * 0.001f, soldier, 55f * Camera.Scale, player.PlayerColor(colorID), true));
+                items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location, itemCount, 0.4f - itemCount * 0.001f, soldier, 55f * Camera.Scale, player.PlayerColor(colorID), true,large));
             }
         }
 
@@ -241,9 +240,9 @@ namespace Carcassonne
 
         public void AddTile(Vector2 location, string owner)
         {
-            
+
             location = AdjustNewTileLocation(location, 1);
-            if (location != Vector2.Zero)
+            if (location != Vector2.Zero && deckManager.CountAll != 0)
             {
                 if (this.IsHost)
                 {
@@ -258,7 +257,7 @@ namespace Carcassonne
             }
         }
 
-        public void AddSoldier(Vector2 location, string owner,int colorID)
+        public void AddSoldier(Vector2 location, string owner,int colorID,bool large)
         {
 
             location = AdjustNewItemLocation(location, 1);
@@ -267,11 +266,11 @@ namespace Carcassonne
                 if (this.IsHost)
                 {
                     itemID++;
-                    items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location, itemID, 0.4f - itemID * 0.001f, soldier, 55f * Camera.Scale, player.PlayerColor(colorID), true));
-                    OnAddItem(owner, 0, itemID,colorID);
+                    items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location, itemID, 0.4f - itemID * 0.001f, soldier, 55f * Camera.Scale, player.PlayerColor(colorID), true,large));
+                    OnAddItem(owner, 0, itemID,colorID,large);
                 }
                 else
-                    OnRequestItem(owner, 0, 0, player.ActivePlayerID);
+                    OnRequestItem(owner, 0, 0, player.ActivePlayerID,large);
             }
         }
 
@@ -279,7 +278,7 @@ namespace Carcassonne
         {
             itemID++;
             items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location,
-                    itemID, 0.05f - itemID * 0.001f, soldier, 55f, player.PlayerColor(player.activePlayers - 1), false));
+                    itemID, 0.05f - itemID * 0.001f, soldier, 55f, player.PlayerColor(player.activePlayers - 1), false,true));
             items[itemID - 1].LockedInBounds = true;
             items[itemID - 1].BoundSize = FormManager.menu.FormSize;
             items[itemID - 1].Bounds = Camera.WorldLocation + FormManager.menu.Location + new Vector2(TileGrid.OriginalTileWidth / 2, 0);
