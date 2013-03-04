@@ -73,7 +73,7 @@ namespace Carcassonne
             spriteBatch.DrawString(
             font,
             "Tiles Left: " +
-             deckManager.Count,
+             deckManager.CountAll,
              text2offSet+FormManager.menu.Location,
             Color.Black);
             

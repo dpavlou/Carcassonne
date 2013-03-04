@@ -140,6 +140,8 @@ namespace Carcassonne
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            exitResize();
+
             cameraHandler.Update(gameTime);
             FormManager.Update(gameTime);
             buttonManager.Update(gameTime);
@@ -152,7 +154,7 @@ namespace Carcassonne
             base.Update(gameTime);
         }
 
-        private void ExitResize()
+        private void exitResize()
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
                 || Keyboard.GetState().IsKeyDown(Keys.Escape))

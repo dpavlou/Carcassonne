@@ -43,6 +43,20 @@ namespace Carcassonne
 
         #region Properties
 
+        public int CountAll
+        {
+            get
+            {
+                int deckSum=0;
+               foreach(Deck deck in decks)
+                   deckSum+=deck.Count;
+
+               if (decks[0].Reserve)
+                   return deckSum + 1;
+               else
+                   return deckSum;
+            }
+        }
         public int NextDeck
         {
             get { return (int)MathHelper.Min(activeDeck+1, decks.Count); }
@@ -85,8 +99,8 @@ namespace Carcassonne
                     activeDeck = NextDeck;
                     return decks[0].getReservedTile();
                 }
-                if (Count == decks[1].fullDeck && activeDeck == 1)
-                    return decks[1].GetTileTexture(0);
+               // if (Count == decks[1].fullDeck && activeDeck == 1)
+                 //   return decks[1].GetTileTexture(0);
 
                 if (Count == 0 && activeDeck >= 1)
                     return decks[1].getEndingTexture(0);

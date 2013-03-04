@@ -39,6 +39,7 @@ namespace Carcassonne
         private DeckManager deckManager;
         private PlayerInformation player;
         private bool isHost;
+        private int largeSoldiersLeft;
 
         #endregion
 
@@ -64,6 +65,7 @@ namespace Carcassonne
             soldier = Content.Load<Texture2D>(@"Textures\Soldier");
             this.isHost = isHost;
 
+            largeSoldiersLeft = 1;
             Id++;
             tiles.Add(new Tile("  C", new Vector2(-23, -10), deckManager.GetTileTexture(0,0), font,TileGrid.mapCenter, Id, 0.5f - Id * 0.001f, frame1, Color.Red));
             tiles[0].SnappedToForm = false;

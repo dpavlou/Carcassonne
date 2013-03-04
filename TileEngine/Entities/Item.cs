@@ -24,6 +24,7 @@ namespace TileEngine.Entity
         private Color itemColor;
         private bool mouseOutOfBounds;
         public float lastY;
+        private float OriginalWidth;
 
         #endregion
 
@@ -36,7 +37,7 @@ namespace TileEngine.Entity
             Lock = false;
             onGround = onground;
             Lying = false;
-            Width = bounds;
+            width = OriginalWidth = bounds;
             itemColor = ItemColor;
             MouseOutOfBounds = false;
             lastY = 0f;
@@ -46,11 +47,13 @@ namespace TileEngine.Entity
                 OffSet = Location - (FormManager.privateSpace.Location + Camera.WorldLocation);
             }
             type = "item";
+
         }
 
         #endregion
 
         #region Properties
+
 
         public Vector2 Bounds
         {
@@ -63,9 +66,9 @@ namespace TileEngine.Entity
             get
             {
                 if (SnappedToForm)
-                    return 55;
+                    return OriginalWidth;
                 else if (LockedInBounds)
-                    return 55;
+                    return OriginalWidth;
                 else
                     return width;
             }
@@ -74,6 +77,8 @@ namespace TileEngine.Entity
                 width = value;
             }
         }
+
+
 
         public Vector2 BoundSize
         {
