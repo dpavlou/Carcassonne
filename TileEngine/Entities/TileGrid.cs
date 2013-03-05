@@ -54,7 +54,7 @@ namespace TileEngine.Entity
             {
                 for (int y = 0; y < MapHeight; y++)
                 {
-                    if (x == 0 || y == 0 || x == MapWidth - 1 || y == MapWidth - 1)
+                    if (x == 0 || y == 0 || x == MapWidth - 1 || y == MapWidth - 1) 
                         mapCells[x, y] = new Square("border",border, new Vector2(x * TileWidth, y * TileHeight));
                     else
                         mapCells[x, y] = new Square("", square, new Vector2(x * TileWidth, y * TileHeight));
