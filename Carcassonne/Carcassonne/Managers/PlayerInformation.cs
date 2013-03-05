@@ -108,9 +108,9 @@ namespace Carcassonne
             if (index == 2)
                 return Color.Blue;
             else if (index == 3)
-                return Color.Green;
+                return Color.LightGreen;
             else if (index == 4)
-                return Color.Brown;
+                return Color.MediumVioletRed;
             else if (index == 5)
                 return Color.Red;
             else

@@ -122,6 +122,8 @@ namespace Carcassonne
             tileManager.ItemStateRequest += (sender, e) => networkManager.SendMessage(new RequestItemMessage(e.codeValue, e.ID, e.Count,e.ColorID,e.Size));
             tileManager.ItemStateAdd += (sender, e) => networkManager.SendMessage(new AddItemMessage(e.codeValue, e.ID, e.Count,e.ColorID,e.Size));
             tileManager.ItemStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateItemMessage(e.item,e.playerID,e.scale));
+
+
         }
 
         /// <summary>

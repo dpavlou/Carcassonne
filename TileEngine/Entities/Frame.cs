@@ -7,24 +7,24 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TileEngine.Entity
 {
-    public static class Frame
+    public class Frame
     {
         #region Declarations
 
-        static public Texture2D dot;
+        public Texture2D dot;
 
         #endregion
 
         #region Initialize
 
-        public static void Initialize(GraphicsDevice graphicsDevice)
+        public void Initialize(GraphicsDevice graphicsDevice)
         {
             dot = new Texture2D(graphicsDevice, 1, 1);
             dot.SetData(new[] { Color.White });
         }
         #endregion
 
-        public static void DrawLine(SpriteBatch spriteBatch,Vector2 start, Vector2 end, Color color)
+        public void DrawLine(SpriteBatch spriteBatch,Vector2 start, Vector2 end, Color color)
         {
             float length = (end - start).Length();
             float rotation = (float)Math.Atan2(end.Y - start.Y, end.X - start.X);
@@ -32,7 +32,7 @@ namespace TileEngine.Entity
 
         }
 
-        public static void DrawRectangle(SpriteBatch spriteBatch, Vector2 location, Vector2 size,Color color)
+        public void DrawRectangle(SpriteBatch spriteBatch, Vector2 location, Vector2 size,Color color)
         {
             DrawLine(spriteBatch, location, location + new Vector2(size.X, 0), color);
             DrawLine(spriteBatch, location, location + new Vector2(0,size.Y), color);
