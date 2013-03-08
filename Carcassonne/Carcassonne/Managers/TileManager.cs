@@ -33,7 +33,6 @@ namespace Carcassonne
         private List<Item> items;
         private SpriteFont font;
         private Texture2D frame1;
-        private Texture2D soldier;
         private int Id;
         private int itemID;
         private DeckManager deckManager;
@@ -62,7 +61,6 @@ namespace Carcassonne
             this.deckManager = deckManager;
             frame1 = Content.Load<Texture2D>(@"Textures\Frame1");
             font = Content.Load<SpriteFont>(@"Fonts\Pericles10");
-            soldier = Content.Load<Texture2D>(@"Textures\Soldier");
             this.isHost = isHost;
 
             Id++;
@@ -211,7 +209,7 @@ namespace Carcassonne
              location = AdjustNewItemLocation(location, 1);
             if (location != Vector2.Zero)
             {
-                items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location, itemCount, 0.4f - itemCount * 0.001f, soldier, 55f * Camera.Scale, player.PlayerColor(colorID), true,large));
+                items.Add(new Item(owner, new Vector2(-23, -10), deckManager.Soldier(colorID), font, location, itemCount, 0.4f - itemCount * 0.001f, deckManager.Soldier(colorID), 55f * Camera.Scale, player.PlayerColor(colorID), true, large));
             }
         }
 
@@ -266,7 +264,7 @@ namespace Carcassonne
                 if (this.IsHost)
                 {
                     itemID++;
-                    items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location, itemID, 0.4f - itemID * 0.001f, soldier, 55f * Camera.Scale, player.PlayerColor(colorID), true,large));
+                    items.Add(new Item(owner, new Vector2(-23, -10), deckManager.Soldier(colorID), font, location, itemID, 0.4f - itemID * 0.001f, deckManager.Soldier(colorID), 55f * Camera.Scale, player.PlayerColor(colorID), true, large));
                     OnAddItem(owner, 0, itemID,colorID,large);
                 }
                 else
@@ -277,8 +275,8 @@ namespace Carcassonne
         public void AddScoreBoardSoldier(Vector2 location, string owner)
         {
             itemID++;
-            items.Add(new Item(owner, new Vector2(-23, -10), soldier, font, location,
-                    itemID, 0.05f - itemID * 0.001f, soldier, 55f, player.PlayerColor(player.activePlayers - 1), false,true));
+            items.Add(new Item(owner, new Vector2(-23, -10), deckManager.Soldier(1), font, location,
+                    itemID, 0.05f - itemID * 0.001f, deckManager.Soldier(1), 55f, player.PlayerColor(player.activePlayers - 1), false, true));
             items[itemID - 1].LockedInBounds = true;
             items[itemID - 1].BoundSize = FormManager.menu.FormSize;
             items[itemID - 1].Bounds = Camera.WorldLocation + FormManager.menu.Location + new Vector2(TileGrid.OriginalTileWidth / 2, 0);

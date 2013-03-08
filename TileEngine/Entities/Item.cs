@@ -366,7 +366,7 @@ namespace TileEngine.Entity
                          Texture,
                          Camera.WorldToScreen(Location),
                          null,
-                         SquareColor,
+                         Color.White,
                          RotationAmount,
                          ItemSourceCenter,
                          Scale-ScaleOffset,

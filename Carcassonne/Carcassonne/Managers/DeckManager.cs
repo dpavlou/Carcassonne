@@ -14,6 +14,7 @@ namespace Carcassonne
         #region Declarations
 
         public List<Deck> decks;
+        public List<Texture2D> soldiers;
         private int activeDeck;
 
         #endregion
@@ -23,6 +24,7 @@ namespace Carcassonne
         public DeckManager()
         {
             decks = new List<Deck>();
+            soldiers = new List<Texture2D>();
             activeDeck=0;
         }
 
@@ -36,6 +38,10 @@ namespace Carcassonne
             {
                 deck.Initialize(Content);
             }
+
+            for (int i = 1; i <= 5; i++) 
+                soldiers.Add(Content.Load<Texture2D>(@"Textures\soldiers\Soldier" + i));
+           
             decks[0].reserveTile();
         }
 
@@ -69,7 +75,16 @@ namespace Carcassonne
 
         #endregion
 
-        #region Public Methods
+        #region Public Soldier Methods
+
+        public Texture2D Soldier(int x)
+        {
+            return soldiers[x-1];
+        }
+
+        #endregion
+
+        #region Public Deck Methods
 
         public void AddNewDeck()
         {

@@ -63,7 +63,7 @@ namespace TileEngine.Entity
                 if (MouseOver)
                     return 1.0f;
                 else
-                    return 0.4f;
+                    return 0.0f;
             }
         }
 
@@ -252,22 +252,22 @@ namespace TileEngine.Entity
 
                 if (!Lock)
                 {
-                    spriteBatch.DrawString(
+                  /*  spriteBatch.DrawString(
                      font,
                      CodeValue, 
                      Camera.WorldToScreen(LabelOffset),
-                     fontColor*Transparency);
+                     fontColor*Transparency);*/
                 
-                     /*spriteBatch.Draw(
+                     spriteBatch.Draw(
                         FrameTexture,
                         Camera.WorldToScreen(Location),
                         null,
-                        Color.White,
+                        Color.White*Transparency,
                         RotationValue,
                         TileGrid.TileSourceCenter(0),
                         Scale,
                         SpriteEffects.None,
-                        Layer-0.05f);*/
+                        Layer-0.05f);
                    
                 }              
             }

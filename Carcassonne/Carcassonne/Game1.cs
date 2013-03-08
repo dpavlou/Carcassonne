@@ -78,6 +78,7 @@ namespace Carcassonne
 
         protected override void Initialize()
         {
+
             this.IsMouseVisible = true;
 
             this.Window.Title = "Carcassonne ALPHA";
@@ -86,7 +87,7 @@ namespace Carcassonne
             this.graphics.PreferredBackBufferHeight = 900;
             this.graphics.ApplyChanges();
 
-            this.networkManager.Connect(serverName,IP);
+            this.networkManager.Connect(serverName, IP);
 
             base.Initialize();
         }
@@ -98,30 +99,32 @@ namespace Carcassonne
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphics.PreferMultiSampling = true;
+
 
             Camera.WorldRectangle = new Rectangle(0, 0, TileGrid.MapWidth * TileGrid.TileWidth, TileGrid.MapHeight * TileGrid.TileHeight);
             Camera.Position = Vector2.Zero;
             Camera.ViewPortWidth = this.GraphicsDevice.Viewport.Width;
             Camera.ViewPortHeight = this.GraphicsDevice.Viewport.Height;
 
-            TileGrid.Initialize(Content,playerInformation.playerTurn);
-            FormManager.Initialize(Content,"Kokos");
+            TileGrid.Initialize(Content, playerInformation.playerTurn);
+            FormManager.Initialize(Content, "Kokos");
             buttonManager.Initialize(Content, "Kokos");
             databaseManager.loadFromDatabase();
             deckManager.Initialize(Content);
-            tileManager.Initialize(Content,deckManager,this.IsHost);
+            tileManager.Initialize(Content, deckManager, this.IsHost);
             menuText.Initialize(Content, deckManager);
 
-           // tileManager.AddScoreBoardSoldier(buttonManager.scoreboardItemLocation(),"Kokos");
+            // tileManager.AddScoreBoardSoldier(buttonManager.scoreboardItemLocation(),"Kokos");
 
             tileManager.TileStateAdd += (sender, e) => networkManager.SendMessage(new AddTileMessage(e.codeValue, e.ID, e.Count));
-            tileManager.TileStateRequest += (sender, e) => networkManager.SendMessage(new RequestTileMessage(e.codeValue,e.ID,e.Count));
-            tileManager.TileStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateTileMessage(e.tile,e.playerID,e.scale));
-            tileManager.ItemStateRequest += (sender, e) => networkManager.SendMessage(new RequestItemMessage(e.codeValue, e.ID, e.Count,e.ColorID,e.Size));
-            tileManager.ItemStateAdd += (sender, e) => networkManager.SendMessage(new AddItemMessage(e.codeValue, e.ID, e.Count,e.ColorID,e.Size));
-            tileManager.ItemStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateItemMessage(e.item,e.playerID,e.scale));
+            tileManager.TileStateRequest += (sender, e) => networkManager.SendMessage(new RequestTileMessage(e.codeValue, e.ID, e.Count));
+            tileManager.TileStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateTileMessage(e.tile, e.playerID, e.scale));
+            tileManager.ItemStateRequest += (sender, e) => networkManager.SendMessage(new RequestItemMessage(e.codeValue, e.ID, e.Count, e.ColorID, e.Size));
+            tileManager.ItemStateAdd += (sender, e) => networkManager.SendMessage(new AddItemMessage(e.codeValue, e.ID, e.Count, e.ColorID, e.Size));
+            tileManager.ItemStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateItemMessage(e.item, e.playerID, e.scale));
 
 
         }
@@ -259,6 +262,7 @@ namespace Carcassonne
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin(
@@ -276,6 +280,7 @@ namespace Carcassonne
             spriteBatch.End();
 
             base.Draw(gameTime);
+            
         }
 
         /// <summary>

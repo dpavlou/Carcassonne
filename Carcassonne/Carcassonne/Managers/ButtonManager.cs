@@ -207,9 +207,9 @@ namespace Carcassonne
 
                 if (buttons[3].OnMouseClick())
                 {
-                    if (player.activePlayers < 7)
+                    if (player.activePlayers < 6)
                     {
-                        AddPlayer("Kokos" + player.activePlayers,player.activePlayers);
+                        AddPlayer("Kokos",player.activePlayers);
                       //  tileManager.AddScoreBoardSoldier( scoreboardItemLocation(),"Kokos" + (player.activePlayers - 1));
                     }
                 }

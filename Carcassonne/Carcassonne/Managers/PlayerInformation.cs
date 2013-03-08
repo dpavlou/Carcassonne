@@ -104,17 +104,17 @@ namespace Carcassonne
         {
 
             if (index == 1)
-                return Color.Black;
-            if (index == 2)
                 return Color.Blue;
-            else if (index == 3)
-                return Color.LightGreen;
-            else if (index == 4)
-                return Color.MediumVioletRed;
-            else if (index == 5)
-                return Color.Red;
-            else
+            if (index == 2)
                 return Color.Yellow;
+            else if (index == 3)
+                return Color.Green;
+            else if (index == 4)
+                return Color.Red;
+            else if (index == 5)
+                return Color.Black;
+            else
+                return Color.Black;
         }
 
 
