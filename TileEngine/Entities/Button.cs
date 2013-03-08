@@ -101,8 +101,8 @@ namespace TileEngine.Entity
         {
             get
             {
-                return new Rectangle((int)Location.X - TileGrid.OriginalTileWidth / 2, (int)Location.Y - TileGrid.OriginalTileHeight / 2,
-                              TileGrid.OriginalTileWidth, TileGrid.OriginalTileHeight);
+                return new Rectangle((int)Location.X - texture.Width / 2, (int)Location.Y - texture.Height / 2,
+                              texture.Width, texture.Height);
             }
 
         }
@@ -129,6 +129,11 @@ namespace TileEngine.Entity
                 location.X = MathHelper.Clamp(value.X, -400, TileGrid.TileWidth * TileGrid.MapWidth);
                 location.Y = MathHelper.Clamp(value.Y, 0, TileGrid.TileHeight * TileGrid.MapHeight);
             }
+        }
+
+        public Vector2 TileSourceCenter
+        {
+            get { return new Vector2(texture.Width / 2,texture.Height / 2); }
         }
 
         #endregion
@@ -214,7 +219,7 @@ namespace TileEngine.Entity
                          null,
                          SquareColor* Transparency,
                          0.0f,
-                         TileGrid.TileSourceCenter(0),
+                         TileSourceCenter,
                          1.0f,
                          SpriteEffects.None,
                          layer);

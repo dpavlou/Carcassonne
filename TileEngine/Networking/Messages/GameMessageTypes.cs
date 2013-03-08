@@ -57,7 +57,22 @@ namespace MultiplayerGame.Networking.Messages
         /// <summary>
         /// Rotation state
         /// </summary>
-        RotationValueState
+        RotationValueState,
+
+        /// <summary>
+        /// Request template state
+        /// </summary>
+        RequestTemplateState,
+
+        /// <summary>
+        /// Add template state
+        /// </summary>
+        AddTemplateState,
+
+        /// <summary>
+        /// Update template state
+        /// </summary>
+        UpdateTemplateState
      
     }
 }

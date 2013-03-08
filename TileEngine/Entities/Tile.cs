@@ -21,11 +21,12 @@ namespace TileEngine.Entity
         #region Declarations
 
 
-
+        private bool showText;
         private bool onGrid;
         private bool idle;
         private Texture2D frame1;
         private Color fontColor;
+        private float timeSinceShowText;
 
         #endregion
 
@@ -43,18 +44,29 @@ namespace TileEngine.Entity
             SnappedToForm = true;
             OffSet = Location - (FormManager.privateSpace.Location + Camera.WorldLocation);
             type = "tile";
+            ShowText = false;
+            timeSinceShowText = 3.0f;
 
         }
         
         #endregion
 
-        #region Networking Events
-
-
-
-        #endregion
 
         #region Properties
+
+        public bool ShowText
+        {
+            get
+            {
+                if (timeSinceShowText < 2.0f)
+                {
+                    timeSinceShowText += 0.4f; return showText;
+                }
+                else
+                    return false;
+            }
+            set { timeSinceShowText = 0; showText = value; }
+        }
 
         public float Transparency
         {
@@ -252,26 +264,30 @@ namespace TileEngine.Entity
 
                 if (!Lock)
                 {
-                  /*  spriteBatch.DrawString(
-                     font,
-                     CodeValue, 
-                     Camera.WorldToScreen(LabelOffset),
-                     fontColor*Transparency);*/
-                
-                     spriteBatch.Draw(
-                        FrameTexture,
-                        Camera.WorldToScreen(Location),
-                        null,
-                        Color.White*Transparency,
-                        RotationValue,
-                        TileGrid.TileSourceCenter(0),
-                        Scale,
-                        SpriteEffects.None,
-                        Layer-0.05f);
-                   
-                }              
+
+                    spriteBatch.Draw(
+                       FrameTexture,
+                       Camera.WorldToScreen(Location),
+                       null,
+                       Color.White * Transparency,
+                       RotationValue,
+                       TileGrid.TileSourceCenter(0),
+                       Scale,
+                       SpriteEffects.None,
+                       Layer - 0.05f);
+
+                }
+                if (ShowText)
+                {
+                    spriteBatch.DrawString(
+                    font,
+                    CodeValue,
+                    Camera.WorldToScreen(LabelOffset),
+                    Color.Black);
+                }
+
             }
-        }   
+        }
 
         #endregion
 

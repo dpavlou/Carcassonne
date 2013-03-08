@@ -91,7 +91,8 @@ namespace Carcassonne
                 {
                     tile.SnappedToForm = false;
                     tile.Location = location;
-                   // tile.RotationValue = rotation;
+                    tile.ShowText = true;
+                    tile.CodeValue = playerID;
                     break;
                 }
         }
@@ -162,7 +163,12 @@ namespace Carcassonne
                 if (type == "item")
                     getItemFromList(ID).RotationValue = rotationValue;
                 else if (type == "tile")
-                    getTileFromList(ID).RotationValue = rotationValue;
+                {
+                    Tile tile = getTileFromList(ID);
+                    tile.RotationValue = rotationValue;
+                    tile.ShowText = true;
+                    tile.CodeValue = playerID;
+                }
             }
         }
 
@@ -563,7 +569,9 @@ namespace Carcassonne
                             tiles[x].ActiveTile = false;
                         }
                         
-                        tiles[x].Update(gameTime);
+                        if(!(tiles[x].ShowText && tiles[x].CodeValue!=player.playerTurn)) //TODO: debug on multiplayer mode
+                            tiles[x].Update(gameTime);
+
                         if (tiles[x].Moving)
                         {
                             NewActiveTile(x);

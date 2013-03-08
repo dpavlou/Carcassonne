@@ -41,6 +41,7 @@ namespace TileEngine.Entity
         public static event EventHandler<TileStateChangedArgs> SnapTileToGrid;
         public static event EventHandler<TileStateChangedArgs> RemoveFromGrid;
         public static event EventHandler<RotationValueChangedArgs> RotateValue;
+        public static event EventHandler<TemplateArgs> UpdateTemplate;
 
         #region Initialization
         static public void Initialize(ContentManager Content,string playerID)
@@ -64,11 +65,19 @@ namespace TileEngine.Entity
             SnapTileToGrid += (sender, e) => TileGrid.networkManager.SendMessage(new SnapToGridMessage(e.tile, e.playerID,e.scale));
             RemoveFromGrid += (sender, e) => TileGrid.networkManager.SendMessage(new RemoveFromGridMessage(e.tile,e.playerID, e.scale));
             RotateValue += (sender, e) => TileGrid.networkManager.SendMessage(new RotationMessage(e.rotationValue,e.ID,e.playerID,e.type));
+            UpdateTemplate += (sender, e) => TileGrid.networkManager.SendMessage(new UpdateTemplateMessage(e.Name, e.Pos, e.Sender));
         }
 
         #endregion
 
         #region Static Events
+
+        public static void OnUpdateTemplate(string id,int score,string player)
+        {
+            EventHandler<TemplateArgs> updateTemplate = UpdateTemplate;
+            if (updateTemplate != null)
+                updateTemplate(updateTemplate, new TemplateArgs(id,score,player));
+        }
 
         public static void OnSnapToGrid(Tile tile,string playerID)
         {

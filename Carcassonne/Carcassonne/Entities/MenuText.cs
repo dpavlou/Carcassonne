@@ -33,7 +33,7 @@ namespace Carcassonne
         {
             fps = new FpsMonitor();
             text1offSet = new Vector2(40, 20);
-            text2offSet = new Vector2(40, 80);
+            text2offSet = new Vector2(190, 110);
             text3offSet = new Vector2(40, 110);
             text4offSet = new Vector2(40, 50);
             this.player = player;
@@ -72,9 +72,8 @@ namespace Carcassonne
              
             spriteBatch.DrawString(
             font,
-            "Tiles Left: " +
-             deckManager.CountAll,
-             text2offSet+FormManager.menu.Location,
+             ""+deckManager.CountAll,
+             text2offSet+FormManager.privateSpace.Location,
             Color.Black);
             
             spriteBatch.DrawString(

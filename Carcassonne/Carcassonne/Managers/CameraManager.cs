@@ -307,13 +307,13 @@ namespace Carcassonne
             }
 
 
-            if (simulateDoubleClick(mouseState) && !MouseInBounds)
+      /*      if (simulateDoubleClick(mouseState) && !MouseInBounds)
             {
                 desiredCenter = (new Vector2(mouseState.X, mouseState.Y)+ worldLocation);
                 calculateVelocity();
                 autoPilot=true;
                 timeSinceAutoPilot = 0.0f;
-            }
+            }*/
 
           
             if (!onLock)

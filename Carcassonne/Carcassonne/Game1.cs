@@ -33,6 +33,7 @@ namespace Carcassonne
         private readonly PlayerInformation playerInformation;
         private readonly DatabaseManager databaseManager;
         private readonly DeckManager deckManager;
+        private TemplateManager templateManager;
         private string serverName;
         private string IP;
 
@@ -116,6 +117,10 @@ namespace Carcassonne
             deckManager.Initialize(Content);
             tileManager.Initialize(Content, deckManager, this.IsHost);
             menuText.Initialize(Content, deckManager);
+            templateManager = new TemplateManager(Content);
+
+            if(this.IsHost)
+                templateManager.addTemplate(playerInformation.playerTurn, 0, playerInformation.playerTurn);
 
             // tileManager.AddScoreBoardSoldier(buttonManager.scoreboardItemLocation(),"Kokos");
 
@@ -125,6 +130,10 @@ namespace Carcassonne
             tileManager.ItemStateRequest += (sender, e) => networkManager.SendMessage(new RequestItemMessage(e.codeValue, e.ID, e.Count, e.ColorID, e.Size));
             tileManager.ItemStateAdd += (sender, e) => networkManager.SendMessage(new AddItemMessage(e.codeValue, e.ID, e.Count, e.ColorID, e.Size));
             tileManager.ItemStateUpdated += (sender, e) => networkManager.SendMessage(new UpdateItemMessage(e.item, e.playerID, e.scale));
+            templateManager.RequestTemplate += (sender, e) => networkManager.SendMessage(new RequestTemplateMessage(e.Name,e.Pos,e.Sender));
+            templateManager.AddTemplate += (sender, e) => networkManager.SendMessage(new AddTemplateMessage(e.Name, e.Pos, e.Sender));
+            //request template event
+
 
 
         }
@@ -152,6 +161,7 @@ namespace Carcassonne
             buttonManager.Update(gameTime);
             tileManager.Update(gameTime);
             menuText.Update(gameTime);
+            templateManager.Update(gameTime);
             //Camera.Update();
 
             ProcessNetworkMessages();
@@ -173,6 +183,36 @@ namespace Carcassonne
         }
 
         #region Handle Incoming Messages
+
+        private void HandleUpdateTemplateMessage(NetIncomingMessage im)
+        {
+            var message = new AddTemplateMessage(im);
+
+            if (playerInformation.playerTurn != message.Sender)
+            {
+                templateManager.updateTemplate(message.Name, message.Pos, message.Sender);
+                if(this.IsHost)
+                    TileGrid.OnUpdateTemplate(message.Name, message.Pos, message.Sender);
+            }
+        }
+
+        private void HandleAddTemplateMessage(NetIncomingMessage im)
+        {
+            var message = new AddTemplateMessage(im);
+
+             templateManager.addNewTemplate(message.Name, message.Pos,message.Sender);
+            
+        }
+
+        private void HandleRequestTemplateMessage(NetIncomingMessage im)
+        {
+            var message = new RequestTemplateMessage(im);
+
+            if (this.IsHost)
+            {
+                templateManager.addTemplate(message.Name,message.Pos,message.Sender);
+            }
+        }
 
         private void HandleAddTileMessage(NetIncomingMessage im)
         {
@@ -276,6 +316,7 @@ namespace Carcassonne
             tileManager.Draw(spriteBatch);
             buttonManager.Draw(spriteBatch);
             menuText.Draw(spriteBatch);
+            templateManager.Draw(spriteBatch);
 
             spriteBatch.End();
 
@@ -308,6 +349,7 @@ namespace Carcassonne
                                 if (!this.IsHost)
                                 {
                                     Console.WriteLine("Connected to {0}");
+                                    templateManager.OnRequestTemplate(playerInformation.playerTurn, playerInformation.playerTurn);
                                 }
                                 else
                                 {
@@ -356,6 +398,15 @@ namespace Carcassonne
                                 break;
                             case GameMessageTypes.RotationValueState:
                                 this.HandleRotationMessage(im);
+                                break;
+                            case GameMessageTypes.RequestTemplateState:
+                                this.HandleRequestTemplateMessage(im);
+                                break;
+                            case GameMessageTypes.AddTemplateState:
+                                this.HandleAddTemplateMessage(im);
+                                break;
+                            case GameMessageTypes.UpdateTemplateState:
+                                this.HandleUpdateTemplateMessage(im);
                                 break;
                         }
 
