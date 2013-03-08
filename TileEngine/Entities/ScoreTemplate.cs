@@ -105,7 +105,7 @@ namespace TileEngine.Entity
                      template,
                      location,
                      null,
-                     Color.White,
+                     Color.White*0.5f,
                      0.0f,
                      Vector2.Zero,
                      1.0f,
@@ -114,9 +114,15 @@ namespace TileEngine.Entity
 
             spriteBatch.DrawString(
                        font,
-                       " "+ID+" | "+Score,
+                       " "+ID,
                        location+new Vector2(10,20),
                        Color.Black);
+
+            spriteBatch.DrawString(
+                     font,
+                     "| " + Score,
+                    location + new Vector2(120, 20),
+                     Color.Black);
 
             foreach (Button button in buttons)
                 button.Draw(spriteBatch);
