@@ -60,7 +60,7 @@ namespace TileEngine.Entity
             {
                 if (timeSinceShowText < 2.0f)
                 {
-                    timeSinceShowText += 0.4f; return showText;
+                    timeSinceShowText += 0.2f; return showText;
                 }
                 else
                     return false;

@@ -537,6 +537,7 @@ namespace Carcassonne
                     {
                         if (!tiles[x].OnGrid || tiles[x].SnappedToForm)
                         {
+                            if (!(tiles[x].ShowText)) //TODO: debug on multiplayer mode
                             tiles[x].Update(gameTime);
 
                         }
@@ -568,9 +569,8 @@ namespace Carcassonne
                         {
                             tiles[x].ActiveTile = false;
                         }
-                        
-                        if(!(tiles[x].ShowText && tiles[x].CodeValue!=player.playerTurn)) //TODO: debug on multiplayer mode
-                            tiles[x].Update(gameTime);
+                          if (!(tiles[x].ShowText))
+                          tiles[x].Update(gameTime);
 
                         if (tiles[x].Moving)
                         {
