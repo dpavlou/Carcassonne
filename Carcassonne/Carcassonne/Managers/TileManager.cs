@@ -215,7 +215,7 @@ namespace Carcassonne
              location = AdjustNewItemLocation(location, 1);
             if (location != Vector2.Zero)
             {
-                items.Add(new Item(owner, new Vector2(-23, -10), deckManager.Soldier(colorID), font, location, itemCount, 0.4f - itemCount * 0.001f, deckManager.Soldier(colorID), 55f * Camera.Scale, player.PlayerColor(colorID), true, large));
+                items.Add(new Item(owner, new Vector2(-23, -10), deckManager.Soldier(colorID), font, location, itemCount, 0.4f - itemCount * 0.001f, deckManager.Soldier(colorID), 55f, player.PlayerColor(colorID), true, large));
             }
         }
 
@@ -270,7 +270,7 @@ namespace Carcassonne
                 if (this.IsHost)
                 {
                     itemID++;
-                    items.Add(new Item(owner, new Vector2(-23, -10), deckManager.Soldier(colorID), font, location, itemID, 0.4f - itemID * 0.001f, deckManager.Soldier(colorID), 55f * Camera.Scale, player.PlayerColor(colorID), true, large));
+                    items.Add(new Item(owner, new Vector2(-23, -10), deckManager.Soldier(colorID), font, location, itemID, 0.4f - itemID * 0.001f, deckManager.Soldier(colorID), 55f, player.PlayerColor(colorID), true, large));
                     OnAddItem(owner, 0, itemID,colorID,large);
                 }
                 else

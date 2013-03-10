@@ -99,8 +99,6 @@ namespace Carcassonne
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphics.PreferMultiSampling = true;
 
@@ -133,8 +131,6 @@ namespace Carcassonne
             templateManager.RequestTemplate += (sender, e) => networkManager.SendMessage(new RequestTemplateMessage(e.Name,e.Pos,e.Sender));
             templateManager.AddTemplate += (sender, e) => networkManager.SendMessage(new AddTemplateMessage(e.Name, e.Pos, e.Sender));
             //request template event
-
-
 
         }
 

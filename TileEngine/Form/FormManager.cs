@@ -26,11 +26,11 @@ namespace TileEngine.Form
 
         public static void Initialize(ContentManager Content, string owner)
         {
-            Texture2D button1=Content.Load<Texture2D>(@"Textures\button");
+            Texture2D button1=Content.Load<Texture2D>(@"Textures\formButton");
             SpriteFont font = Content.Load<SpriteFont>(@"Fonts\pericles10");
 
-            menu = new Form(button1,"MENU",new Vector2(600, Camera.ViewPortHeight), font, new Vector2(Camera.ViewPortWidth, 0),true);
-            privateSpace = new Form(button1,"     BANK",new Vector2(300, Camera.ViewPortHeight), font, new Vector2(0, 0),false);
+            menu = new Form(button1,"    M",new Vector2(600, Camera.ViewPortHeight), font, new Vector2(Camera.ViewPortWidth, 0),true);
+            privateSpace = new Form(button1,"    T",new Vector2(200, Camera.ViewPortHeight), font, new Vector2(0, 0),false);
             privateSpace.Close();
             ScoreBoard = Content.Load<Texture2D>(@"Textures\ScoreBoard");
             dragging = false;

@@ -214,7 +214,7 @@ namespace TileEngine.Entity
              {
                  OffSet = Location - (FormManager.privateSpace.Location+Camera.WorldLocation);
                  offSet.X = MathHelper.Clamp(offSet.X,0, FormManager.privateSpace.FormSize.X-TileGrid.TileWidth/2);
-                 SnappedToForm = true;
+                 //SnappedToForm = true;
              }
              else if (!TileRectangle.Intersects(FormRectangle))
              {

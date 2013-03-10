@@ -33,7 +33,7 @@ namespace Carcassonne
         {
             fps = new FpsMonitor();
             text1offSet = new Vector2(40, 20);
-            text2offSet = new Vector2(190, 110);
+            text2offSet = new Vector2(140, 110);
             text3offSet = new Vector2(40, 110);
             text4offSet = new Vector2(40, 50);
             this.player = player;

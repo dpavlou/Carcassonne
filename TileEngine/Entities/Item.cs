@@ -40,8 +40,9 @@ namespace TileEngine.Entity
             onGround = onground;
             Lying = false;
             if (!large)
-                bounds -= 20f;
-            width = OriginalWidth = bounds;
+                bounds -= 15f;
+            width = bounds * Camera.Scale;
+            OriginalWidth = bounds;
             itemColor = ItemColor;
             MouseOutOfBounds = false;
             lastY = 0f;
@@ -193,8 +194,12 @@ namespace TileEngine.Entity
         {
             get
             {
-                return new Rectangle((int)Location.X - ((int)Width/2) , (int)Location.Y - ((int)Width/2) ,
-                             (int)Width, (int)Width);
+                if (SnappedToForm)
+                    return new Rectangle((int)Location.X - ((int)OriginalWidth / 2), (int)Location.Y - ((int)OriginalWidth / 2),
+                           (int)OriginalWidth, (int)OriginalWidth);
+                else
+                    return new Rectangle((int)Location.X - ((int)Width / 2), (int)Location.Y - ((int)Width / 2),
+                                 (int)Width, (int)Width);
             }
 
         }
@@ -244,7 +249,9 @@ namespace TileEngine.Entity
                 else if (LockedInBounds)
                     return 1.0f;
                 else
+                {
                     return Camera.Scale;
+                }
             }
         }
 

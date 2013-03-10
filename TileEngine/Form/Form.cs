@@ -48,9 +48,9 @@ namespace TileEngine.Form
 
            Vector2 buttonLocation;
            if(DragLeft)
-               buttonLocation =  new Vector2(location.X, Camera.ViewPortHeight / 2 - TileGrid.TileHeight / 2);
+               buttonLocation =  new Vector2(location.X - texture.Width/2, Camera.ViewPortHeight / 2 - TileGrid.TileHeight / 2);
            else
-               buttonLocation =  new Vector2(location.X+formSize.X, Camera.ViewPortHeight / 2 - TileGrid.TileHeight / 2);
+               buttonLocation = new Vector2(location.X + formSize.X + -texture.Width / 2, Camera.ViewPortHeight / 2 - TileGrid.TileHeight / 2);
 
            handle = new Button(buttonTag, new Vector2(-45, -10), texture, font, buttonLocation, 1, 0.05f, false,Color.Red);
            target=velocity = Vector2.Zero;
@@ -103,8 +103,8 @@ namespace TileEngine.Form
        public Vector2 ButtonLocation
        {
            get
-           { 
-              return Location - new Vector2(TileGrid.TileWidth / 2, 0);
+           {
+               return Location -new Vector2(TileGrid.TileWidth / 2, 0);
            }
        }
 
@@ -181,9 +181,9 @@ namespace TileEngine.Form
 
            start = MouseLocation;
            if(DragLeft)
-             handle.MoveAt(new Vector2(Location.X,handle.Location.Y));
+             handle.MoveAt(new Vector2(Location.X- handle.texture.Width/2,handle.Location.Y));
            else
-              handle.MoveAt(new Vector2(Location.X+formSize.X, handle.Location.Y));
+               handle.MoveAt(new Vector2(Location.X + formSize.X + handle.texture.Width / 2, handle.Location.Y));
 
        }
 
@@ -197,9 +197,9 @@ namespace TileEngine.Form
            Location += MoveAmount;
 
            if (DragLeft)
-               handle.MoveAt(new Vector2(Location.X, handle.Location.Y));
+               handle.MoveAt(new Vector2(Location.X - handle.texture.Width / 2, handle.Location.Y));
            else
-               handle.MoveAt(new Vector2(Location.X + formSize.X, handle.Location.Y));
+               handle.MoveAt(new Vector2(Location.X + formSize.X + handle.texture.Width / 2, handle.Location.Y));
 
            CheckFormLocation();
        }
@@ -259,9 +259,9 @@ namespace TileEngine.Form
            Location += MoveAmount;
 
            if (DragLeft)
-               handle.MoveAt(new Vector2(Location.X, handle.Location.Y));
+               handle.MoveAt(new Vector2(Location.X - handle.texture.Width / 2, handle.Location.Y));
            else
-               handle.MoveAt(new Vector2(Location.X + formSize.X, handle.Location.Y));
+               handle.MoveAt(new Vector2(Location.X + formSize.X + handle.texture.Width / 2, handle.Location.Y));
 
            CheckFormLocation();
 

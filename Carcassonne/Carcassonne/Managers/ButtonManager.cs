@@ -47,10 +47,10 @@ namespace Carcassonne
             Font = Content.Load<SpriteFont>(@"Fonts\pericles10");
             buttonTexture = Content.Load<Texture2D>(@"Textures\Button");
 
-            buttons.Add(new Button("Tiles", new Vector2(-25, -15), button2, Font, new Vector2(200, 100), 1, 0.1f, true,Color.Blue));
-            buttons.Add(new Button("Soldier", new Vector2(-35, -15), button2, Font, new Vector2(80, 100), 1, 0.05f, true, Color.Blue));
+            buttons.Add(new Button("Tiles", new Vector2(-25, -15), button2, Font, new Vector2(150, 100), 1, 0.1f, true,Color.Blue));
+            buttons.Add(new Button("Soldier", new Vector2(-35, -15), button2, Font, new Vector2(50, 100), 1, 0.05f, true, Color.Blue));
             buttons.Add(new Button("Lock", new Vector2(-20, -15), button2, Font, new Vector2(Camera.ViewPortWidth + 110, 210), 1, 0.1f, true, Color.Blue));
-            buttons.Add(new Button("Add Player", new Vector2(-48, -15), button2, Font, new Vector2(Camera.ViewPortWidth + 470, 80), 1, 0.09f, true, Color.Blue));
+            buttons.Add(new Button("Add Player", new Vector2(-48, -15), button2, Font, new Vector2(Camera.ViewPortWidth +370, 210), 1, 0.09f, true, Color.Blue));
             buttons.Add(new Button("Unlock False", new Vector2(-50, -15), button2, Font, new Vector2((Camera.ViewPortWidth + 220), 210), 1, 0.05f, true, Color.Blue));
                                     
             keyAdjustment = false;
