@@ -71,10 +71,11 @@ namespace TileEngine.Entity
         {
             get
             {
-                Vector2 newLocation;
-                newLocation.X = MathHelper.Clamp(location.X, Bounds.X, Bounds.X + BoundSize.X);
-                newLocation.Y = MathHelper.Clamp(location.Y, Bounds.Y, Bounds.Y + BoundSize.Y);
-                return newLocation;
+              //  Vector2 newLocation;
+              //  newLocation.X = MathHelper.Clamp(location.X, Bounds.X, Bounds.X + BoundSize.X);
+             //   newLocation.Y = MathHelper.Clamp(location.Y, Bounds.Y, Bounds.Y + BoundSize.Y);
+              //  return newLocation;
+                return location;
             }
         }
 

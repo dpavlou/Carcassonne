@@ -69,6 +69,14 @@ namespace Carcassonne
              
         }
 
+        public void moveTemplates(Vector2 step)
+        {
+            foreach (ScoreTemplate template in templates)
+            {
+                template.Move(step);
+            }       
+        }
+
         public int getNewTemplatePos()
         {
             return templates.Count();

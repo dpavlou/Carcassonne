@@ -61,6 +61,14 @@ namespace TileEngine.Form
 
         #region Properties
 
+       public Vector2 InitialLocation
+       {
+           set
+           {
+              defaultLocation = value;
+           }
+       }
+
        public bool DragLeft
        {
            get { return dragLeft; }
@@ -144,6 +152,7 @@ namespace TileEngine.Form
        public Vector2 FormSize
        {
            get { return formSize; }
+           set { formSize = value; }
        }
 
        public Rectangle FormRectangle
@@ -202,6 +211,11 @@ namespace TileEngine.Form
                handle.MoveAt(new Vector2(Location.X + formSize.X + handle.texture.Width / 2, handle.Location.Y));
 
            CheckFormLocation();
+       }
+
+       public void MoveHandle(Vector2 moveStep)
+       {
+           handle.MoveAt(new Vector2(handle.Location.X+moveStep.X, handle.Location.Y));
        }
 
        public void CheckFormLocation()

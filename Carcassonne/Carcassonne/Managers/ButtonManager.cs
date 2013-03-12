@@ -109,6 +109,15 @@ namespace Carcassonne
             }
         }
 
+        public void ForceButtonLocation(Vector2 step)
+        {
+            for (int x = buttons.Count - 1; x >= 2; x--)
+            {
+                buttons[x].ForceMove(step);
+            }
+
+        }
+
         public  void ToggleKeyAdjustment()
         {
             keyAdjustment = !keyAdjustment;

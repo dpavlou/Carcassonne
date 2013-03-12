@@ -234,6 +234,11 @@ namespace TileEngine.Entity
             Location += amount;
         }
 
+        public void ForceMove(Vector2 amount)
+        {
+            location += amount;
+        }
+
         public void MoveAt(Vector2 newLocation)
         {
             Location = newLocation;

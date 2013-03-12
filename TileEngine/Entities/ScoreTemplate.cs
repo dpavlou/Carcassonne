@@ -51,6 +51,12 @@ namespace TileEngine.Entity
 
         #region Properties
 
+        public Vector2 Location
+        {
+            get { return location; }
+            set { location = value; }
+        }
+
         public int Score
         {
             get { return score; }
@@ -69,9 +75,15 @@ namespace TileEngine.Entity
 
         #endregion
 
-        #region Events
+        #region Move
 
+        public void Move(Vector2 step)
+        {
+            foreach(Button button in buttons)
+               button.ForceMove(step);
 
+            location += step;
+        }
 
         #endregion
 

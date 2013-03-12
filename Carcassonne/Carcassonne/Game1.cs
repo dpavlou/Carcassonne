@@ -86,6 +86,7 @@ namespace Carcassonne
             this.graphics.IsFullScreen = false;
             this.graphics.PreferredBackBufferWidth = 1600;
             this.graphics.PreferredBackBufferHeight = 900;
+            this.Window.AllowUserResizing = false;
             this.graphics.ApplyChanges();
 
             this.networkManager.Connect(serverName, IP);
@@ -171,10 +172,44 @@ namespace Carcassonne
                 || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            if ((Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+            //TODO: update the whole algorithm with a virtual resolution class
+            if (((Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                || (Keyboard.GetState().IsKeyDown(Keys.RightAlt) && Keyboard.GetState().IsKeyDown(Keys.RightShift)))
+                && (this.graphics.PreferredBackBufferWidth == 1920 || this.graphics.PreferredBackBufferWidth == 1600))
             {
-                graphics.ToggleFullScreen();
+                Vector2 step = Vector2.Zero;
+                Vector2 formY = Vector2.Zero;
+                if (!graphics.IsFullScreen)
+                {
+                    graphics.ToggleFullScreen();
+                    this.Window.AllowUserResizing = true;
+                    this.graphics.PreferredBackBufferWidth = 1920;
+                    this.graphics.PreferredBackBufferHeight = 1080;
+                    this.Window.AllowUserResizing = false;
+                    this.graphics.ApplyChanges();
+                    step = new Vector2(320, 0);
+                    formY = new Vector2(0,180);
+                }
+                else
+                {
+                    graphics.ToggleFullScreen();
+                    this.Window.AllowUserResizing = true;
+                    this.graphics.PreferredBackBufferWidth = 1600;
+                    this.graphics.PreferredBackBufferHeight = 900;
+                    this.Window.AllowUserResizing = false;
+                    this.graphics.ApplyChanges();
+                    step = new Vector2(-320, 0);
+                    formY = new Vector2(0,-180);
+                }
+                Camera.ViewPortWidth = this.graphics.PreferredBackBufferWidth;
+                Camera.ViewPortHeight = this.graphics.PreferredBackBufferHeight;
+                FormManager.menu.InitialLocation = FormManager.menu.DefaultLocation + step;
+                FormManager.menu.Location = FormManager.menu.Location + step;
+                FormManager.menu.MoveHandle(step);
+                FormManager.menu.FormSize+= formY;
+                FormManager.privateSpace.FormSize +=formY;
+                templateManager.moveTemplates(step);
+
             }
         }
 
