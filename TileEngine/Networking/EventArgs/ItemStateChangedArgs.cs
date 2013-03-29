@@ -22,7 +22,7 @@
             this.playerID = playerID;
             this.colorID = colorID;
         }
-
+  
         #endregion
 
         #region Public Properties

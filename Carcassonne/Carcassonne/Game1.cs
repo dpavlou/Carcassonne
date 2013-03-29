@@ -1,4 +1,6 @@
 using System;
+using System.Net;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -116,10 +118,13 @@ namespace Carcassonne
             deckManager.Initialize(Content);
             tileManager.Initialize(Content, deckManager, this.IsHost);
             menuText.Initialize(Content, deckManager);
-            templateManager = new TemplateManager(Content);
+            templateManager = new TemplateManager(Content,playerInformation);
 
-            if(this.IsHost)
-                templateManager.addTemplate(playerInformation.playerTurn, 0, playerInformation.playerTurn);
+            if (this.IsHost)
+            {
+                templateManager.addTemplate(playerInformation.playerTurn, 0, playerInformation.playerTurn, GraphicsDevice);
+                TileGrid.PlayerID = playerInformation.playerTurn = templateManager.getServerName();
+            }
 
             // tileManager.AddScoreBoardSoldier(buttonManager.scoreboardItemLocation(),"Kokos");
 
@@ -172,45 +177,50 @@ namespace Carcassonne
                 || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            //TODO: update the whole algorithm with a virtual resolution class
+
             if (((Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && Keyboard.GetState().IsKeyDown(Keys.LeftShift))
                || (Keyboard.GetState().IsKeyDown(Keys.RightAlt) && Keyboard.GetState().IsKeyDown(Keys.RightShift)))
                 && (this.graphics.PreferredBackBufferWidth == 1920 || this.graphics.PreferredBackBufferWidth == 1600))
             {
-                Vector2 step = Vector2.Zero;
-                Vector2 formY = Vector2.Zero;
-                if (!graphics.IsFullScreen)
-                {
-                    graphics.ToggleFullScreen();
-                    this.Window.AllowUserResizing = true;
-                    this.graphics.PreferredBackBufferWidth = 1920;
-                    this.graphics.PreferredBackBufferHeight = 1080;
-                    this.Window.AllowUserResizing = false;
-                    this.graphics.ApplyChanges();
-                    step = new Vector2(320, 0);
-                    formY = new Vector2(0,180);
-                }
-                else
-                {
-                    graphics.ToggleFullScreen();
-                    this.Window.AllowUserResizing = true;
-                    this.graphics.PreferredBackBufferWidth = 1600;
-                    this.graphics.PreferredBackBufferHeight = 900;
-                    this.Window.AllowUserResizing = false;
-                    this.graphics.ApplyChanges();
-                    step = new Vector2(-320, 0);
-                    formY = new Vector2(0,-180);
-                }
-                Camera.ViewPortWidth = this.graphics.PreferredBackBufferWidth;
-                Camera.ViewPortHeight = this.graphics.PreferredBackBufferHeight;
-                FormManager.menu.InitialLocation = FormManager.menu.DefaultLocation + step;
-                FormManager.menu.Location = FormManager.menu.Location + step;
-                FormManager.menu.MoveHandle(step);
-                FormManager.menu.FormSize+= formY;
-                FormManager.privateSpace.FormSize +=formY;
-                templateManager.moveTemplates(step);
-
+                //TODO: update the whole algorithm with a virtual resolution class
+                changeResolution();               
             }
+        }
+
+        void changeResolution()
+        {
+            Vector2 step = Vector2.Zero;
+            Vector2 formY = Vector2.Zero;
+            if (!graphics.IsFullScreen)
+            {
+                graphics.ToggleFullScreen();
+                this.Window.AllowUserResizing = true;
+                this.graphics.PreferredBackBufferWidth = 1920;
+                this.graphics.PreferredBackBufferHeight = 1080;
+                this.Window.AllowUserResizing = false;
+                this.graphics.ApplyChanges();
+                step = new Vector2(320, 0);
+                formY = new Vector2(0, 180);
+            }
+            else
+            {
+                graphics.ToggleFullScreen();
+                this.Window.AllowUserResizing = true;
+                this.graphics.PreferredBackBufferWidth = 1600;
+                this.graphics.PreferredBackBufferHeight = 900;
+                this.Window.AllowUserResizing = false;
+                this.graphics.ApplyChanges();
+                step = new Vector2(-320, 0);
+                formY = new Vector2(0, -180);
+            }
+            Camera.ViewPortWidth = this.graphics.PreferredBackBufferWidth;
+            Camera.ViewPortHeight = this.graphics.PreferredBackBufferHeight;
+            FormManager.menu.InitialLocation = FormManager.menu.DefaultLocation + step;
+            FormManager.menu.Location = FormManager.menu.Location + step;
+            FormManager.menu.MoveHandle(step);
+            FormManager.menu.FormSize += formY;
+            FormManager.privateSpace.FormSize += formY;
+            templateManager.moveTemplates(step);
         }
 
         #region Handle Incoming Messages
@@ -231,7 +241,7 @@ namespace Carcassonne
         {
             var message = new AddTemplateMessage(im);
 
-             templateManager.addNewTemplate(message.Name, message.Pos,message.Sender);
+             templateManager.addNewTemplate(message.Name, message.Pos,message.Sender,GraphicsDevice);
             
         }
 
@@ -241,7 +251,7 @@ namespace Carcassonne
 
             if (this.IsHost)
             {
-                templateManager.addTemplate(message.Name,message.Pos,message.Sender);
+                templateManager.addTemplate(message.Name, message.Pos, message.Sender, GraphicsDevice);
             }
         }
 

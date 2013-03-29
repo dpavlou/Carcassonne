@@ -26,18 +26,24 @@ namespace TileEngine.Entity
 
         #region Constructor
 
-        public ScoreTemplate(SpriteFont font,Texture2D button,Texture2D template,string id, int pos)
+        public ScoreTemplate(SpriteFont font,Texture2D button,Texture2D template,string id,string realID, int pos,Texture2D avatar)
         {
 
             float offSet=5.0f;
-            float nameOffset = 180f;
+            float nameOffset = 270f;
 
             Score = 0;
             ID = id;
 
+            RealID = realID;
+
             this.template = template;
             this.font = font;
             this.button = button;
+            if (avatar != null)
+                this.Avatar = avatar;
+            else
+                Avatar = button;
 
             location = new Vector2(Camera.ViewPortWidth - template.Width - offSet, pos * template.Height + offSet);
 
@@ -50,6 +56,27 @@ namespace TileEngine.Entity
         #endregion
 
         #region Properties
+
+        public string RealID
+        {
+            get;
+            set;
+        }
+
+        public Texture2D Avatar
+        {
+            get;
+            set;
+        }
+
+        public Rectangle AvatarRectangle
+        {
+            get
+            {
+                int offSet = template.Height;
+                return new Rectangle((int)location.X - offSet, (int)location.Y, offSet, offSet);
+            }
+        }
 
         public Vector2 Location
         {
@@ -124,6 +151,11 @@ namespace TileEngine.Entity
                      SpriteEffects.None,
                      0.19f);
 
+          spriteBatch.Draw(
+                    Avatar,
+                    AvatarRectangle,
+                    Color.White);
+            
             spriteBatch.DrawString(
                        font,
                        " "+ID,
@@ -132,9 +164,9 @@ namespace TileEngine.Entity
 
             spriteBatch.DrawString(
                      font,
-                     "| " + Score,
-                    location + new Vector2(120, 20),
-                     Color.Black);
+                     " " + Score,
+                    location + new Vector2(180, 20),
+                     Color.Red);
 
             foreach (Button button in buttons)
                 button.Draw(spriteBatch);

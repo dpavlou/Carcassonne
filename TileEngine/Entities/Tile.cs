@@ -282,7 +282,7 @@ namespace TileEngine.Entity
                     spriteBatch.DrawString(
                     font,
                     CodeValue,
-                    Camera.WorldToScreen(LabelOffset),
+                    Camera.WorldToScreen(LabelOffset-new Vector2(CodeValue.Length*2,0)),
                     Color.Black);
                 }
 

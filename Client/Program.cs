@@ -36,7 +36,7 @@ namespace Client
             string serverName = Console.ReadLine();
             Console.WriteLine("IP: ");
             string IP = Console.ReadLine();
-            Console.WriteLine("Player Name: ");
+            Console.WriteLine("SteamID: ");
             string playerName = Console.ReadLine();
 
             Thread.Sleep(1000);

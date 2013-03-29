@@ -20,6 +20,7 @@ namespace Carcassonne
         public event EventHandler<TemplateArgs> AddTemplate;
         private List<ScoreTemplate> templates;
         private Texture2D template;
+        private readonly PlayerInformation playerInformation;
         private SpriteFont font;
         private Texture2D button;
 
@@ -27,12 +28,13 @@ namespace Carcassonne
 
         #region Constructor
 
-        public TemplateManager(ContentManager content)
+        public TemplateManager(ContentManager content,PlayerInformation playerInformation)
         {
             templates = new List<ScoreTemplate>();
             template = content.Load<Texture2D>(@"Textures\Template");
             font = content.Load<SpriteFont>(@"Fonts\pericles10");
             button = content.Load<Texture2D>(@"Textures\smallButton");
+            this.playerInformation = playerInformation;
         }
 
         #endregion
@@ -54,18 +56,26 @@ namespace Carcassonne
         }
 
 
-        public void addTemplate(string ID, int pos,string sender)
+        public void addTemplate(string ID, int pos, string sender, GraphicsDevice graphicsDevice)
         {
-            templates.Add(new ScoreTemplate(font,button,template, ID, getNewTemplatePos()));
+            Avatar avatar = new Avatar(ID, graphicsDevice);
+            templates.Add(new ScoreTemplate(font,button,template, avatar.UsrName,ID, getNewTemplatePos(),avatar.Texture));
+
             for(int i=0;i<templates.Count;i++)
-                OnAddTemplate(templates[i].ID, i, sender);
+                OnAddTemplate(templates[i].RealID, i, sender);
         }
 
-        public void addNewTemplate(string ID, int pos, string sender)
+        public void addNewTemplate(string ID, int pos, string sender, GraphicsDevice graphicsDevice)
         {
-            if(templates.Count<=pos)
-            templates.Add(new ScoreTemplate(font, button, template, ID, pos));
-      
+            if (templates.Count <= pos)
+            {
+                Avatar avatar = new Avatar(ID, graphicsDevice);
+                templates.Add(new ScoreTemplate(font, button, template, avatar.UsrName,ID, pos, avatar.Texture));
+                if (ID == playerInformation.playerTurn)
+                {
+                    TileGrid.PlayerID = playerInformation.playerTurn = avatar.UsrName;
+                }
+            }
              
         }
 
@@ -89,6 +99,10 @@ namespace Carcassonne
                     template.score = value;
         }
 
+        public string getServerName()
+        {
+            return templates[0].ID;
+        }
         #endregion
 
         #region Update

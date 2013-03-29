@@ -33,7 +33,7 @@ namespace Server
             Console.WriteLine("Server Name: ");
             string serverName = Console.ReadLine();
 
-            Console.WriteLine("Player Name: ");
+            Console.WriteLine("SteamID: ");
             string playerName = Console.ReadLine();
 
             using (var game = new Game1(new ServerNetworkManager(), serverName, "", playerName))
