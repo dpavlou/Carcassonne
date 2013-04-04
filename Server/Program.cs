@@ -30,13 +30,10 @@ namespace Server
         private static void Main(string[] args)
         {
 
-            Console.WriteLine("Server Name: ");
-            string serverName = Console.ReadLine();
-
             Console.WriteLine("SteamID: ");
             string playerName = Console.ReadLine();
 
-            using (var game = new Game1(new ServerNetworkManager(), serverName, "", playerName))
+            using (var game = new Game1(new ServerNetworkManager(), "Carcassonne_Server", "", playerName))
             {
                game.Run();
             }
