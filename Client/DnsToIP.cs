@@ -11,8 +11,17 @@ namespace Client
                 IP = DNS;
             else
             {
-                var address = Dns.GetHostAddresses(DNS)[0];
-                IP = address.ToString();
+                try
+                {
+                    var address = Dns.GetHostAddresses(DNS)[0];
+                    IP = address.ToString();
+                }
+                catch (System.Net.Sockets.SocketException exc)
+                {
+                    Console.WriteLine(exc.Message);
+                    IP = "127.0.0.1";
+                }
+
             }
         }
 
